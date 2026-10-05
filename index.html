@@ -338,7 +338,8 @@ const EMPTY = {
 };
 
 // This repo's real integrity chain (block headers), exported from .chain/blocks.
-const CHAIN = [{"header":{"version":1,"height":0,"prevHash":"0000000000000000000000000000000000000000000000000000000000000000","timestamp":1791239580183,"difficulty":16,"nonce":96419,"eventsRoot":"fe4b9c1182ac099c7e1dc226c113414dc35cfa64ecd235e2baea16c2baf937da","stateRoot":"0000000000000000000000000000000000000000000000000000000000000000"},"hash":"0000da1dff9a4e258419652ffa5e2c4fb609063da82297fb49b460df07816d8f","subjects":["chain.genesis"]},{"header":{"version":1,"height":1,"prevHash":"0000da1dff9a4e258419652ffa5e2c4fb609063da82297fb49b460df07816d8f","timestamp":1791239580868,"difficulty":16,"nonce":5315,"eventsRoot":"9218a43411efa8eae08a67666189c121044089e3fc8bd2298545b62c314da315","stateRoot":"136ed14a27fa32fa088a736abbe07044c4a86f352babbe6e95147285d6247e3f"},"hash":"0000ca9ada909d87a4f4743eedbe83c984dac436b2e81a29aab5e6a7fd1f37f5","subjects":["git.commit","snapshot.created","ref.update"]},{"header":{"version":1,"height":2,"prevHash":"0000ca9ada909d87a4f4743eedbe83c984dac436b2e81a29aab5e6a7fd1f37f5","timestamp":1791239581166,"difficulty":16,"nonce":118273,"eventsRoot":"6a3cc18c38f38612e5b5280e32a025231848bf4f917cd3233b0a5302ff62e949","stateRoot":"136ed14a27fa32fa088a736abbe07044c4a86f352babbe6e95147285d6247e3f"},"hash":"00009cd580abffa05ff449f1b6f58f04797bef9b110d7406e32ea365694789ec","subjects":["ref.update"]},{"header":{"version":1,"height":3,"prevHash":"00009cd580abffa05ff449f1b6f58f04797bef9b110d7406e32ea365694789ec","timestamp":1791239582056,"difficulty":16,"nonce":94281,"eventsRoot":"35b97f7b31134adc7b77a26f669d59146d98fa99ca4912bd6275ff51a3059915","stateRoot":"136ed14a27fa32fa088a736abbe07044c4a86f352babbe6e95147285d6247e3f"},"hash":"00001fea6b63cc723958d0b56209933e9de3ae81558dbe9c2fec7072578e3443","subjects":["verify.ok"]},{"header":{"version":1,"height":4,"prevHash":"00001fea6b63cc723958d0b56209933e9de3ae81558dbe9c2fec7072578e3443","timestamp":1791239582693,"difficulty":16,"nonce":160,"eventsRoot":"eab66bc5d92e0bd3b02b23660f31060ebf50f3c3d872acd462b8f7e2daa79402","stateRoot":"136ed14a27fa32fa088a736abbe07044c4a86f352babbe6e95147285d6247e3f"},"hash":"0000cd764439a27b3ec1d9c68a3700d7ef52d2299941029d17f8b17686d0993e","subjects":["restore.done"]},{"header":{"version":1,"height":5,"prevHash":"0000cd764439a27b3ec1d9c68a3700d7ef52d2299941029d17f8b17686d0993e","timestamp":1791239588649,"difficulty":16,"nonce":56217,"eventsRoot":"b7e81a627101e83915ef6cbfb445d23dd18e2bb9a5f5969f2dd9050a76b5232a","stateRoot":"136ed14a27fa32fa088a736abbe07044c4a86f352babbe6e95147285d6247e3f"},"hash":"00006ad72831690e95210dc5ecde85c6f1e46d54e28dca89ebb698b3788ceb80","subjects":["memory.transition"]}];
+// On the live site it is replaced by the current .chain/blocks/*.json.
+let CHAIN = [{"header":{"version":1,"height":0,"prevHash":"0000000000000000000000000000000000000000000000000000000000000000","timestamp":1791239580183,"difficulty":16,"nonce":96419,"eventsRoot":"fe4b9c1182ac099c7e1dc226c113414dc35cfa64ecd235e2baea16c2baf937da","stateRoot":"0000000000000000000000000000000000000000000000000000000000000000"},"hash":"0000da1dff9a4e258419652ffa5e2c4fb609063da82297fb49b460df07816d8f","subjects":["chain.genesis"]},{"header":{"version":1,"height":1,"prevHash":"0000da1dff9a4e258419652ffa5e2c4fb609063da82297fb49b460df07816d8f","timestamp":1791239580868,"difficulty":16,"nonce":5315,"eventsRoot":"9218a43411efa8eae08a67666189c121044089e3fc8bd2298545b62c314da315","stateRoot":"136ed14a27fa32fa088a736abbe07044c4a86f352babbe6e95147285d6247e3f"},"hash":"0000ca9ada909d87a4f4743eedbe83c984dac436b2e81a29aab5e6a7fd1f37f5","subjects":["git.commit","snapshot.created","ref.update"]},{"header":{"version":1,"height":2,"prevHash":"0000ca9ada909d87a4f4743eedbe83c984dac436b2e81a29aab5e6a7fd1f37f5","timestamp":1791239581166,"difficulty":16,"nonce":118273,"eventsRoot":"6a3cc18c38f38612e5b5280e32a025231848bf4f917cd3233b0a5302ff62e949","stateRoot":"136ed14a27fa32fa088a736abbe07044c4a86f352babbe6e95147285d6247e3f"},"hash":"00009cd580abffa05ff449f1b6f58f04797bef9b110d7406e32ea365694789ec","subjects":["ref.update"]},{"header":{"version":1,"height":3,"prevHash":"00009cd580abffa05ff449f1b6f58f04797bef9b110d7406e32ea365694789ec","timestamp":1791239582056,"difficulty":16,"nonce":94281,"eventsRoot":"35b97f7b31134adc7b77a26f669d59146d98fa99ca4912bd6275ff51a3059915","stateRoot":"136ed14a27fa32fa088a736abbe07044c4a86f352babbe6e95147285d6247e3f"},"hash":"00001fea6b63cc723958d0b56209933e9de3ae81558dbe9c2fec7072578e3443","subjects":["verify.ok"]},{"header":{"version":1,"height":4,"prevHash":"00001fea6b63cc723958d0b56209933e9de3ae81558dbe9c2fec7072578e3443","timestamp":1791239582693,"difficulty":16,"nonce":160,"eventsRoot":"eab66bc5d92e0bd3b02b23660f31060ebf50f3c3d872acd462b8f7e2daa79402","stateRoot":"136ed14a27fa32fa088a736abbe07044c4a86f352babbe6e95147285d6247e3f"},"hash":"0000cd764439a27b3ec1d9c68a3700d7ef52d2299941029d17f8b17686d0993e","subjects":["restore.done"]},{"header":{"version":1,"height":5,"prevHash":"0000cd764439a27b3ec1d9c68a3700d7ef52d2299941029d17f8b17686d0993e","timestamp":1791239588649,"difficulty":16,"nonce":56217,"eventsRoot":"b7e81a627101e83915ef6cbfb445d23dd18e2bb9a5f5969f2dd9050a76b5232a","stateRoot":"136ed14a27fa32fa088a736abbe07044c4a86f352babbe6e95147285d6247e3f"},"hash":"00006ad72831690e95210dc5ecde85c6f1e46d54e28dca89ebb698b3788ceb80","subjects":["memory.transition"]}];
 
 // Config for the live deployment. Fee is the agreed 10% (follow_up_2.md).
 const CONFIG = { dataUrl: 'data/dashboard.json', googleClientId: '', platformFeeBps: 1000 };
@@ -663,6 +664,18 @@ function setupGoogle() {
   document.head.appendChild(s);
 }
 
+async function loadChain() {
+  const blocks = [];
+  for (let h = 0; ; h++) {
+    let res;
+    try { res = await fetch(`.chain/blocks/${h}.json`, { cache: 'no-store' }); } catch { break; }
+    if (!res.ok) break;
+    const b = await res.json();
+    blocks.push({ header: b.header, hash: b.hash, subjects: b.events.map((e) => e.subject) });
+  }
+  if (blocks.length) { CHAIN = blocks; renderChain(); }
+}
+
 async function loadData() {
   try {
     const res = await fetch(CONFIG.dataUrl, { cache: 'no-store' });
@@ -684,4 +697,5 @@ renderChain();
 render();
 setInterval(renderCountdown, 30_000);
 loadData().then(render);
+loadChain();
 </script>
