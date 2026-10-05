@@ -1,0 +1,29 @@
+{
+  "header": {
+    "version": 1,
+    "height": 2,
+    "prevHash": "0000ca9ada909d87a4f4743eedbe83c984dac436b2e81a29aab5e6a7fd1f37f5",
+    "timestamp": 1791239581166,
+    "difficulty": 16,
+    "nonce": 118273,
+    "eventsRoot": "6a3cc18c38f38612e5b5280e32a025231848bf4f917cd3233b0a5302ff62e949",
+    "stateRoot": "136ed14a27fa32fa088a736abbe07044c4a86f352babbe6e95147285d6247e3f"
+  },
+  "hash": "00009cd580abffa05ff449f1b6f58f04797bef9b110d7406e32ea365694789ec",
+  "events": [
+    {
+      "id": "a8833eccee7d9e5cc4c2334bf74c0aaab79497e15b7a6ec038a5ca9b175ab874",
+      "type": "update",
+      "subject": "ref.update",
+      "source": "github-poll",
+      "body": {
+        "ref": "origin/heads/main",
+        "from": null,
+        "to": "5d122959a13edde442dd622e80f51f8db06eef26",
+        "forced": false
+      },
+      "ts": 1791239581164,
+      "block": 2
+    }
+  ]
+}

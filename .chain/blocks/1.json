@@ -1,0 +1,65 @@
+{
+  "header": {
+    "version": 1,
+    "height": 1,
+    "prevHash": "0000da1dff9a4e258419652ffa5e2c4fb609063da82297fb49b460df07816d8f",
+    "timestamp": 1791239580868,
+    "difficulty": 16,
+    "nonce": 5315,
+    "eventsRoot": "9218a43411efa8eae08a67666189c121044089e3fc8bd2298545b62c314da315",
+    "stateRoot": "136ed14a27fa32fa088a736abbe07044c4a86f352babbe6e95147285d6247e3f"
+  },
+  "hash": "0000ca9ada909d87a4f4743eedbe83c984dac436b2e81a29aab5e6a7fd1f37f5",
+  "events": [
+    {
+      "id": "e0029571215c2f2ea81ea32393b6173e050124bfb6afb4100e38c45cf3299cd6",
+      "type": "update",
+      "subject": "git.commit",
+      "source": "local-cli",
+      "body": {
+        "sha": "5d122959a13edde442dd622e80f51f8db06eef26",
+        "parents": [],
+        "author": {
+          "name": "thegoodolbois",
+          "email": "thegoodolbois@gmail.com",
+          "date": "2026-10-05T17:59:06-04:00"
+        },
+        "committer": {
+          "name": "GitHub",
+          "email": "noreply@github.com",
+          "date": "2026-10-05T17:59:06-04:00"
+        },
+        "message": "Initial commit"
+      },
+      "ts": 1791239580839,
+      "block": 1
+    },
+    {
+      "id": "88f2a73a754bc4188a06ce243ef34188a9fb859998b1169bd4c958cbeade9a32",
+      "type": "file",
+      "subject": "snapshot.created",
+      "source": "local-cli",
+      "body": {
+        "commit": "5d122959a13edde442dd622e80f51f8db06eef26",
+        "manifest": "b063083f5c480e9eaa31ece60dcaae72371c9a98aba4b6ed74130707c5851907",
+        "files": 2
+      },
+      "ts": 1791239580865,
+      "block": 1
+    },
+    {
+      "id": "22aa751e54a6e892c97c2eed637bd877be6c3910eaf0951e775ed43f93740c90",
+      "type": "update",
+      "subject": "ref.update",
+      "source": "local-cli",
+      "body": {
+        "ref": "local/heads/main",
+        "from": null,
+        "to": "5d122959a13edde442dd622e80f51f8db06eef26",
+        "forced": false
+      },
+      "ts": 1791239580867,
+      "block": 1
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "name": "bundlepad-chain",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Local integrity chain that logs repository events and stores restorable snapshots",
+  "main": "src/index.js",
+  "bin": {
+    "chain": "src/index.js"
+  },
+  "scripts": {
+    "status": "node src/index.js status",
+    "test": "node --test test/*.test.js"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

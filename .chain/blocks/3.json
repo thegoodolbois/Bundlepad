@@ -1,0 +1,31 @@
+{
+  "header": {
+    "version": 1,
+    "height": 3,
+    "prevHash": "00009cd580abffa05ff449f1b6f58f04797bef9b110d7406e32ea365694789ec",
+    "timestamp": 1791239582056,
+    "difficulty": 16,
+    "nonce": 94281,
+    "eventsRoot": "35b97f7b31134adc7b77a26f669d59146d98fa99ca4912bd6275ff51a3059915",
+    "stateRoot": "136ed14a27fa32fa088a736abbe07044c4a86f352babbe6e95147285d6247e3f"
+  },
+  "hash": "00001fea6b63cc723958d0b56209933e9de3ae81558dbe9c2fec7072578e3443",
+  "events": [
+    {
+      "id": "6289e3237c58c6ecb2b15b8739195f2246dd66cf2445185a97b0372f22a4198f",
+      "type": "reply",
+      "subject": "verify.ok",
+      "source": "local-cli",
+      "body": {
+        "target": "origin",
+        "created": [],
+        "moved": [],
+        "rewritten": [],
+        "deleted": [],
+        "content": []
+      },
+      "ts": 1791239582054,
+      "block": 3
+    }
+  ]
+}

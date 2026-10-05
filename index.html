@@ -1,0 +1,687 @@
+<title>Bundlepad</title>
+<meta name="description" content="Transparent group launches: one buy, split 1:1 by SOL committed, every step on the record.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..125,500..800&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: a launch-room console. Summary strip, then a two-column work area
+   (your position + launch record | split table + curve), then governance,
+   buyback and the integrity chain. */
+:root {
+  --paper: #f2f4f7;
+  --surface: #ffffff;
+  --ink: #141a26;
+  --muted: #5b6577;
+  --line: #d9dee7;
+  --accent: #2450b8;
+  --accent-soft: #e3eafa;
+  --burn: #c2410c;
+  --good: #16794a;
+  --good-soft: #def3e7;
+  --warn: #9a6400;
+  --bad: #b42318;
+  --bad-soft: #fde4e1;
+  --zero: #2450b8;
+  --font-display: "Archivo", "Arial Narrow", system-ui, sans-serif;
+  --font-body: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --step--1: 0.8125rem;
+  --step-0: 0.9375rem;
+  --step-1: 1.125rem;
+  --step-2: 1.5rem;
+  --step-3: 2.25rem;
+  --radius: 10px;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --paper: #0f131b;
+    --surface: #171c27;
+    --ink: #e8ecf3;
+    --muted: #97a1b3;
+    --line: #2a3242;
+    --accent: #7ea2ff;
+    --accent-soft: #1d2a4a;
+    --burn: #fb8a4c;
+    --good: #4cc488;
+    --good-soft: #14301f;
+    --warn: #e0b04a;
+    --bad: #ff8a7a;
+    --bad-soft: #3a1714;
+    --zero: #7ea2ff;
+  }
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --paper: #0f131b;
+  --surface: #171c27;
+  --ink: #e8ecf3;
+  --muted: #97a1b3;
+  --line: #2a3242;
+  --accent: #7ea2ff;
+  --accent-soft: #1d2a4a;
+  --burn: #fb8a4c;
+  --good: #4cc488;
+  --good-soft: #14301f;
+  --warn: #e0b04a;
+  --bad: #ff8a7a;
+  --bad-soft: #3a1714;
+  --zero: #7ea2ff;
+}
+
+* { box-sizing: border-box; }
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font: var(--step-0)/1.55 var(--font-body);
+  padding: 0 clamp(16px, 4vw, 40px);
+}
+.wrap { max-width: 1180px; margin: 0 auto; padding-block: 20px 64px; display: grid; gap: 20px; }
+h1, h2, h3 { font-family: var(--font-display); font-stretch: 85%; margin: 0; text-wrap: balance; line-height: 1.15; }
+h2 { font-size: var(--step-1); font-weight: 700; }
+.mono { font-family: var(--font-mono); font-size: var(--step--1); }
+.muted { color: var(--muted); }
+.num { font-variant-numeric: tabular-nums; }
+.label { font-size: 0.6875rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
+a { color: var(--accent); }
+button, input { font: inherit; color: inherit; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+/* Top bar */
+.topbar { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 16px; justify-content: space-between; }
+.brand { display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; }
+.brand h1 { font-size: var(--step-2); font-weight: 800; font-stretch: 110%; letter-spacing: -0.01em; }
+.actions { display: flex; flex-wrap: wrap; gap: 8px; }
+.btn { border: 1px solid var(--line); background: var(--surface); padding: 8px 14px; border-radius: 8px; cursor: pointer; font-weight: 500; }
+.btn:hover { border-color: var(--accent); }
+.btn.primary { background: var(--accent); border-color: var(--accent); color: var(--surface); }
+.btn.primary:hover { filter: brightness(1.08); }
+.btn:disabled { opacity: 0.5; cursor: not-allowed; }
+.pill { display: inline-flex; align-items: center; gap: 6px; padding: 2px 10px; border-radius: 999px; font-size: var(--step--1); font-weight: 600; background: var(--accent-soft); color: var(--accent); }
+.pill.good { background: var(--good-soft); color: var(--good); }
+.pill.bad { background: var(--bad-soft); color: var(--bad); }
+.pill::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+
+/* Summary strip */
+.summary { display: grid; grid-template-columns: 2fr repeat(3, 1fr); gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; }
+.summary > div { background: var(--surface); padding: 14px 18px; display: grid; gap: 4px; align-content: start; }
+.big { font-family: var(--font-display); font-size: var(--step-3); font-weight: 700; font-stretch: 90%; line-height: 1; font-variant-numeric: tabular-nums; }
+.big small { font-size: var(--step-1); color: var(--muted); font-weight: 500; }
+.bar { height: 8px; border-radius: 4px; background: var(--accent-soft); overflow: hidden; margin-top: 6px; }
+.bar > span { display: block; height: 100%; background: var(--accent); }
+@media (max-width: 760px) { .summary { grid-template-columns: 1fr 1fr; } .summary > div:first-child { grid-column: 1 / -1; } }
+
+/* Work area */
+.grid { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 20px; align-items: start; }
+.col { display: grid; gap: 20px; }
+@media (max-width: 900px) { .grid { grid-template-columns: 1fr; } }
+.panel { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 18px; display: grid; gap: 14px; }
+.panel-head { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; flex-wrap: wrap; }
+
+/* Position calculator */
+.field { display: grid; gap: 6px; }
+.field-row { display: flex; gap: 8px; }
+.field input { flex: 1; min-width: 0; border: 1px solid var(--line); background: var(--paper); border-radius: 8px; padding: 10px 12px; font-family: var(--font-mono); font-size: var(--step-1); }
+.kv { display: grid; grid-template-columns: 1fr auto; gap: 6px 12px; margin: 0; }
+.kv dt { color: var(--muted); }
+.kv dd { margin: 0; text-align: right; font-variant-numeric: tabular-nums; font-weight: 500; }
+.kv .total { border-top: 1px solid var(--line); padding-top: 6px; font-weight: 600; color: var(--ink); }
+.note { font-size: var(--step--1); color: var(--muted); margin: 0; }
+.status-line { font-size: var(--step--1); min-height: 1.4em; margin: 0; }
+
+/* Tables */
+.table-wrap { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; font-size: var(--step--1); }
+th, td { text-align: right; padding: 8px 10px; border-bottom: 1px solid var(--line); white-space: nowrap; font-variant-numeric: tabular-nums; }
+th:first-child, td:first-child { text-align: left; }
+th { font-weight: 600; color: var(--muted); font-size: 0.6875rem; letter-spacing: 0.06em; text-transform: uppercase; }
+tr.you td { background: var(--accent-soft); }
+tfoot td { font-weight: 600; border-bottom: 0; }
+.formula { font-family: var(--font-mono); font-size: var(--step--1); background: var(--paper); border-radius: 8px; padding: 8px 12px; overflow-x: auto; }
+
+/* Curve */
+.chart { width: 100%; height: auto; display: block; }
+.chart text { fill: var(--muted); font: 11px var(--font-mono); }
+.chart .axis { stroke: var(--line); }
+.chart .grid-line { stroke: var(--line); stroke-dasharray: 2 4; }
+.chart .curve { fill: none; stroke: var(--ink); stroke-width: 2; }
+.chart .buy { fill: var(--accent); opacity: 0.22; }
+.chart .buy-edge { stroke: var(--accent); stroke-width: 2; }
+.chart .grad { stroke: var(--good); stroke-dasharray: 4 3; }
+.chart .grad-label { fill: var(--good); }
+.chart .buy-label { fill: var(--accent); font-weight: 500; }
+
+/* Governance */
+.proposals { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 14px; }
+.proposal { border: 1px solid var(--line); border-radius: 8px; padding: 14px; display: grid; gap: 10px; }
+.proposal h3 { font-size: var(--step-0); font-weight: 700; }
+.tally { display: grid; gap: 6px; }
+.tally-row { display: grid; grid-template-columns: 3.5em 1fr 4.5em; gap: 8px; align-items: center; font-size: var(--step--1); }
+.tally-row .bar { margin: 0; height: 6px; }
+.tally-row.no .bar > span { background: var(--muted); }
+.vote-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+
+/* Buyback */
+.burn-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 14px; }
+.burn-stats .big { font-size: var(--step-2); }
+.burn-stats .big.burn { color: var(--burn); }
+
+/* Chain */
+.blocks { display: grid; gap: 0; }
+.block { display: grid; grid-template-columns: 3.5em minmax(0, 1fr) auto; gap: 4px 14px; padding: 10px 0; border-bottom: 1px solid var(--line); align-items: baseline; }
+.block:last-child { border-bottom: 0; }
+.block .h { font-family: var(--font-display); font-weight: 700; font-size: var(--step-1); font-variant-numeric: tabular-nums; }
+.block .hash { font-family: var(--font-mono); font-size: var(--step--1); overflow-wrap: anywhere; }
+.block .hash b { color: var(--zero); font-weight: 500; }
+.block .events { grid-column: 2 / -1; display: flex; flex-wrap: wrap; gap: 6px; }
+.tag { font-family: var(--font-mono); font-size: 0.6875rem; border: 1px solid var(--line); border-radius: 4px; padding: 0 6px; color: var(--muted); }
+.check { font-size: var(--step--1); font-weight: 600; }
+.check.ok { color: var(--good); }
+.check.fail { color: var(--bad); }
+
+footer { font-size: var(--step--1); color: var(--muted); display: grid; gap: 4px; }
+@media (prefers-reduced-motion: no-preference) { .bar > span { transition: width 0.4s ease; } }
+</style>
+
+<div class="wrap">
+  <header class="topbar">
+    <div class="brand">
+      <h1>Bundlepad</h1>
+      <span class="pill" id="launch-status">No launch open</span>
+      <span class="mono muted" id="launch-id"></span>
+    </div>
+    <div class="actions">
+      <span id="google-slot"><button class="btn" id="google-btn" type="button">Sign in with Google</button></span>
+      <button class="btn primary" id="wallet-btn" type="button">Connect wallet</button>
+    </div>
+  </header>
+
+  <section class="summary" aria-label="Launch summary">
+    <div>
+      <span class="label">Committed toward target</span>
+      <span class="big" id="sum-committed">0 <small>/ 0 SOL</small></span>
+      <div class="bar" aria-hidden="true"><span id="sum-bar" style="width:0"></span></div>
+    </div>
+    <div>
+      <span class="label">Investors</span>
+      <span class="big" id="sum-investors">0</span>
+    </div>
+    <div>
+      <span class="label">Commitments close</span>
+      <span class="big" id="sum-close">--</span>
+      <span class="muted mono" id="sum-close-date"></span>
+    </div>
+    <div>
+      <span class="label">Platform fee</span>
+      <span class="big" id="sum-fee">--</span>
+      <span class="muted">funds $BUNDLEPAD burn</span>
+    </div>
+  </section>
+
+  <div class="grid">
+    <div class="col">
+      <section class="panel" aria-labelledby="pos-title">
+        <div class="panel-head">
+          <h2 id="pos-title">Your position</h2>
+          <span class="mono muted" id="pos-wallet">No wallet connected</span>
+        </div>
+        <div class="field">
+          <label class="label" for="commit-input">Commit SOL</label>
+          <div class="field-row">
+            <input id="commit-input" type="number" inputmode="decimal" step="0.05" min="0" value="0">
+            <button class="btn primary" id="commit-btn" type="button">Commit</button>
+          </div>
+          <span class="note" id="commit-limits"></span>
+        </div>
+        <dl class="kv">
+          <dt>Platform fee</dt><dd id="pos-fee">--</dd>
+          <dt>Goes into the group buy</dt><dd id="pos-buy">--</dd>
+          <dt>Your share of the buy</dt><dd id="pos-share">--</dd>
+          <dt>Vote weight</dt><dd id="pos-weight">--</dd>
+          <dt class="total">Estimated tokens</dt><dd class="total" id="pos-tokens">--</dd>
+        </dl>
+        <p class="status-line" id="commit-status" role="status"></p>
+        <p class="note">Your SOL stays in your wallet until launch. At launch, your wallet signs the group-buy transaction and your tokens arrive straight in your wallet. You can cancel before launch.</p>
+      </section>
+
+      <section class="panel" aria-labelledby="record-title">
+        <div class="panel-head">
+          <h2 id="record-title">Launch record</h2>
+          <span class="pill" id="record-frozen">Not published</span>
+        </div>
+        <dl class="kv" id="record-list"></dl>
+        <div class="field">
+          <span class="label">Manifest hash</span>
+          <span class="mono" id="record-hash" style="overflow-wrap:anywhere">--</span>
+        </div>
+        <p class="note">Every launch transaction carries a memo with this label and hash, so explorers and trackers can see it's a Bundlepad group buy.</p>
+      </section>
+    </div>
+
+    <div class="col">
+      <section class="panel" aria-labelledby="split-title">
+        <div class="panel-head">
+          <h2 id="split-title">The split</h2>
+          <span class="muted" id="split-sub"></span>
+        </div>
+        <div class="formula">your tokens = total tokens bought × your SOL ÷ total SOL</div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Wallet</th><th>Committed</th><th>Share</th><th>Est. tokens</th><th>Vote weight</th></tr></thead>
+            <tbody id="split-body"></tbody>
+            <tfoot><tr id="split-foot"></tr></tfoot>
+          </table>
+        </div>
+        <p class="note">Everyone pays the same price: one buy for the whole group, then the tokens are split. Committing early raises your vote weight, not your token share.</p>
+      </section>
+
+      <section class="panel" aria-labelledby="curve-title">
+        <div class="panel-head">
+          <h2 id="curve-title">Where the group buy lands on the curve</h2>
+          <span class="muted" id="curve-sub"></span>
+        </div>
+        <svg class="chart" id="curve" viewBox="0 0 640 260" role="img" aria-labelledby="curve-title curve-sub"></svg>
+      </section>
+    </div>
+  </div>
+
+  <section class="panel" aria-labelledby="gov-title">
+    <div class="panel-head">
+      <h2 id="gov-title">Governance</h2>
+      <span class="muted">Weight = commit × (1 + 1 / log₂(SOL committed before you + 2))</span>
+    </div>
+    <div class="proposals" id="proposals"></div>
+  </section>
+
+  <section class="panel" aria-labelledby="burn-title">
+    <div class="panel-head">
+      <h2 id="burn-title">Buyback &amp; burn</h2>
+      <span class="mono muted" id="burn-wallet"></span>
+    </div>
+    <div class="burn-stats">
+      <div><span class="label">Fees collected</span><div class="big num" id="burn-fees">--</div></div>
+      <div><span class="label">$BUNDLEPAD bought</span><div class="big num" id="burn-bought">--</div></div>
+      <div><span class="label">$BUNDLEPAD burned</span><div class="big num burn" id="burn-burned">--</div></div>
+      <div><span class="label">Launches</span><div class="big num" id="burn-launches">--</div></div>
+    </div>
+    <p class="note" id="burn-note"></p>
+  </section>
+
+  <section class="panel" aria-labelledby="chain-title">
+    <div class="panel-head">
+      <h2 id="chain-title">Integrity chain</h2>
+      <div class="actions">
+        <span class="check" id="chain-check" role="status"></span>
+        <button class="btn" id="chain-verify" type="button">Verify in browser</button>
+      </div>
+    </div>
+    <p class="note">Each block's hash must start with 16 zero bits (proof-of-work, highlighted) and link to the block before it. "Verify" recomputes every header hash here in your browser.</p>
+    <div class="blocks" id="blocks"></div>
+  </section>
+
+  <footer>
+    <span>Bundlepad never holds investor SOL and never sells investors' tokens.</span>
+    <span id="footer-source"></span>
+  </footer>
+</div>
+
+<script>
+'use strict';
+
+// Live data comes from CONFIG.dataUrl. Until a launch is published, every
+// figure is zero and every list is empty.
+const EMPTY = {
+  launch: null,
+  investors: [],
+  proposals: [],
+  buyback: { wallet: null, feesSol: 0, boughtTokens: 0, burnedTokens: 0, launches: 0 },
+};
+
+// This repo's real integrity chain (block headers), exported from .chain/blocks.
+const CHAIN = [{"header":{"version":1,"height":0,"prevHash":"0000000000000000000000000000000000000000000000000000000000000000","timestamp":1791239580183,"difficulty":16,"nonce":96419,"eventsRoot":"fe4b9c1182ac099c7e1dc226c113414dc35cfa64ecd235e2baea16c2baf937da","stateRoot":"0000000000000000000000000000000000000000000000000000000000000000"},"hash":"0000da1dff9a4e258419652ffa5e2c4fb609063da82297fb49b460df07816d8f","subjects":["chain.genesis"]},{"header":{"version":1,"height":1,"prevHash":"0000da1dff9a4e258419652ffa5e2c4fb609063da82297fb49b460df07816d8f","timestamp":1791239580868,"difficulty":16,"nonce":5315,"eventsRoot":"9218a43411efa8eae08a67666189c121044089e3fc8bd2298545b62c314da315","stateRoot":"136ed14a27fa32fa088a736abbe07044c4a86f352babbe6e95147285d6247e3f"},"hash":"0000ca9ada909d87a4f4743eedbe83c984dac436b2e81a29aab5e6a7fd1f37f5","subjects":["git.commit","snapshot.created","ref.update"]},{"header":{"version":1,"height":2,"prevHash":"0000ca9ada909d87a4f4743eedbe83c984dac436b2e81a29aab5e6a7fd1f37f5","timestamp":1791239581166,"difficulty":16,"nonce":118273,"eventsRoot":"6a3cc18c38f38612e5b5280e32a025231848bf4f917cd3233b0a5302ff62e949","stateRoot":"136ed14a27fa32fa088a736abbe07044c4a86f352babbe6e95147285d6247e3f"},"hash":"00009cd580abffa05ff449f1b6f58f04797bef9b110d7406e32ea365694789ec","subjects":["ref.update"]},{"header":{"version":1,"height":3,"prevHash":"00009cd580abffa05ff449f1b6f58f04797bef9b110d7406e32ea365694789ec","timestamp":1791239582056,"difficulty":16,"nonce":94281,"eventsRoot":"35b97f7b31134adc7b77a26f669d59146d98fa99ca4912bd6275ff51a3059915","stateRoot":"136ed14a27fa32fa088a736abbe07044c4a86f352babbe6e95147285d6247e3f"},"hash":"00001fea6b63cc723958d0b56209933e9de3ae81558dbe9c2fec7072578e3443","subjects":["verify.ok"]},{"header":{"version":1,"height":4,"prevHash":"00001fea6b63cc723958d0b56209933e9de3ae81558dbe9c2fec7072578e3443","timestamp":1791239582693,"difficulty":16,"nonce":160,"eventsRoot":"eab66bc5d92e0bd3b02b23660f31060ebf50f3c3d872acd462b8f7e2daa79402","stateRoot":"136ed14a27fa32fa088a736abbe07044c4a86f352babbe6e95147285d6247e3f"},"hash":"0000cd764439a27b3ec1d9c68a3700d7ef52d2299941029d17f8b17686d0993e","subjects":["restore.done"]},{"header":{"version":1,"height":5,"prevHash":"0000cd764439a27b3ec1d9c68a3700d7ef52d2299941029d17f8b17686d0993e","timestamp":1791239588649,"difficulty":16,"nonce":56217,"eventsRoot":"b7e81a627101e83915ef6cbfb445d23dd18e2bb9a5f5969f2dd9050a76b5232a","stateRoot":"136ed14a27fa32fa088a736abbe07044c4a86f352babbe6e95147285d6247e3f"},"hash":"00006ad72831690e95210dc5ecde85c6f1e46d54e28dca89ebb698b3788ceb80","subjects":["memory.transition"]}];
+
+// Config for the live deployment. Fee is the agreed 10% (follow_up_2.md).
+const CONFIG = { dataUrl: 'data/dashboard.json', googleClientId: '', platformFeeBps: 1000 };
+
+// pump.fun-style constant-product bonding curve (virtual reserves).
+const CURVE = { virtualSol: 30, virtualTokens: 1_073_000_000, graduationSol: 85, supply: 1_000_000_000 };
+const tokensForSol = (sol) => CURVE.virtualTokens - (CURVE.virtualSol * CURVE.virtualTokens) / (CURVE.virtualSol + sol);
+// Price in SOL per 1M tokens after `sol` has gone into the curve.
+const priceAt = (sol) => ((CURVE.virtualSol + sol) ** 2 / (CURVE.virtualSol * CURVE.virtualTokens)) * 1e6;
+
+let data = structuredClone(EMPTY);
+let wallet = null;     // { address, provider }
+let googleUser = null; // { name, credential }
+
+const $ = (id) => document.getElementById(id);
+const fmt = (n, d = 2) => n.toLocaleString('en-US', { minimumFractionDigits: d, maximumFractionDigits: d });
+const fmtInt = (n) => Math.round(n).toLocaleString('en-US');
+const short = (a) => a.slice(0, 4) + '…' + a.slice(-4);
+
+const feeBps = () => data.launch?.platformFeeBps ?? CONFIG.platformFeeBps;
+const feeRate = () => feeBps() / 10_000;
+const STATUS_TEXT = { open: 'Commitments open', closed: 'Commitments closed', launched: 'Launched' };
+
+// Commitments (plus an optional extra one), each with its vote weight.
+function positions(extra) {
+  const list = data.investors.map((i) => ({ ...i }));
+  if (extra) list.push(extra);
+  let before = 0;
+  return list.map((p) => {
+    const weight = p.sol * (1 + 1 / Math.log2(before + 2));
+    before += p.sol;
+    return { ...p, weight };
+  });
+}
+
+function computeSplit(list) {
+  const totalSol = list.reduce((s, p) => s + p.sol, 0);
+  const buySol = totalSol * (1 - feeRate());
+  const totalTokens = buySol > 0 ? tokensForSol(buySol) : 0;
+  return {
+    totalSol, buySol, totalTokens,
+    rows: list.map((p) => ({ ...p, share: totalSol ? p.sol / totalSol : 0, tokens: totalSol ? (totalTokens * p.sol) / totalSol : 0 })),
+  };
+}
+
+function render() {
+  const { launch } = data;
+  const isYou = (w) => wallet && w === wallet.address;
+  const split = computeSplit(positions());
+  const committed = split.totalSol;
+
+  $('launch-status').textContent = launch ? (STATUS_TEXT[launch.status] ?? launch.status) : 'No launch open';
+  $('launch-status').className = 'pill' + (launch?.status === 'open' ? ' good' : '');
+  $('launch-id').textContent = launch ? `${launch.id} · ${launch.token.symbol}` : '';
+  $('sum-committed').innerHTML = `${fmt(committed)} <small>/ ${fmt(launch?.caps.targetSol ?? 0)} SOL</small>`;
+  $('sum-bar').style.width = launch?.caps.targetSol ? Math.min(100, (committed / launch.caps.targetSol) * 100) + '%' : '0';
+  $('sum-investors').innerHTML = `${data.investors.length} <small>/ ${launch?.caps.maxInvestors ?? 0}</small>`;
+  $('sum-fee').textContent = `${feeBps() / 100}%`;
+  renderCountdown();
+
+  // Position calculator
+  const sol = Math.max(0, Number($('commit-input').value) || 0);
+  const youSplit = computeSplit(positions(sol > 0 ? { wallet: 'you', sol } : null));
+  const you = sol > 0 ? youSplit.rows[youSplit.rows.length - 1] : { share: 0, weight: 0, tokens: 0 };
+  $('commit-limits').textContent = launch
+    ? `Min ${launch.caps.minSol} SOL, max ${launch.caps.maxSolPerInvestor} SOL per Google account.`
+    : 'No launch is open for commitments yet.';
+  $('commit-btn').disabled = !(launch?.status === 'open');
+  $('pos-fee').textContent = `${fmt(sol * feeRate(), 3)} SOL`;
+  $('pos-buy').textContent = `${fmt(sol * (1 - feeRate()), 3)} SOL`;
+  $('pos-share').textContent = `${fmt(you.share * 100, 1)}%`;
+  $('pos-weight').textContent = fmt(you.weight, 3);
+  $('pos-tokens').textContent = `${fmtInt(you.tokens)}${launch ? ' ' + launch.token.symbol : ''}`;
+  $('pos-wallet').textContent = wallet ? short(wallet.address) : 'No wallet connected';
+
+  // Launch record
+  if (launch) {
+    const record = [
+      ['Label', launch.label],
+      ['Token', `${launch.token.name} (${launch.token.symbol})`],
+      ['Creator', short(launch.creatorWallet)],
+      ['Per investor', `${launch.caps.minSol}–${launch.caps.maxSolPerInvestor} SOL`],
+      ['Target', `${launch.caps.targetSol} SOL, ${launch.caps.maxInvestors} investors`],
+      ['Fee', `${feeBps() / 100}% to buyback & burn`],
+      ['Launch', new Date(launch.launchAt).toUTCString().replace(':00 GMT', ' UTC')],
+      ['On chain', launch.manifestBlock == null ? 'Not logged yet' : `Block ${launch.manifestBlock}`],
+    ];
+    $('record-list').innerHTML = record.map(([k, v]) => `<dt>${k}</dt><dd>${escapeHtml(v)}</dd>`).join('');
+    $('record-hash').textContent = launch.manifestHash;
+    $('record-frozen').textContent = launch.manifestBlock == null ? 'Draft' : 'Frozen';
+    $('record-frozen').className = 'pill' + (launch.manifestBlock == null ? '' : ' good');
+  } else {
+    $('record-list').innerHTML = '<dt>No launch published yet.</dt><dd></dd>';
+    $('record-hash').textContent = '—';
+    $('record-frozen').textContent = 'Not published';
+    $('record-frozen').className = 'pill';
+  }
+
+  // Split table
+  $('split-sub').textContent = `${fmt(split.buySol)} SOL buy → ${fmtInt(split.totalTokens)} tokens (${fmt((split.totalTokens / CURVE.supply) * 100, 1)}% of supply)`;
+  $('split-body').innerHTML = split.rows.length
+    ? split.rows.map((r) => `
+    <tr class="${isYou(r.wallet) ? 'you' : ''}">
+      <td class="mono">${isYou(r.wallet) ? 'You · ' : ''}${short(r.wallet)}</td>
+      <td>${fmt(r.sol)} SOL</td>
+      <td>${fmt(r.share * 100, 1)}%</td>
+      <td>${fmtInt(r.tokens)}</td>
+      <td>${fmt(r.weight, 3)}</td>
+    </tr>`).join('')
+    : '<tr><td colspan="5" class="muted">No commitments yet.</td></tr>';
+  $('split-foot').innerHTML = `<td>Total</td><td>${fmt(split.totalSol)} SOL</td><td>${split.rows.length ? '100' : '0'}%</td><td>${fmtInt(split.totalTokens)}</td><td>${fmt(split.rows.reduce((s, r) => s + r.weight, 0), 3)}</td>`;
+
+  renderCurve(split.buySol);
+  renderProposals();
+  renderBuyback();
+}
+
+function renderCountdown() {
+  const closes = data.launch && new Date(data.launch.commitWindow.closes);
+  if (!closes) {
+    $('sum-close').textContent = '0h 0m';
+    $('sum-close-date').textContent = 'Not scheduled';
+    return;
+  }
+  const ms = Math.max(0, closes - Date.now());
+  const h = Math.floor(ms / 3.6e6);
+  $('sum-close').textContent = ms === 0 ? 'Closed' : h >= 24 ? `${Math.floor(h / 24)}d ${h % 24}h` : `${h}h ${Math.floor((ms % 3.6e6) / 6e4)}m`;
+  $('sum-close-date').textContent = closes.toISOString().slice(0, 16).replace('T', ' ') + ' UTC';
+}
+
+function renderCurve(buySol) {
+  const W = 640, H = 260, L = 56, R = 16, T = 16, B = 40;
+  const maxX = CURVE.graduationSol, maxY = Math.ceil(priceAt(maxX) * 20) / 20;
+  const x = (s) => L + (s / maxX) * (W - L - R);
+  const y = (p) => T + (1 - p / maxY) * (H - T - B);
+  const pts = [];
+  for (let s = 0; s <= maxX; s += 1) pts.push(`${x(s).toFixed(1)},${y(priceAt(s)).toFixed(1)}`);
+  const area = [`${x(0)},${y(0)}`];
+  if (buySol > 0) for (let i = 0; i <= 40; i++) { const s = (buySol * i) / 40; area.push(`${x(s).toFixed(1)},${y(priceAt(s)).toFixed(1)}`); }
+  area.push(`${x(buySol)},${y(0)}`);
+  const xTicks = [0, 20, 40, 60, 85];
+  const yTicks = [];
+  for (let p = 0; p <= maxY + 1e-9; p += 0.1) yTicks.push(p);
+  $('curve').innerHTML = `
+    ${yTicks.map((p) => `<line class="grid-line" x1="${L}" x2="${W - R}" y1="${y(p)}" y2="${y(p)}"/><text x="${L - 8}" y="${y(p) + 4}" text-anchor="end">${p.toFixed(2)}</text>`).join('')}
+    ${xTicks.map((s) => `<text x="${x(s)}" y="${H - B + 18}" text-anchor="middle">${s}</text>`).join('')}
+    <line class="axis" x1="${L}" x2="${W - R}" y1="${y(0)}" y2="${y(0)}"/>
+    ${buySol > 0 ? `<polygon class="buy" points="${area.join(' ')}"/><line class="buy-edge" x1="${x(buySol)}" x2="${x(buySol)}" y1="${y(0)}" y2="${y(priceAt(buySol))}"/>` : ''}
+    <polyline class="curve" points="${pts.join(' ')}"/>
+    <line class="grad" x1="${x(maxX)}" x2="${x(maxX)}" y1="${T}" y2="${y(0)}"/>
+    <text class="grad-label" x="${x(maxX) - 6}" y="${T + 12}" text-anchor="end">graduates ~${maxX} SOL</text>
+    <text class="buy-label" x="${x(buySol) + 6}" y="${y(priceAt(buySol)) - 8}">group buy ${fmt(buySol)} SOL</text>
+    <text x="${(L + W - R) / 2}" y="${H - 6}" text-anchor="middle">SOL in the curve</text>
+    <text x="12" y="${T + (H - T - B) / 2}" text-anchor="middle" transform="rotate(-90 12 ${T + (H - T - B) / 2})">SOL per 1M tokens</text>`;
+  $('curve-sub').textContent = `${fmt((buySol / CURVE.graduationSol) * 100, 1)}% of the way to graduation`;
+}
+
+function renderProposals() {
+  if (!data.proposals.length) {
+    $('proposals').innerHTML = '<p class="note">No proposals yet. Proposals open once a launch is published.</p>';
+    return;
+  }
+  $('proposals').innerHTML = data.proposals.map((p) => {
+    const total = p.tally.reduce((a, b) => a + b, 0);
+    return `<article class="proposal">
+      <h3>${escapeHtml(p.title)}</h3>
+      <div class="tally">${p.options.map((o, i) => `
+        <div class="tally-row ${i ? 'no' : ''}"><span class="mono">${escapeHtml(o)}</span><div class="bar"><span style="width:${total ? (p.tally[i] / total) * 100 : 0}%"></span></div><span class="num" style="text-align:right">${fmt(p.tally[i])}</span></div>`).join('')}
+      </div>
+      <div class="vote-actions">${p.options.map((o, i) => `<button class="btn" type="button" data-vote="${p.id}" data-choice="${i}">Vote ${escapeHtml(o)}</button>`).join('')}</div>
+      <p class="status-line" id="vote-status-${p.id}" role="status"></p>
+    </article>`;
+  }).join('');
+}
+
+function renderBuyback() {
+  const b = data.buyback;
+  $('burn-wallet').textContent = b.wallet ? 'Buyback wallet ' + short(b.wallet) : 'Buyback wallet not set';
+  $('burn-fees').textContent = `${fmt(b.feesSol)} SOL`;
+  $('burn-bought').textContent = fmtInt(b.boughtTokens);
+  $('burn-burned').textContent = fmtInt(b.burnedTokens);
+  $('burn-launches').textContent = b.launches;
+  $('burn-note').textContent = 'The buyback wallet is controlled by the Bundlepad owner. Fees from each launch are swapped for $BUNDLEPAD and burned, and every swap and burn is logged with its transaction.';
+}
+
+function renderChain() {
+  $('blocks').innerHTML = [...CHAIN].reverse().map((b) => {
+    const zeros = Math.floor(b.header.difficulty / 4);
+    return `<div class="block" data-height="${b.header.height}">
+      <span class="h">#${b.header.height}</span>
+      <span class="hash"><b>${b.hash.slice(0, zeros)}</b>${b.hash.slice(zeros)}</span>
+      <span class="check" data-check></span>
+      <span class="events">${b.subjects.map((s) => `<span class="tag">${s}</span>`).join('')}<span class="tag">nonce ${b.header.nonce}</span><span class="tag">${new Date(b.header.timestamp).toISOString().slice(0, 19).replace('T', ' ')}</span></span>
+    </div>`;
+  }).join('');
+  $('footer-source').textContent = `Chain height ${CHAIN.length - 1}, tip ${short(CHAIN[CHAIN.length - 1].hash)}.`;
+}
+
+// Same canonical JSON as src/hash.js: sorted keys, no whitespace.
+function canonical(v) {
+  if (v === null || typeof v !== 'object') return JSON.stringify(v);
+  if (Array.isArray(v)) return '[' + v.map(canonical).join(',') + ']';
+  return '{' + Object.keys(v).sort().filter((k) => v[k] !== undefined).map((k) => JSON.stringify(k) + ':' + canonical(v[k])).join(',') + '}';
+}
+
+async function sha256Hex(text) {
+  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(text));
+  return [...new Uint8Array(buf)].map((b) => b.toString(16).padStart(2, '0')).join('');
+}
+
+function leadingZeroBits(hex) {
+  let bits = 0;
+  for (const ch of hex) {
+    const n = parseInt(ch, 16);
+    if (n === 0) { bits += 4; continue; }
+    return bits + Math.clz32(n) - 28;
+  }
+  return bits;
+}
+
+async function verifyChain() {
+  const status = $('chain-check');
+  if (!globalThis.crypto?.subtle) { status.textContent = 'This browser can\'t compute SHA-256 here.'; status.className = 'check fail'; return; }
+  let bad = 0;
+  for (let i = 0; i < CHAIN.length; i++) {
+    const b = CHAIN[i];
+    const problems = [];
+    if ((await sha256Hex(canonical(b.header))) !== b.hash) problems.push('hash');
+    if (leadingZeroBits(b.hash) < b.header.difficulty) problems.push('work');
+    if (b.header.prevHash !== (i ? CHAIN[i - 1].hash : '0'.repeat(64))) problems.push('link');
+    const cell = document.querySelector(`.block[data-height="${b.header.height}"] [data-check]`);
+    cell.textContent = problems.length ? 'Failed: ' + problems.join(', ') : 'Verified';
+    cell.className = 'check ' + (problems.length ? 'fail' : 'ok');
+    if (problems.length) bad++;
+  }
+  status.textContent = bad ? `${bad} block${bad > 1 ? 's' : ''} failed` : `All ${CHAIN.length} blocks verified`;
+  status.className = 'check ' + (bad ? 'fail' : 'ok');
+}
+
+function escapeHtml(s) {
+  return String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+}
+
+// Wallets: Phantom, Solflare and Backpack inject a provider on window.
+function findProvider() {
+  return window.phantom?.solana || window.solflare || window.backpack || (window.solana?.isPhantom ? window.solana : null);
+}
+
+async function connectWallet() {
+  const provider = findProvider();
+  if (!provider) return setStatus('commit-status', 'No Solana wallet found. Install Phantom, Solflare or Backpack, then reload.');
+  try {
+    const res = await provider.connect();
+    wallet = { address: (res?.publicKey ?? provider.publicKey).toString(), provider };
+    $('wallet-btn').textContent = short(wallet.address);
+    render();
+  } catch {
+    setStatus('commit-status', 'Wallet connection was cancelled.');
+  }
+}
+
+async function signText(text) {
+  const res = await wallet.provider.signMessage(new TextEncoder().encode(text), 'utf8');
+  return res.signature ?? res;
+}
+
+async function commit() {
+  const { launch } = data;
+  if (!launch || launch.status !== 'open') return setStatus('commit-status', 'No launch is open for commitments.');
+  const { caps } = launch;
+  const sol = Number($('commit-input').value);
+  if (!googleUser) return setStatus('commit-status', 'Sign in with Google first. Each Google account can commit with one wallet.');
+  if (!wallet) return setStatus('commit-status', 'Connect a wallet first.');
+  if (data.investors.some((i) => i.wallet === wallet.address)) return setStatus('commit-status', 'This wallet has already committed to this launch.');
+  if (!(sol >= caps.minSol && sol <= caps.maxSolPerInvestor)) return setStatus('commit-status', `Enter between ${caps.minSol} and ${caps.maxSolPerInvestor} SOL.`);
+  const committed = data.investors.reduce((s, i) => s + i.sol, 0);
+  if (committed + sol > caps.targetSol) return setStatus('commit-status', `Only ${fmt(caps.targetSol - committed)} SOL is left before the target.`);
+  let signature;
+  try {
+    signature = await signText(`Bundlepad commit ${launch.id} ${sol} SOL ${wallet.address} ${launch.manifestHash}`);
+  } catch {
+    return setStatus('commit-status', 'Signature was cancelled, so nothing was committed.');
+  }
+  // TODO(backend): POST { launch: launch.id, wallet, sol, signature, google: googleUser.credential }.
+  setStatus('commit-status', 'Signed. Commitments are recorded once the Bundlepad backend is running.');
+  void signature;
+}
+
+async function vote(id, choice) {
+  const proposal = data.proposals.find((p) => p.id === id);
+  const mine = positions().find((p) => wallet && p.wallet === wallet.address);
+  if (!mine) return setStatus(`vote-status-${id}`, 'Commit to this launch to vote.');
+  try {
+    await signText(`Bundlepad vote ${data.launch.id} ${id} ${proposal.options[choice]} ${wallet.address}`);
+  } catch {
+    return setStatus(`vote-status-${id}`, 'Signature was cancelled, so no vote was cast.');
+  }
+  setStatus(`vote-status-${id}`, `Signed vote for ${proposal.options[choice]} (weight ${fmt(mine.weight, 3)}). Votes are counted once the backend is running.`);
+}
+
+function setStatus(id, text) { const el = $(id); if (el) el.textContent = text; }
+
+function setupGoogle() {
+  if (!CONFIG.googleClientId) {
+    $('google-btn').addEventListener('click', () => setStatus('commit-status', 'Google sign-in isn\'t set up yet. Add a Google OAuth client ID to CONFIG in index.html.'));
+    return;
+  }
+  const s = document.createElement('script');
+  s.src = 'https://accounts.google.com/gsi/client';
+  s.onload = () => {
+    google.accounts.id.initialize({
+      client_id: CONFIG.googleClientId,
+      callback: (resp) => {
+        // The backend verifies resp.credential; the page only reads the name.
+        const payload = JSON.parse(atob(resp.credential.split('.')[1].replace(/-/g, '+').replace(/_/g, '/')));
+        googleUser = { name: payload.name, credential: resp.credential };
+        $('google-slot').innerHTML = `<span class="pill good">${escapeHtml(payload.name)}</span>`;
+      },
+    });
+    google.accounts.id.renderButton($('google-slot'), { theme: 'outline', size: 'medium' });
+  };
+  document.head.appendChild(s);
+}
+
+async function loadData() {
+  try {
+    const res = await fetch(CONFIG.dataUrl, { cache: 'no-store' });
+    if (res.ok) data = { ...structuredClone(EMPTY), ...(await res.json()) };
+  } catch { /* nothing published yet */ }
+}
+
+$('commit-input').addEventListener('input', render);
+$('commit-btn').addEventListener('click', commit);
+$('wallet-btn').addEventListener('click', connectWallet);
+$('chain-verify').addEventListener('click', verifyChain);
+$('proposals').addEventListener('click', (e) => {
+  const b = e.target.closest('[data-vote]');
+  if (b) vote(b.dataset.vote, Number(b.dataset.choice));
+});
+
+setupGoogle();
+renderChain();
+render();
+setInterval(renderCountdown, 30_000);
+loadData().then(render);
+</script>

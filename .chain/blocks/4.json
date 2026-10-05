@@ -1,0 +1,28 @@
+{
+  "header": {
+    "version": 1,
+    "height": 4,
+    "prevHash": "00001fea6b63cc723958d0b56209933e9de3ae81558dbe9c2fec7072578e3443",
+    "timestamp": 1791239582693,
+    "difficulty": 16,
+    "nonce": 160,
+    "eventsRoot": "eab66bc5d92e0bd3b02b23660f31060ebf50f3c3d872acd462b8f7e2daa79402",
+    "stateRoot": "136ed14a27fa32fa088a736abbe07044c4a86f352babbe6e95147285d6247e3f"
+  },
+  "hash": "0000cd764439a27b3ec1d9c68a3700d7ef52d2299941029d17f8b17686d0993e",
+  "events": [
+    {
+      "id": "7e82784531a268606fb2d428d1eec13ca70d87d983a9c06a4c7e75a48f723f92",
+      "type": "file",
+      "subject": "restore.done",
+      "source": "local-cli",
+      "body": {
+        "commit": "5d122959a13edde442dd622e80f51f8db06eef26",
+        "files": 2,
+        "to": "/tmp/claude-1000/-workspaces-Bundlepad/c16afc9e-5a12-42bc-ab62-a76c883cd085/scratchpad/restore"
+      },
+      "ts": 1791239582692,
+      "block": 4
+    }
+  ]
+}

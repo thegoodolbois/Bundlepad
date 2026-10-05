@@ -1,0 +1,29 @@
+{
+  "header": {
+    "version": 1,
+    "height": 5,
+    "prevHash": "0000cd764439a27b3ec1d9c68a3700d7ef52d2299941029d17f8b17686d0993e",
+    "timestamp": 1791239588649,
+    "difficulty": 16,
+    "nonce": 56217,
+    "eventsRoot": "b7e81a627101e83915ef6cbfb445d23dd18e2bb9a5f5969f2dd9050a76b5232a",
+    "stateRoot": "136ed14a27fa32fa088a736abbe07044c4a86f352babbe6e95147285d6247e3f"
+  },
+  "hash": "00006ad72831690e95210dc5ecde85c6f1e46d54e28dca89ebb698b3788ceb80",
+  "events": [
+    {
+      "id": "289566b78f23c6f3d9eb4e20134f75f444834261e4bc09315398704ac8b7118d",
+      "type": "update",
+      "subject": "memory.transition",
+      "source": "memory",
+      "body": {
+        "ts": "2026-10-05T22:33:08.638Z",
+        "plan": 2,
+        "stage": "awaiting_review",
+        "note": "Step 4 implemented; chain initialized in .chain/ (difficulty 16); 4/4 tests pass"
+      },
+      "ts": 1791239588647,
+      "block": 5
+    }
+  ]
+}
