@@ -1,0 +1,67 @@
+{
+  "header": {
+    "version": 1,
+    "height": 6,
+    "prevHash": "00006ad72831690e95210dc5ecde85c6f1e46d54e28dca89ebb698b3788ceb80",
+    "timestamp": 1791243073975,
+    "difficulty": 16,
+    "nonce": 152641,
+    "eventsRoot": "694e28eb9309440111560d6ad88dc90f9657fcb1edf25ab3466773c2fddaba97",
+    "stateRoot": "2b5fd04ca3f79e4f2a5ec7441f05586eecdc1155e620dc9e11171159a4e206d3"
+  },
+  "hash": "00001c34e94ba2d65375d95a1ea2a89cd9f9597e26fb22455de236d1047bd0af",
+  "events": [
+    {
+      "id": "864b9074de8707769387076516d36c96bec900626ace3118dc48dcef5e80316c",
+      "type": "update",
+      "subject": "git.commit",
+      "source": "local-cli",
+      "body": {
+        "sha": "7abde30121cda41d82d81ea27ec3e31912ac2b1c",
+        "parents": [
+          "5d122959a13edde442dd622e80f51f8db06eef26"
+        ],
+        "author": {
+          "name": "thegoodolbois",
+          "email": "thegoodolbois@gmail.com",
+          "date": "2026-10-05T23:30:43Z"
+        },
+        "committer": {
+          "name": "thegoodolbois",
+          "email": "thegoodolbois@gmail.com",
+          "date": "2026-10-05T23:30:43Z"
+        },
+        "message": "Add integrity chain, plans, and launch dashboard\n\n- Local proof-of-work chain (.chain/) that logs repo events and stores\n  compressed snapshots of every public branch, tag and PR head, with\n  verify, export/restore, backup and a localhost API\n- memory.json plan state gated in the CLI entrypoint\n- plan/plan.md and plan/follow_up/ approval docs\n- index.html dashboard for GitHub Pages (live data only, in-browser\n  chain verification)\n\nCo-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"
+      },
+      "ts": 1791243073625,
+      "block": 6
+    },
+    {
+      "id": "ab4cdf68846516b9ee4cc75a13ab34a1f4798d7a697aa95def3a508ce72f6ed2",
+      "type": "file",
+      "subject": "snapshot.created",
+      "source": "local-cli",
+      "body": {
+        "commit": "7abde30121cda41d82d81ea27ec3e31912ac2b1c",
+        "manifest": "66b7fcc77e504798f1726dd0e9a2ebcfdb7cc50da55878100cc4ea5444bb0fb3",
+        "files": 20
+      },
+      "ts": 1791243073973,
+      "block": 6
+    },
+    {
+      "id": "ea4df1b2ab4ca36e19c7b4442c79b65f249e49588552728556f75d9f7ee6ff63",
+      "type": "update",
+      "subject": "ref.update",
+      "source": "local-cli",
+      "body": {
+        "ref": "local/heads/main",
+        "from": "5d122959a13edde442dd622e80f51f8db06eef26",
+        "to": "7abde30121cda41d82d81ea27ec3e31912ac2b1c",
+        "forced": false
+      },
+      "ts": 1791243073974,
+      "block": 6
+    }
+  ]
+}
