@@ -22,11 +22,11 @@
       "schedulers": "Isekai Core (self-hosted, unofficial)",
       "siri_shortcuts": "OAuth",
       "shortcuts_ease": "Hard",
-      "verification": "Search snippets",
+      "verification": "Official pages via search (Oct 2026 review)",
       "docs_url": "https://www.deviantart.com/developers/",
       "user_login": "DeviantArt OAuth 2.0",
       "post_on_users_behalf": "Yes — Sta.sh submit + publish",
-      "login_scopes": "stash publish (unverified)",
+      "login_scopes": "stash publish (plus basic/user implied); unchanged but still not confirmed from an official page this pass",
       "review_to_open_to_other_users": "None known",
       "token_lifetime": "1h + ~3-month refresh",
       "needs_server_secret": "Yes",
@@ -43,7 +43,7 @@
         {
           "route": "user_sign_in_post_on_behalf",
           "summary": "The user signs in with DeviantArt OAuth 2.0 and grants permission; the app then posts for them. Yes — Sta.sh submit + publish.",
-          "scopes": "stash publish (unverified)",
+          "scopes": "stash publish (plus basic/user implied); unchanged but still not confirmed from an official page this pass",
           "review_to_open_to_other_users": "None known",
           "token_lifetime": "1h + ~3-month refresh",
           "needs_server_secret": "Yes"
@@ -73,14 +73,14 @@
       "api_can_upload": "Tracks (≤4 GB), metadata, playlists",
       "api_free": "Paid (developer needs Artist Pro)",
       "api_cost_detail": "—",
-      "approval": "Self-serve app registration for Artist Pro subscribers; OAuth 2.1 + PKCE",
-      "limits": "~1h tokens, single-use refresh",
+      "approval": "Self-serve at soundcloud.com/you/apps (or the sc-api-auth.mjs CLI) — requires Artist Pro; OAuth 2.1 Authorization Code + PKCE (secure.soundcloud.com)",
+      "limits": "Upload ≤4 GB and ≤24 h per file (AIFF/WAV/FLAC/OGG/MP2/MP3/AAC/AMR/WMA); play-stream requests 15,000/24 h per client_id; tokens ~1 h",
       "native_scheduling": "Yes (Artist Pro, private tracks)",
-      "api_scheduling": "Unverified",
+      "api_scheduling": "No — POST /tracks has track[release_date] (yyyy-mm-dd metadata) and track[sharing]=public|private, but no publish-at field; schedule by uploading private and PUT sharing=public later",
       "schedulers": "None known",
       "siri_shortcuts": "OAuth with short-lived tokens",
       "shortcuts_ease": "Hard",
-      "verification": "Official help via search",
+      "verification": "Verified against official docs (Oct 2026 review)",
       "docs_url": "https://developers.soundcloud.com/docs/api",
       "user_login": "OAuth 2.1 + PKCE (secret also needed)",
       "post_on_users_behalf": "Yes — track uploads",
@@ -93,10 +93,10 @@
         {
           "route": "official_api_own_account",
           "summary": "Post to your own account with the official API (SoundCloud API): Tracks (≤4 GB), metadata, playlists.",
-          "access": "Self-serve app registration for Artist Pro subscribers; OAuth 2.1 + PKCE",
+          "access": "Self-serve at soundcloud.com/you/apps (or the sc-api-auth.mjs CLI) — requires Artist Pro; OAuth 2.1 Authorization Code + PKCE (secure.soundcloud.com)",
           "cost": "Paid (developer needs Artist Pro)",
-          "scheduling": "Unverified",
-          "limits": "~1h tokens, single-use refresh"
+          "scheduling": "No — POST /tracks has track[release_date] (yyyy-mm-dd metadata) and track[sharing]=public|private, but no publish-at field; schedule by uploading private and PUT sharing=public later",
+          "limits": "Upload ≤4 GB and ≤24 h per file (AIFF/WAV/FLAC/OGG/MP2/MP3/AAC/AMR/WMA); play-stream requests 15,000/24 h per client_id; tokens ~1 h"
         },
         {
           "route": "user_sign_in_post_on_behalf",
@@ -131,13 +131,13 @@
       "api_free": "Free",
       "api_cost_detail": "Uses Resource Credits (staked HP)",
       "approval": "Hive account + posting key",
-      "limits": "~5 min between root posts (unverified)",
-      "native_scheduling": "Yes (PeakD)",
+      "limits": "Minimum 5 minutes between root posts and 3 seconds between replies per account (chain constants); every action costs Resource Credits from staked HP",
+      "native_scheduling": "Yes in front-ends (PeakD, Ecency); not in the chain API",
       "api_scheduling": "No",
-      "schedulers": "PeakD, HiveVote",
+      "schedulers": "PeakD, Ecency (built-in schedulers)",
       "siri_shortcuts": "Needs key signing",
       "shortcuts_ease": "Hard",
-      "verification": "Official docs via search",
+      "verification": "Official pages via search (Oct 2026 review)",
       "docs_url": "https://developers.hive.io/",
       "user_login": "Posting-key authority (e.g. via HiveSigner/Keychain)",
       "post_on_users_behalf": "Yes — signed by the user's key",
@@ -153,7 +153,7 @@
           "access": "Hive account + posting key",
           "cost": "Free (Uses Resource Credits (staked HP))",
           "scheduling": "No",
-          "limits": "~5 min between root posts (unverified)"
+          "limits": "Minimum 5 minutes between root posts and 3 seconds between replies per account (chain constants); every action costs Resource Credits from staked HP"
         },
         {
           "route": "user_sign_in_post_on_behalf",
@@ -165,7 +165,7 @@
         },
         {
           "route": "scheduler_or_automation_tool",
-          "summary": "Connect the account once in a tool that already has platform approval and schedule there: PeakD, HiveVote.",
+          "summary": "Connect the account once in a tool that already has platform approval and schedule there: PeakD, Ecency (built-in schedulers).",
           "note": "Easiest path when the platform requires app review or an audit; the tool handles login and tokens."
         },
         {
@@ -176,7 +176,7 @@
         },
         {
           "route": "native_scheduler",
-          "summary": "Schedule inside the platform itself: Yes (PeakD)."
+          "summary": "Schedule inside the platform itself: Yes in front-ends (PeakD, Ecency); not in the chain API."
         },
         {
           "route": "manual",
@@ -189,39 +189,39 @@
       "category": "Blog",
       "content_types": "Posts, pages, images, embedded video",
       "official_api": "Yes — Blogger API v3",
-      "api_can_upload": "Posts and pages (publish/schedule)",
+      "api_can_upload": "Posts and pages (HTML content; create/update/publish/schedule). No image-upload endpoint — images must be hosted elsewhere and referenced in HTML.",
       "api_free": "Free",
       "api_cost_detail": "—",
       "approval": "Google OAuth (blogger scope)",
-      "limits": "~10,000 requests/day (unverified)",
+      "limits": "Default 10,000 requests/day per project; 100 requests/100 s per user (Cloud Console quota page shows exact values)",
       "native_scheduling": "Yes",
-      "api_scheduling": "Yes — posts.publish with publishDate",
+      "api_scheduling": "Yes — posts.publish with optional publishDate (POST /blogger/v3/blogs/{blogId}/posts/{postId}/publish)",
       "schedulers": "Zapier/Make (unverified)",
       "siri_shortcuts": "Google OAuth",
       "shortcuts_ease": "Hard",
-      "verification": "Official docs via search",
+      "verification": "Official pages via search (Oct 2026 review)",
       "docs_url": "https://developers.google.com/blogger/docs/3.0/reference/posts/publish",
       "user_login": "Google OAuth 2.0 (same consent can include YouTube + Business Profile)",
       "post_on_users_behalf": "Yes — blogs the user writes for",
       "login_scopes": "blogger",
-      "review_to_open_to_other_users": "Google OAuth verification",
+      "review_to_open_to_other_users": "Google OAuth verification (blogger is a sensitive scope); Testing mode: 100 test users, refresh tokens expire after 7 days",
       "token_lifetime": "Same as YouTube",
       "needs_server_secret": "For long-lived access",
       "has_upload_api": true,
       "automation_options": [
         {
           "route": "official_api_own_account",
-          "summary": "Post to your own account with the official API (Blogger API v3): Posts and pages (publish/schedule).",
+          "summary": "Post to your own account with the official API (Blogger API v3): Posts and pages (HTML content; create/update/publish/schedule). No image-upload endpoint — images must be hosted elsewhere and referenced in HTML..",
           "access": "Google OAuth (blogger scope)",
           "cost": "Free",
-          "scheduling": "Yes — posts.publish with publishDate",
-          "limits": "~10,000 requests/day (unverified)"
+          "scheduling": "Yes — posts.publish with optional publishDate (POST /blogger/v3/blogs/{blogId}/posts/{postId}/publish)",
+          "limits": "Default 10,000 requests/day per project; 100 requests/100 s per user (Cloud Console quota page shows exact values)"
         },
         {
           "route": "user_sign_in_post_on_behalf",
           "summary": "The user signs in with Google OAuth 2.0 (same consent can include YouTube + Business Profile) and grants permission; the app then posts for them. Yes — blogs the user writes for.",
           "scopes": "blogger",
-          "review_to_open_to_other_users": "Google OAuth verification",
+          "review_to_open_to_other_users": "Google OAuth verification (blogger is a sensitive scope); Testing mode: 100 test users, refresh tokens expire after 7 days",
           "token_lifetime": "Same as YouTube",
           "needs_server_secret": "For long-lived access"
         },
@@ -255,19 +255,19 @@
       "api_free": "Free",
       "api_cost_detail": "—",
       "approval": "OAuth",
-      "limits": "250 posts/day; 1,000 queued",
+      "limits": "250 published posts/day per user (incl. reblogs); 250 image uploads/day per user; queue limit exists (error 403.8022) but number not stated in API docs",
       "native_scheduling": "Yes (queue)",
-      "api_scheduling": "Yes — state=queue + publish_on",
-      "schedulers": "Unverified",
+      "api_scheduling": "Yes — POST /v2/blog/{blog}/posts with state=queue and publish_on (ISO 8601) for a set time; state values published|queue|draft|private",
+      "schedulers": "Native queue/scheduler; IFTTT, Zapier (Ayrshare no longer lists Tumblr)",
       "siri_shortcuts": "OAuth needed",
       "shortcuts_ease": "Hard",
-      "verification": "Official docs via search",
+      "verification": "Verified against official docs (Oct 2026 review)",
       "docs_url": "https://www.tumblr.com/docs/en/api/v2",
       "user_login": "Tumblr OAuth 2",
       "post_on_users_behalf": "Yes — the user's blogs",
       "login_scopes": "basic write offline_access",
       "review_to_open_to_other_users": "None documented",
-      "token_lifetime": "1h; refresh with offline_access",
+      "token_lifetime": "Short-lived access token (expires_in seconds in response); refresh token only with offline_access",
       "needs_server_secret": "Yes",
       "has_upload_api": true,
       "automation_options": [
@@ -276,20 +276,20 @@
           "summary": "Post to your own account with the official API (API v2): All post types (NPF).",
           "access": "OAuth",
           "cost": "Free",
-          "scheduling": "Yes — state=queue + publish_on",
-          "limits": "250 posts/day; 1,000 queued"
+          "scheduling": "Yes — POST /v2/blog/{blog}/posts with state=queue and publish_on (ISO 8601) for a set time; state values published|queue|draft|private",
+          "limits": "250 published posts/day per user (incl. reblogs); 250 image uploads/day per user; queue limit exists (error 403.8022) but number not stated in API docs"
         },
         {
           "route": "user_sign_in_post_on_behalf",
           "summary": "The user signs in with Tumblr OAuth 2 and grants permission; the app then posts for them. Yes — the user's blogs.",
           "scopes": "basic write offline_access",
           "review_to_open_to_other_users": "None documented",
-          "token_lifetime": "1h; refresh with offline_access",
+          "token_lifetime": "Short-lived access token (expires_in seconds in response); refresh token only with offline_access",
           "needs_server_secret": "Yes"
         },
         {
           "route": "scheduler_or_automation_tool",
-          "summary": "Connect the account once in a tool that already has platform approval and schedule there: Unverified.",
+          "summary": "Connect the account once in a tool that already has platform approval and schedule there: Native queue/scheduler; IFTTT, Zapier (Ayrshare no longer lists Tumblr).",
           "note": "Easiest path when the platform requires app review or an audit; the tool handles login and tokens."
         },
         {
@@ -317,19 +317,19 @@
       "api_free": "Free",
       "api_cost_detail": "—",
       "approval": "WordPress.com: OAuth app; self-hosted: application password",
-      "limits": "Unverified",
+      "limits": "Self-hosted: no rate limit in core (host/WAF/security plugins may throttle); per_page max 100; upload size capped by PHP upload_max_filesize/post_max_size. WordPress.com: rate limits exist but numbers are not published (watch X-WS-RateLimit-Remaining header, back off on 429).",
       "native_scheduling": "Yes",
       "api_scheduling": "Yes — status=future + date",
       "schedulers": "Publer, Jetpack Social, Zapier, n8n",
       "siri_shortcuts": "Self-hosted: one call with an application password",
       "shortcuts_ease": "Easy (self-hosted) / Hard (.com)",
-      "verification": "Official docs via search",
+      "verification": "Official pages via search (Oct 2026 review)",
       "docs_url": "https://developer.wordpress.com/docs/api/",
       "user_login": "WordPress.com OAuth 2.0; self-hosted: application passwords",
       "post_on_users_behalf": "Yes — posts, pages, media",
-      "login_scopes": "global or per-site; posts, media",
+      "login_scopes": "WordPress.com OAuth: default = one blog chosen at authorize time; scope=global = all the user's sites (incl. Jetpack sites); also auth, media, posts, sites etc.",
       "review_to_open_to_other_users": "None",
-      "token_lifetime": "Implicit 2 weeks; server long-lived",
+      "token_lifetime": "WordPress.com: implicit-grant tokens last 2 weeks; authorization-code tokens are long-lived with no refresh token (re-auth if revoked). Self-hosted application passwords: until revoked.",
       "needs_server_secret": "Optional",
       "has_upload_api": true,
       "automation_options": [
@@ -339,14 +339,14 @@
           "access": "WordPress.com: OAuth app; self-hosted: application password",
           "cost": "Free",
           "scheduling": "Yes — status=future + date",
-          "limits": "Unverified"
+          "limits": "Self-hosted: no rate limit in core (host/WAF/security plugins may throttle); per_page max 100; upload size capped by PHP upload_max_filesize/post_max_size. WordPress.com: rate limits exist but numbers are not published (watch X-WS-RateLimit-Remaining header, back off on 429)."
         },
         {
           "route": "user_sign_in_post_on_behalf",
           "summary": "The user signs in with WordPress.com OAuth 2.0; self-hosted: application passwords and grants permission; the app then posts for them. Yes — posts, pages, media.",
-          "scopes": "global or per-site; posts, media",
+          "scopes": "WordPress.com OAuth: default = one blog chosen at authorize time; scope=global = all the user's sites (incl. Jetpack sites); also auth, media, posts, sites etc.",
           "review_to_open_to_other_users": "None",
-          "token_lifetime": "Implicit 2 weeks; server long-lived",
+          "token_lifetime": "WordPress.com: implicit-grant tokens last 2 weeks; authorization-code tokens are long-lived with no refresh token (re-auth if revoked). Self-hosted application passwords: until revoked.",
           "needs_server_secret": "Optional"
         },
         {
@@ -377,15 +377,15 @@
       "official_api": "Yes — Admin API",
       "api_can_upload": "Posts, pages, images, media, newsletters",
       "api_free": "Free tier + paid",
-      "api_cost_detail": "Free self-hosted; Ghost(Pro) above Starter for custom integrations",
+      "api_cost_detail": "Admin API itself is free; self-hosted free. Ghost(Pro) Starter does not include custom integrations - need Publisher (about $29/mo) or higher.",
       "approval": "Admin API key (signs a 5-min JWT)",
-      "limits": "Unverified",
+      "limits": "No published per-key quota; Ghost(Pro) applies undocumented rate limiting (back off on 429). JWT must expire within 5 minutes. Image upload size limited by plan (Starter 5MB).",
       "native_scheduling": "Yes",
       "api_scheduling": "Yes — status=scheduled + published_at",
       "schedulers": "Zapier",
       "siri_shortcuts": "Needs JWT signing (helper needed)",
       "shortcuts_ease": "Hard",
-      "verification": "Official docs via search",
+      "verification": "Official pages via search (Oct 2026 review)",
       "docs_url": "https://docs.ghost.org/admin-api",
       "user_login": "No user OAuth — Admin API key per site",
       "post_on_users_behalf": "Limited — with the site owner's key",
@@ -399,9 +399,9 @@
           "route": "official_api_own_account",
           "summary": "Post to your own account with the official API (Admin API): Posts, pages, images, media, newsletters.",
           "access": "Admin API key (signs a 5-min JWT)",
-          "cost": "Free tier + paid (Free self-hosted; Ghost(Pro) above Starter for custom integrations)",
+          "cost": "Free tier + paid (Admin API itself is free; self-hosted free. Ghost(Pro) Starter does not include custom integrations - need Publisher (about $29/mo) or higher.)",
           "scheduling": "Yes — status=scheduled + published_at",
-          "limits": "Unverified"
+          "limits": "No published per-key quota; Ghost(Pro) applies undocumented rate limiting (back off on 429). JWT must expire within 5 minutes. Image upload size limited by plan (Starter 5MB)."
         },
         {
           "route": "user_sign_in_post_on_behalf",
@@ -437,17 +437,17 @@
       "category": "Community",
       "content_types": "Messages, images, video, files, polls, threads, events",
       "official_api": "Yes — Webhooks + bot API",
-      "api_can_upload": "Text, embeds, files, polls",
+      "api_can_upload": "Text, embeds, files (multipart), polls, components; can post into a forum/media channel thread via thread_id or thread_name",
       "api_free": "Free",
       "api_cost_detail": "—",
       "approval": "Webhook URL (no review)",
-      "limits": "~5 requests/2s per webhook",
+      "limits": "Rate limits are dynamic - read X-RateLimit-* headers and back off on 429 (retry_after). Observed per-webhook bucket ~5 req/2 s and ~30 messages/min per webhook/channel; message content <=2000 chars, <=10 embeds; attachments 10 MB on non-boosted servers",
       "native_scheduling": "Events only",
       "api_scheduling": "No",
       "schedulers": "n8n, Postiz, Zapier, IFTTT",
       "siri_shortcuts": "One call to the webhook URL",
       "shortcuts_ease": "Easy",
-      "verification": "Official docs via search",
+      "verification": "Official pages via search (Oct 2026 review)",
       "docs_url": "https://docs.discord.com/developers/resources/webhook",
       "user_login": "Discord OAuth2 with webhook.incoming",
       "post_on_users_behalf": "Yes — the user picks a channel and you get its webhook",
@@ -459,11 +459,11 @@
       "automation_options": [
         {
           "route": "official_api_own_account",
-          "summary": "Post to your own account with the official API (Webhooks + bot API): Text, embeds, files, polls.",
+          "summary": "Post to your own account with the official API (Webhooks + bot API): Text, embeds, files (multipart), polls, components; can post into a forum/media channel thread via thread_id or thread_name.",
           "access": "Webhook URL (no review)",
           "cost": "Free",
           "scheduling": "No",
-          "limits": "~5 requests/2s per webhook"
+          "limits": "Rate limits are dynamic - read X-RateLimit-* headers and back off on 429 (retry_after). Observed per-webhook bucket ~5 req/2 s and ~30 messages/min per webhook/channel; message content <=2000 chars, <=10 embeds; attachments 10 MB on non-boosted servers"
         },
         {
           "route": "user_sign_in_post_on_behalf",
@@ -498,14 +498,14 @@
       "api_can_upload": "Text, link, image posts; comments",
       "api_free": "Free tier + paid",
       "api_cost_detail": "Free 100 queries/min; commercial use needs a paid agreement",
-      "approval": "Explicit approval (Responsible Builder Policy, Nov 2025)",
+      "approval": "Self-service API access closed (Responsible Builder Policy, Nov 2025): new apps, including personal script apps, must request approval via a support ticket; existing approved access unaffected; Reddit targets ~7-day turnaround but many requests reportedly denied/unanswered; Devvit recommended for in-Reddit apps",
       "limits": "100 QPM",
-      "native_scheduling": "Moderators only",
+      "native_scheduling": "Moderators only (subreddit mod tools → Scheduled Posts, desktop, needs Manage Posts permission in that subreddit)",
       "api_scheduling": "No",
-      "schedulers": "Ayrshare, n8n",
+      "schedulers": "Postpone, Postiz, Ayrshare, n8n (Buffer/Hootsuite do not support Reddit posting)",
       "siri_shortcuts": "OAuth needed — use a scheduler",
       "shortcuts_ease": "Hard",
-      "verification": "Official help pages via search",
+      "verification": "Official pages via search (Oct 2026 review)",
       "docs_url": "https://support.reddithelp.com/hc/en-us/articles/16160319875092-Reddit-Data-API-Wiki",
       "user_login": "Reddit OAuth2",
       "post_on_users_behalf": "Yes — the user's account",
@@ -518,7 +518,7 @@
         {
           "route": "official_api_own_account",
           "summary": "Post to your own account with the official API (Data API (approval required)): Text, link, image posts; comments.",
-          "access": "Explicit approval (Responsible Builder Policy, Nov 2025)",
+          "access": "Self-service API access closed (Responsible Builder Policy, Nov 2025): new apps, including personal script apps, must request approval via a support ticket; existing approved access unaffected; Reddit targets ~7-day turnaround but many requests reportedly denied/unanswered; Devvit recommended for in-Reddit apps",
           "cost": "Free tier + paid (Free 100 queries/min; commercial use needs a paid agreement)",
           "scheduling": "No",
           "limits": "100 QPM"
@@ -533,7 +533,7 @@
         },
         {
           "route": "scheduler_or_automation_tool",
-          "summary": "Connect the account once in a tool that already has platform approval and schedule there: Ayrshare, n8n.",
+          "summary": "Connect the account once in a tool that already has platform approval and schedule there: Postpone, Postiz, Ayrshare, n8n (Buffer/Hootsuite do not support Reddit posting).",
           "note": "Easiest path when the platform requires app review or an audit; the tool handles login and tokens."
         },
         {
@@ -558,18 +558,18 @@
       "api_cost_detail": "—",
       "approval": "Log in with username/password → JWT",
       "limits": "6 posts/10 min default",
-      "native_scheduling": "Unverified",
-      "api_scheduling": "Unverified",
+      "native_scheduling": "No on 0.19.x (current stable, 0.19.20); Lemmy 1.0 (in beta, API v4) adds post scheduling, max 10 scheduled posts per user",
+      "api_scheduling": "No on API v3 (CreatePost has no schedule field); API v4 / Lemmy 1.0 adds a scheduled publish time",
       "schedulers": "Lemmy Schedule, Poster.ly, Postiz",
       "siri_shortcuts": "Login POST then Bearer call",
       "shortcuts_ease": "Easy",
-      "verification": "Official docs via search",
+      "verification": "Official pages via search (Oct 2026 review)",
       "docs_url": "https://join-lemmy.org/api/main",
       "user_login": "Username/password login → JWT",
       "post_on_users_behalf": "Limited — app must handle the user's password",
       "login_scopes": "Full account",
       "review_to_open_to_other_users": "None",
-      "token_lifetime": "JWT session",
+      "token_lifetime": "JWT login token stays valid until logout or password change (no fixed expiry in 0.19)",
       "needs_server_secret": "No",
       "has_upload_api": true,
       "automation_options": [
@@ -578,7 +578,7 @@
           "summary": "Post to your own account with the official API (Lemmy HTTP API (per server)): Posts, comments, images.",
           "access": "Log in with username/password → JWT",
           "cost": "Free",
-          "scheduling": "Unverified",
+          "scheduling": "No on API v3 (CreatePost has no schedule field); API v4 / Lemmy 1.0 adds a scheduled publish time",
           "limits": "6 posts/10 min default"
         },
         {
@@ -586,7 +586,7 @@
           "summary": "The user signs in with Username/password login → JWT and grants permission; the app then posts for them. Limited — app must handle the user's password.",
           "scopes": "Full account",
           "review_to_open_to_other_users": "None",
-          "token_lifetime": "JWT session",
+          "token_lifetime": "JWT login token stays valid until logout or password change (no fixed expiry in 0.19)",
           "needs_server_secret": "No"
         },
         {
@@ -614,37 +614,37 @@
       "api_can_upload": "Text, up to 4 images, articles, video",
       "api_free": "Free (unverified)",
       "api_cost_detail": "—",
-      "approval": "Key from Creator Center",
-      "limits": "Unverified",
+      "approval": "Self-serve: create a Square OpenAPI key at https://www.binance.com/square/creator-center/home",
+      "limits": "100 posts/day, 400 uploads/day per key; max 4 images per post; article = exactly 1 cover; images and video mutually exclusive",
       "native_scheduling": "Unverified",
-      "api_scheduling": "Unverified",
+      "api_scheduling": "None documented (post immediately; schedule on the agent side)",
       "schedulers": "—",
       "siri_shortcuts": "One API call with the key header",
       "shortcuts_ease": "Medium",
-      "verification": "Official repo via search",
-      "docs_url": "https://github.com/binance/binance-skills-hub",
+      "verification": "Verified against official docs (Oct 2026 review)",
+      "docs_url": "https://github.com/binance/binance-skills-hub (skills/binance/square-post)",
       "user_login": "No third-party login — user pastes a personal key",
       "post_on_users_behalf": "Limited — with the user's own key",
       "login_scopes": "—",
       "review_to_open_to_other_users": "None",
-      "token_lifetime": "Until the user regenerates the key",
+      "token_lifetime": "Key can expire (error 220004 'API key expired'); regenerate in Creator Center",
       "needs_server_secret": "Yes (keep the key secret)",
       "has_upload_api": true,
       "automation_options": [
         {
           "route": "official_api_own_account",
           "summary": "Post to your own account with the official API (Square OpenAPI): Text, up to 4 images, articles, video.",
-          "access": "Key from Creator Center",
+          "access": "Self-serve: create a Square OpenAPI key at https://www.binance.com/square/creator-center/home",
           "cost": "Free (unverified)",
-          "scheduling": "Unverified",
-          "limits": "Unverified"
+          "scheduling": "None documented (post immediately; schedule on the agent side)",
+          "limits": "100 posts/day, 400 uploads/day per key; max 4 images per post; article = exactly 1 cover; images and video mutually exclusive"
         },
         {
           "route": "user_sign_in_post_on_behalf",
           "summary": "The user signs in with No third-party login — user pastes a personal key and grants permission; the app then posts for them. Limited — with the user's own key.",
           "scopes": "—",
           "review_to_open_to_other_users": "None",
-          "token_lifetime": "Until the user regenerates the key",
+          "token_lifetime": "Key can expire (error 220004 'API key expired'); regenerate in Creator Center",
           "needs_server_secret": "Yes (keep the key secret)"
         },
         {
@@ -664,17 +664,17 @@
       "category": "Decentralized social",
       "content_types": "Text casts, images, links, channels, mini apps",
       "official_api": "Yes — via Neynar API",
-      "api_can_upload": "Text, embeds, replies, channels",
+      "api_can_upload": "Text casts (320 bytes; longer for Pro), up to 2 embeds by URL (images/video must be hosted elsewhere - no blob upload), replies, quote casts, channels",
       "api_free": "Free tier + paid",
       "api_cost_detail": "Free 200K compute units; $9–$249/mo plans",
-      "approval": "Neynar key + signer approved once",
+      "approval": "Neynar API key + a signer approved once in the Farcaster app; creating a managed signer requires a signed key request from an app FID (custody mnemonic) or using Sign In With Neynar",
       "limits": "Plan-based",
       "native_scheduling": "No",
       "api_scheduling": "No",
       "schedulers": "Postiz",
       "siri_shortcuts": "One API call with key + signer",
       "shortcuts_ease": "Medium",
-      "verification": "Mixed official/3rd-party",
+      "verification": "Official pages via search (Oct 2026 review)",
       "docs_url": "https://docs.neynar.com/docs/integrate-managed-signers",
       "user_login": "Sign In With Farcaster + signer approval (or Neynar managed signer)",
       "post_on_users_behalf": "Yes — via a signer the user approves",
@@ -686,8 +686,8 @@
       "automation_options": [
         {
           "route": "official_api_own_account",
-          "summary": "Post to your own account with the official API (via Neynar API): Text, embeds, replies, channels.",
-          "access": "Neynar key + signer approved once",
+          "summary": "Post to your own account with the official API (via Neynar API): Text casts (320 bytes; longer for Pro), up to 2 embeds by URL (images/video must be hosted elsewhere - no blob upload), replies, quote casts, channels.",
+          "access": "Neynar API key + a signer approved once in the Farcaster app; creating a managed signer requires a signed key request from an app FID (custody mnemonic) or using Sign In With Neynar",
           "cost": "Free tier + paid (Free 200K compute units; $9–$249/mo plans)",
           "scheduling": "No",
           "limits": "Plan-based"
@@ -723,20 +723,20 @@
       "content_types": "Posts, images, video metadata",
       "official_api": "Yes — Lens API/SDK",
       "api_can_upload": "Posts with media metadata",
-      "api_free": "Unverified",
+      "api_free": "API free to use; onchain actions need gas on Lens Chain unless the App sponsors them; optional Server API key (x-lens-app header) lifts rate limits",
       "api_cost_detail": "—",
       "approval": "Wallet signature",
-      "limits": "Unverified",
+      "limits": "API rate limits apply without a Server API key (numbers unverified)",
       "native_scheduling": "Unverified",
       "api_scheduling": "Unverified",
       "schedulers": "None confirmed",
       "siri_shortcuts": "Not practical",
       "shortcuts_ease": "Hard",
-      "verification": "Mostly unverified",
-      "docs_url": "https://lens.xyz/docs/protocol/best-practices/transaction-lifecycle",
+      "verification": "Partly unverified (Oct 2026 review)",
+      "docs_url": "https://lens.xyz/docs/protocol",
       "user_login": "Wallet sign-in (SIWE)",
       "post_on_users_behalf": "Yes — as account owner/manager",
-      "login_scopes": "Account Manager",
+      "login_scopes": "Account Owner or Account Manager role (manager permissions: canExecuteTransactions, canSetMetadataUri, canTransferTokens, canTransferNative)",
       "review_to_open_to_other_users": "Register your app address",
       "token_lifetime": "10-min access, 7-day refresh",
       "needs_server_secret": "No",
@@ -746,14 +746,14 @@
           "route": "official_api_own_account",
           "summary": "Post to your own account with the official API (Lens API/SDK): Posts with media metadata.",
           "access": "Wallet signature",
-          "cost": "Unverified",
+          "cost": "API free to use; onchain actions need gas on Lens Chain unless the App sponsors them; optional Server API key (x-lens-app header) lifts rate limits",
           "scheduling": "Unverified",
-          "limits": "Unverified"
+          "limits": "API rate limits apply without a Server API key (numbers unverified)"
         },
         {
           "route": "user_sign_in_post_on_behalf",
           "summary": "The user signs in with Wallet sign-in (SIWE) and grants permission; the app then posts for them. Yes — as account owner/manager.",
-          "scopes": "Account Manager",
+          "scopes": "Account Owner or Account Manager role (manager permissions: canExecuteTransactions, canSetMetadataUri, canTransferTokens, canTransferNative)",
           "review_to_open_to_other_users": "Register your app address",
           "token_lifetime": "10-min access, 7-day refresh",
           "needs_server_secret": "No"
@@ -775,7 +775,7 @@
       "category": "Decentralized social",
       "content_types": "Text notes, images/video by URL, long-form",
       "official_api": "Protocol (no company API)",
-      "api_can_upload": "Anything as signed events to relays",
+      "api_can_upload": "Signed events to relays (kind 1 notes, kind 30023 long-form); media uploaded to Blossom servers (NIP-B7; NIP-96 now deprecated) and referenced by URL with imeta tags",
       "api_free": "Free",
       "api_cost_detail": "Some relays charge",
       "approval": "Your private key",
@@ -785,11 +785,11 @@
       "schedulers": "Postiz",
       "siri_shortcuts": "Not directly (needs signing)",
       "shortcuts_ease": "Hard",
-      "verification": "Protocol docs via search",
-      "docs_url": "https://d-central.tech/nostr-nips-reference/",
+      "verification": "Verified against official docs (Oct 2026 review)",
+      "docs_url": "https://github.com/nostr-protocol/nips",
       "user_login": "NIP-07 extension or NIP-46 remote signer",
       "post_on_users_behalf": "Yes — the user's signer signs each post",
-      "login_scopes": "Per-connection permissions",
+      "login_scopes": "Per-connection permissions in NIP-46 (e.g. sign_event:1, sign_event:24242); NIP-07 extensions prompt per site",
       "review_to_open_to_other_users": "None",
       "token_lifetime": "Until revoked",
       "needs_server_secret": "No",
@@ -797,7 +797,7 @@
       "automation_options": [
         {
           "route": "official_api_own_account",
-          "summary": "Post to your own account with the official API (Protocol (no company API)): Anything as signed events to relays.",
+          "summary": "Post to your own account with the official API (Protocol (no company API)): Signed events to relays (kind 1 notes, kind 30023 long-form); media uploaded to Blossom servers (NIP-B7; NIP-96 now deprecated) and referenced by URL with imeta tags.",
           "access": "Your private key",
           "cost": "Free (Some relays charge)",
           "scheduling": "No",
@@ -806,7 +806,7 @@
         {
           "route": "user_sign_in_post_on_behalf",
           "summary": "The user signs in with NIP-07 extension or NIP-46 remote signer and grants permission; the app then posts for them. Yes — the user's signer signs each post.",
-          "scopes": "Per-connection permissions",
+          "scopes": "Per-connection permissions in NIP-46 (e.g. sign_event:1, sign_event:24242); NIP-07 extensions prompt per site",
           "review_to_open_to_other_users": "None",
           "token_lifetime": "Until revoked",
           "needs_server_secret": "No"
@@ -836,18 +836,18 @@
       "api_can_upload": "Shots (upload scope)",
       "api_free": "Free",
       "api_cost_detail": "—",
-      "approval": "OAuth2; upload may need Pro (unverified)",
-      "limits": "Unverified",
+      "approval": "Self-serve OAuth2 app at developer.dribbble.com; shot creation needs the 'upload' scope and the user must be an eligible uploader (Pro/team, per third-party reports)",
+      "limits": "Shot image exactly 400x300 or 800x600 (or larger multiples per newer UI, unverified), ≤8 MB, GIF/JPG/PNG; API rate limits unverified",
       "native_scheduling": "Unverified",
       "api_scheduling": "No",
       "schedulers": "TimeToPost (3rd-party claim)",
       "siri_shortcuts": "OAuth (feasible with a pasted long-lived token)",
       "shortcuts_ease": "Hard",
-      "verification": "Search snippets",
+      "verification": "Official pages via search (Oct 2026 review)",
       "docs_url": "https://developer.dribbble.com/v2/",
-      "user_login": "—",
-      "post_on_users_behalf": "Unverified",
-      "login_scopes": "—",
+      "user_login": "Dribbble OAuth 2.0 (authorization code)",
+      "post_on_users_behalf": "Yes — create shots for the authenticated user (upload scope)",
+      "login_scopes": "public upload",
       "review_to_open_to_other_users": "—",
       "token_lifetime": "—",
       "needs_server_secret": "—",
@@ -856,10 +856,18 @@
         {
           "route": "official_api_own_account",
           "summary": "Post to your own account with the official API (API v2): Shots (upload scope).",
-          "access": "OAuth2; upload may need Pro (unverified)",
+          "access": "Self-serve OAuth2 app at developer.dribbble.com; shot creation needs the 'upload' scope and the user must be an eligible uploader (Pro/team, per third-party reports)",
           "cost": "Free",
           "scheduling": "No",
-          "limits": "Unverified"
+          "limits": "Shot image exactly 400x300 or 800x600 (or larger multiples per newer UI, unverified), ≤8 MB, GIF/JPG/PNG; API rate limits unverified"
+        },
+        {
+          "route": "user_sign_in_post_on_behalf",
+          "summary": "The user signs in with Dribbble OAuth 2.0 (authorization code) and grants permission; the app then posts for them. Yes — create shots for the authenticated user (upload scope).",
+          "scopes": "public upload",
+          "review_to_open_to_other_users": "—",
+          "token_lifetime": "—",
+          "needs_server_secret": "—"
         },
         {
           "route": "scheduler_or_automation_tool",
@@ -887,19 +895,19 @@
       "api_free": "Free (non-commercial)",
       "api_cost_detail": "Non-commercial free; commercial terms unverified",
       "approval": "New app registration closed (Aug 2026); existing apps keep working",
-      "limits": "~12,500 requests/day per app",
+      "limits": "~12,500 requests/day per client (≈1,250 uploads/day; uploads cost 10 credits); X-RateLimit-ClientRemaining header",
       "native_scheduling": "No",
       "api_scheduling": "No",
       "schedulers": "None known",
       "siri_shortcuts": "Anonymous upload with Client-ID is one call; account posting needs OAuth",
       "shortcuts_ease": "Easy (existing apps only)",
-      "verification": "Docs via search",
+      "verification": "Official pages via search (Oct 2026 review)",
       "docs_url": "https://apidocs.imgur.com/",
       "user_login": "Imgur OAuth 2.0",
       "post_on_users_behalf": "No for new apps — registration closed Aug 2026",
-      "login_scopes": "—",
+      "login_scopes": "No scopes — OAuth 2.0 grants full account access",
       "review_to_open_to_other_users": "Closed to new apps",
-      "token_lifetime": "~1 month + refresh",
+      "token_lifetime": "Access token ~1 month (28 days) + refresh token",
       "needs_server_secret": "—",
       "has_upload_api": true,
       "automation_options": [
@@ -909,7 +917,7 @@
           "access": "New app registration closed (Aug 2026); existing apps keep working",
           "cost": "Free (non-commercial) (Non-commercial free; commercial terms unverified)",
           "scheduling": "No",
-          "limits": "~12,500 requests/day per app"
+          "limits": "~12,500 requests/day per client (≈1,250 uploads/day; uploads cost 10 credits); X-RateLimit-ClientRemaining header"
         },
         {
           "route": "siri_shortcut",
@@ -924,34 +932,124 @@
       ]
     },
     {
-      "platform": "Nextdoor",
-      "category": "Local",
-      "content_types": "Posts, photos, video, events, For Sale & Free",
-      "official_api": "Yes — Publish API (access by request)",
-      "api_can_upload": "Neighbor/business/agency posts, events, listings",
-      "api_free": "Free (unverified)",
+      "platform": "Kick",
+      "category": "Live video",
+      "content_types": "Live streams, clips, chat",
+      "official_api": "Partial — Kick API",
+      "api_can_upload": "No video/clip upload (Kick is live-only; VODs come from streams). Official API (docs.kick.com) can update stream title/category (channel:write), send chat messages (chat:write), read stream key, manage webhooks",
+      "api_free": "Free",
       "api_cost_detail": "—",
-      "approval": "Request Publish API access",
+      "approval": "OAuth 2.1",
       "limits": "Unverified",
       "native_scheduling": "Unverified",
       "api_scheduling": "Unverified",
-      "schedulers": "None verified",
-      "siri_shortcuts": "Bearer token once access is granted",
-      "shortcuts_ease": "Easy",
-      "verification": "Official docs via search",
+      "schedulers": "—",
+      "siri_shortcuts": "None",
+      "shortcuts_ease": "—",
+      "verification": "Official pages via search (Oct 2026 review)",
+      "docs_url": "https://docs.kick.com",
+      "user_login": "—",
+      "post_on_users_behalf": "Partial: own-channel metadata and chat messages via OAuth; no content upload",
+      "login_scopes": "user:read, channel:read, channel:write, chat:write, chat:delete, streamkey:read, events:subscribe, moderation:manage",
+      "review_to_open_to_other_users": "—",
+      "token_lifetime": "—",
+      "needs_server_secret": "—",
+      "has_upload_api": true,
+      "automation_options": [
+        {
+          "route": "official_api_own_account",
+          "summary": "Post to your own account with the official API (Kick API): No video/clip upload (Kick is live-only; VODs come from streams). Official API (docs.kick.com) can update stream title/category (channel:write), send chat messages (chat:write), read stream key, manage webhooks.",
+          "access": "OAuth 2.1",
+          "cost": "Free",
+          "scheduling": "Unverified",
+          "limits": "Unverified"
+        },
+        {
+          "route": "user_sign_in_post_on_behalf",
+          "summary": "The user signs in with — and grants permission; the app then posts for them. Partial: own-channel metadata and chat messages via OAuth; no content upload.",
+          "scopes": "user:read, channel:read, channel:write, chat:write, chat:delete, streamkey:read, events:subscribe, moderation:manage",
+          "review_to_open_to_other_users": "—",
+          "token_lifetime": "—",
+          "needs_server_secret": "—"
+        },
+        {
+          "route": "manual",
+          "summary": "Post by hand in the app or website (always available)."
+        }
+      ]
+    },
+    {
+      "platform": "Twitch",
+      "category": "Live video",
+      "content_types": "Live streams, clips, VODs, chat",
+      "official_api": "Partial — Helix API",
+      "api_can_upload": "No video uploads: v5 upload API removed, Helix never added uploads. API can update channel info, create clips from live, manage stream schedule, chat, polls",
+      "api_free": "Free",
+      "api_cost_detail": "—",
+      "approval": "OAuth",
+      "limits": "Points-per-minute",
+      "native_scheduling": "Yes (stream schedule)",
+      "api_scheduling": "Yes: Create Channel Stream Schedule Segment (POST /helix/schedule/segment); non-recurring segments only for Affiliates/Partners",
+      "schedulers": "—",
+      "siri_shortcuts": "None",
+      "shortcuts_ease": "—",
+      "verification": "Official pages via search (Oct 2026 review)",
+      "docs_url": "https://dev.twitch.tv/docs/api/reference",
+      "user_login": "Twitch OAuth (public client possible)",
+      "post_on_users_behalf": "No uploads — clips and channel info only",
+      "login_scopes": "channel:manage:broadcast, channel:manage:schedule, clips:edit, user:write:chat (as needed)",
+      "review_to_open_to_other_users": "None",
+      "token_lifetime": "~4h, refreshable",
+      "needs_server_secret": "No",
+      "has_upload_api": true,
+      "automation_options": [
+        {
+          "route": "official_api_own_account",
+          "summary": "Post to your own account with the official API (Helix API): No video uploads: v5 upload API removed, Helix never added uploads. API can update channel info, create clips from live, manage stream schedule, chat, polls.",
+          "access": "OAuth",
+          "cost": "Free",
+          "scheduling": "Yes: Create Channel Stream Schedule Segment (POST /helix/schedule/segment); non-recurring segments only for Affiliates/Partners",
+          "limits": "Points-per-minute"
+        },
+        {
+          "route": "native_scheduler",
+          "summary": "Schedule inside the platform itself: Yes (stream schedule)."
+        },
+        {
+          "route": "manual",
+          "summary": "Post by hand in the app or website (always available)."
+        }
+      ]
+    },
+    {
+      "platform": "Nextdoor",
+      "category": "Local",
+      "content_types": "Posts, photos, video, events, For Sale & Free",
+      "official_api": "Yes — Publish API (partner access by request). Create post endpoint supports neighbor profile, business profile and entity pages; requires post:write scope. Other endpoints: event post, FSF post, agency post, news articles.",
+      "api_can_upload": "Media via publicly accessible URLs only (media/smartlink URLs must be valid public URLs); response returns share_link https://nextdoor.com/p/{post_share_id}",
+      "api_free": "Free (unverified)",
+      "api_cost_detail": "—",
+      "approval": "Submit the Publishing API request form at developer.nextdoor.com; Nextdoor reviews every request; on approval they email a client ID and secret",
+      "limits": "Unverified",
+      "native_scheduling": "Unverified",
+      "api_scheduling": "Unverified",
+      "schedulers": "None verified among mainstream schedulers",
+      "siri_shortcuts": "Not practical: requires approved partner access",
+      "shortcuts_ease": "Hard (access gated)",
+      "verification": "Official pages via search (Oct 2026 review)",
       "docs_url": "https://developer.nextdoor.com/docs/sharing-overview",
       "user_login": "Nextdoor OAuth (Publish API)",
       "post_on_users_behalf": "Yes — once access is granted",
       "login_scopes": "Publish",
-      "review_to_open_to_other_users": "Publish API access request",
-      "token_lifetime": "Unverified",
+      "review_to_open_to_other_users": "Access is aimed at organizations, public agencies, businesses and news partners; individual hobby use is unlikely to be approved",
+      "token_lifetime": "Bearer token from OAuth2 client_id/secret; the token response includes an expiry time (exact duration not published publicly)",
       "needs_server_secret": "Yes",
       "has_upload_api": true,
       "automation_options": [
         {
           "route": "official_api_own_account",
-          "summary": "Post to your own account with the official API (Publish API (access by request)): Neighbor/business/agency posts, events, listings.",
-          "access": "Request Publish API access",
+          "summary": "Post to your own account with the official API (Publish API (partner access by request). Create post endpoint supports neighbor profile, business profile and entity pages; requires post:write scope. Other endpoints: event post, FSF post, agency post, news articles.): Media via publicly accessible URLs only (media/smartlink URLs must be valid public URLs); response returns share_link https://nextdoor.com/p/{post_share_id}.",
+          "access": "Submit the Publishing API request form at developer.nextdoor.com; Nextdoor reviews every request; on approval they email a client ID and secret",
           "cost": "Free (unverified)",
           "scheduling": "Unverified",
           "limits": "Unverified"
@@ -960,14 +1058,19 @@
           "route": "user_sign_in_post_on_behalf",
           "summary": "The user signs in with Nextdoor OAuth (Publish API) and grants permission; the app then posts for them. Yes — once access is granted.",
           "scopes": "Publish",
-          "review_to_open_to_other_users": "Publish API access request",
-          "token_lifetime": "Unverified",
+          "review_to_open_to_other_users": "Access is aimed at organizations, public agencies, businesses and news partners; individual hobby use is unlikely to be approved",
+          "token_lifetime": "Bearer token from OAuth2 client_id/secret; the token response includes an expiry time (exact duration not published publicly)",
           "needs_server_secret": "Yes"
         },
         {
+          "route": "scheduler_or_automation_tool",
+          "summary": "Connect the account once in a tool that already has platform approval and schedule there: None verified among mainstream schedulers.",
+          "note": "Easiest path when the platform requires app review or an audit; the tool handles login and tokens."
+        },
+        {
           "route": "siri_shortcut",
-          "summary": "Bearer token once access is granted",
-          "ease": "Easy",
+          "summary": "Not practical directly (Not practical: requires approved partner access). Have the Shortcut call a scheduler's API or your own n8n/Zapier webhook instead.",
+          "ease": "Hard (access gated)",
           "see": "SHORTCUTS.md"
         },
         {
@@ -985,13 +1088,13 @@
       "api_free": "Free",
       "api_cost_detail": "—",
       "approval": "Apply for API access (allowlist form, ~14 days) + Google OAuth (business.manage)",
-      "limits": "Quota is 0 until approved",
-      "native_scheduling": "Yes (built-in scheduler, 2026)",
-      "api_scheduling": "Partial — recurring posts only",
+      "limits": "0 QPM until the API access request is approved; after approval default 300 QPM (Business Information) and per-endpoint quotas",
+      "native_scheduling": "Yes — built-in post scheduler and multi-location publishing (rolled out ~Apr–May 2026)",
+      "api_scheduling": "Partial — recurring posts via RecurrenceInfo on LocalPost (since 7 Apr 2026); no one-off future publish time — agent must hold one-off posts",
       "schedulers": "Buffer, Publer, Hootsuite, SocialPilot",
       "siri_shortcuts": "OAuth + allowlist",
       "shortcuts_ease": "Hard",
-      "verification": "Official docs via search",
+      "verification": "Official pages via search (Oct 2026 review)",
       "docs_url": "https://developers.google.com/my-business/reference/rest/v4/accounts.locations.localPosts/create",
       "user_login": "Google OAuth 2.0",
       "post_on_users_behalf": "Yes — the user's business locations",
@@ -1006,8 +1109,8 @@
           "summary": "Post to your own account with the official API (Business Profile API (v4 localPosts)): Posts, media, review replies.",
           "access": "Apply for API access (allowlist form, ~14 days) + Google OAuth (business.manage)",
           "cost": "Free",
-          "scheduling": "Partial — recurring posts only",
-          "limits": "Quota is 0 until approved"
+          "scheduling": "Partial — recurring posts via RecurrenceInfo on LocalPost (since 7 Apr 2026); no one-off future publish time — agent must hold one-off posts",
+          "limits": "0 QPM until the API access request is approved; after approval default 300 QPM (Business Information) and per-endpoint quotas"
         },
         {
           "route": "user_sign_in_post_on_behalf",
@@ -1030,7 +1133,7 @@
         },
         {
           "route": "native_scheduler",
-          "summary": "Schedule inside the platform itself: Yes (built-in scheduler, 2026)."
+          "summary": "Schedule inside the platform itself: Yes — built-in post scheduler and multi-location publishing (rolled out ~Apr–May 2026)."
         },
         {
           "route": "manual",
@@ -1053,7 +1156,7 @@
       "schedulers": "None for posts",
       "siri_shortcuts": "None for posts",
       "shortcuts_ease": "—",
-      "verification": "Search snippets",
+      "verification": "Partly unverified (Oct 2026 review)",
       "docs_url": "https://developers.kakao.com/docs/latest/en/kakaotalk-channel/common",
       "user_login": "Kakao Login",
       "post_on_users_behalf": "Limited — 'send to me' chat; Kakao Story API ended",
@@ -1098,13 +1201,13 @@
       "api_free": "Free tier + paid",
       "api_cost_detail": "Japan: free 200 msgs/month; ¥5,000 for 5,000; ¥15,000+ with overage",
       "approval": "Official Account + Messaging API channel",
-      "limits": "Monthly plan cap",
+      "limits": "Monthly message cap by plan; broadcast endpoint rate limit 60 requests/hour; other endpoints ~2,000 req/s (unverified - official site blocked)",
       "native_scheduling": "Yes (scheduled broadcasts)",
       "api_scheduling": "No",
       "schedulers": "respond.io and CRM tools",
       "siri_shortcuts": "Long-lived channel token, one broadcast call",
       "shortcuts_ease": "Easy",
-      "verification": "Official docs via search",
+      "verification": "Partly unverified (Oct 2026 review)",
       "docs_url": "https://developers.line.biz/en/reference/messaging-api/",
       "user_login": "LINE Login (OAuth + OIDC, PKCE)",
       "post_on_users_behalf": "No — no API for user timeline posts; share picker only",
@@ -1120,7 +1223,7 @@
           "access": "Official Account + Messaging API channel",
           "cost": "Free tier + paid (Japan: free 200 msgs/month; ¥5,000 for 5,000; ¥15,000+ with overage)",
           "scheduling": "No",
-          "limits": "Monthly plan cap"
+          "limits": "Monthly message cap by plan; broadcast endpoint rate limit 60 requests/hour; other endpoints ~2,000 req/s (unverified - official site blocked)"
         },
         {
           "route": "scheduler_or_automation_tool",
@@ -1144,67 +1247,23 @@
       ]
     },
     {
-      "platform": "Messenger",
-      "category": "Messaging",
-      "content_types": "Messages, photos, video",
-      "official_api": "Partial — Send API",
-      "api_can_upload": "Replies within 24h only; broadcasts mostly deprecated (Feb 2026)",
-      "api_free": "Free",
-      "api_cost_detail": "—",
-      "approval": "Page + App Review",
-      "limits": "—",
-      "native_scheduling": "No",
-      "api_scheduling": "No",
-      "schedulers": "Inbox tools only",
-      "siri_shortcuts": "None",
-      "shortcuts_ease": "—",
-      "verification": "Official docs via search",
-      "docs_url": "https://developers.facebook.com/docs/messenger-platform/send-messages",
-      "user_login": "—",
-      "post_on_users_behalf": "Unverified",
-      "login_scopes": "—",
-      "review_to_open_to_other_users": "—",
-      "token_lifetime": "—",
-      "needs_server_secret": "—",
-      "has_upload_api": true,
-      "automation_options": [
-        {
-          "route": "official_api_own_account",
-          "summary": "Post to your own account with the official API (Send API): Replies within 24h only; broadcasts mostly deprecated (Feb 2026).",
-          "access": "Page + App Review",
-          "cost": "Free",
-          "scheduling": "No",
-          "limits": "—"
-        },
-        {
-          "route": "scheduler_or_automation_tool",
-          "summary": "Connect the account once in a tool that already has platform approval and schedule there: Inbox tools only.",
-          "note": "Easiest path when the platform requires app review or an audit; the tool handles login and tokens."
-        },
-        {
-          "route": "manual",
-          "summary": "Post by hand in the app or website (always available)."
-        }
-      ]
-    },
-    {
       "platform": "Telegram",
       "category": "Messaging",
       "content_types": "Messages, photos, video, files, polls, stories, channels",
       "official_api": "Yes — Bot API",
-      "api_can_upload": "Text, photos, video, albums, files, polls to channels/groups",
+      "api_can_upload": "Text (4096 chars), photos (10 MB), video/files (50 MB via api.telegram.org; up to 2000 MB with a self-hosted Local Bot API server), albums of 2-10, polls to channels/groups; stories only on Business accounts that connected the bot",
       "api_free": "Free",
       "api_cost_detail": "—",
       "approval": "Bot token from @BotFather; bot is channel admin",
-      "limits": "~1 msg/s per chat; 20/min in groups",
+      "limits": "Avoid >1 msg/s in a single chat; max 20 msgs/min in a group/channel; ~30 msgs/s across all chats (more only with paid broadcasts). On 429 obey retry_after.",
       "native_scheduling": "Yes (in apps)",
       "api_scheduling": "No",
       "schedulers": "Ayrshare, n8n, Postiz, IFTTT",
       "siri_shortcuts": "One API call with the bot token",
       "shortcuts_ease": "Easy",
-      "verification": "Official docs via search",
+      "verification": "Official pages via search (Oct 2026 review)",
       "docs_url": "https://core.telegram.org/bots/api",
-      "user_login": "Log In With Telegram (OIDC + PKCE) for identity",
+      "user_login": "Log In With Telegram: standard OIDC authorization-code flow with PKCE (S256); discovery at https://oauth.telegram.org/.well-known/openid-configuration; client ID/secret from @BotFather; scopes openid, profile, phone. Identity only - grants no posting rights.",
       "post_on_users_behalf": "Limited — the user adds your bot as channel admin; posts appear as the channel",
       "login_scopes": "Channel admin right: post messages",
       "review_to_open_to_other_users": "None",
@@ -1214,15 +1273,15 @@
       "automation_options": [
         {
           "route": "official_api_own_account",
-          "summary": "Post to your own account with the official API (Bot API): Text, photos, video, albums, files, polls to channels/groups.",
+          "summary": "Post to your own account with the official API (Bot API): Text (4096 chars), photos (10 MB), video/files (50 MB via api.telegram.org; up to 2000 MB with a self-hosted Local Bot API server), albums of 2-10, polls to channels/groups; stories only on Business accounts that connected the bot.",
           "access": "Bot token from @BotFather; bot is channel admin",
           "cost": "Free",
           "scheduling": "No",
-          "limits": "~1 msg/s per chat; 20/min in groups"
+          "limits": "Avoid >1 msg/s in a single chat; max 20 msgs/min in a group/channel; ~30 msgs/s across all chats (more only with paid broadcasts). On 429 obey retry_after."
         },
         {
           "route": "user_sign_in_post_on_behalf",
-          "summary": "The user signs in with Log In With Telegram (OIDC + PKCE) for identity and grants permission; the app then posts for them. Limited — the user adds your bot as channel admin; posts appear as the channel.",
+          "summary": "The user signs in with Log In With Telegram: standard OIDC authorization-code flow with PKCE (S256); discovery at https://oauth.telegram.org/.well-known/openid-configuration; client ID/secret from @BotFather; scopes openid, profile, phone. Identity only - grants no posting rights. and grants permission; the app then posts for them. Limited — the user adds your bot as channel admin; posts appear as the channel.",
           "scopes": "Channel admin right: post messages",
           "review_to_open_to_other_users": "None",
           "token_lifetime": "Until the bot is removed",
@@ -1264,7 +1323,7 @@
       "schedulers": "SMMplanner, postmypost",
       "siri_shortcuts": "Static auth-token header, one call",
       "shortcuts_ease": "Easy",
-      "verification": "Official docs via search",
+      "verification": "Partly unverified (Oct 2026 review)",
       "docs_url": "https://developers.viber.com/docs/tools/channels-post-api/",
       "user_login": "—",
       "post_on_users_behalf": "Unverified",
@@ -1306,18 +1365,18 @@
       "official_api": "Partial — Cloud API (no Channels API)",
       "api_can_upload": "1:1 template/session messages only; Channel posts are manual",
       "api_free": "Paid",
-      "api_cost_detail": "Per delivered template (~$0.025 US marketing)",
+      "api_cost_detail": "Per-message pricing since 1 Jul 2025: marketing/utility/authentication templates charged per delivered message (rates by country; US marketing ≈ $0.025); non-template replies in the 24h service window are free",
       "approval": "Meta Business + WhatsApp Business account",
       "limits": "Messaging tiers",
-      "native_scheduling": "Unverified",
+      "native_scheduling": "Rolling out: in-app message scheduling (beta Feb–Mar 2026); Business app has automated greeting/away messages. No native scheduling for Channel posts confirmed.",
       "api_scheduling": "No",
       "schedulers": "Hootsuite (inbox)",
       "siri_shortcuts": "Open URL wa.me/?text=… (prefill, tap send)",
       "shortcuts_ease": "Easy (manual send)",
-      "verification": "Official pages via search",
+      "verification": "Official pages via search (Oct 2026 review)",
       "docs_url": "https://developers.facebook.com/docs/whatsapp/pricing",
       "user_login": "Embedded Signup (Facebook Login for Business)",
-      "post_on_users_behalf": "Limited — messages as the business, not posts",
+      "post_on_users_behalf": "No posting — Cloud API sends 1:1 messages as the business number to opted-in contacts; no Channels or Status API",
       "login_scopes": "whatsapp_business_management, whatsapp_business_messaging",
       "review_to_open_to_other_users": "Tech Provider + Business Verification + App Review",
       "token_lifetime": "System-user token (long-lived)",
@@ -1328,17 +1387,9 @@
           "route": "official_api_own_account",
           "summary": "Post to your own account with the official API (Cloud API (no Channels API)): 1:1 template/session messages only; Channel posts are manual.",
           "access": "Meta Business + WhatsApp Business account",
-          "cost": "Paid (Per delivered template (~$0.025 US marketing))",
+          "cost": "Paid (Per-message pricing since 1 Jul 2025: marketing/utility/authentication templates charged per delivered message (rates by country; US marketing ≈ $0.025); non-template replies in the 24h service window are free)",
           "scheduling": "No",
           "limits": "Messaging tiers"
-        },
-        {
-          "route": "user_sign_in_post_on_behalf",
-          "summary": "The user signs in with Embedded Signup (Facebook Login for Business) and grants permission; the app then posts for them. Limited — messages as the business, not posts.",
-          "scopes": "whatsapp_business_management, whatsapp_business_messaging",
-          "review_to_open_to_other_users": "Tech Provider + Business Verification + App Review",
-          "token_lifetime": "System-user token (long-lived)",
-          "needs_server_secret": "Yes"
         },
         {
           "route": "scheduler_or_automation_tool",
@@ -1362,9 +1413,9 @@
       "category": "Messaging/publishing",
       "content_types": "Official Account articles, images, video, audio; Channels short video, live",
       "official_api": "Partial — Official Account API (no Channels API)",
-      "api_can_upload": "Official Accounts: media, drafts, publish (verified Chinese entity required to publish)",
+      "api_can_upload": "Official Accounts: permanent media, drafts (draft/add), publish (freepublish/submit). Since July 2025 publish APIs revoked for individual-entity accounts, unverified enterprise accounts and accounts that cannot be verified.",
       "api_free": "Free",
-      "api_cost_detail": "Account verification ~¥300/yr (unverified)",
+      "api_cost_detail": "WeChat verification ¥300 per year (annual re-verification)",
       "approval": "Verified corporate/sole-proprietor account; IP whitelist",
       "limits": "1 mass send/day (subscription accounts)",
       "native_scheduling": "Yes (scheduled mass send)",
@@ -1372,21 +1423,21 @@
       "schedulers": "None official",
       "siri_shortcuts": "appid+secret token + IP whitelist",
       "shortcuts_ease": "Hard",
-      "verification": "Search snippets",
+      "verification": "Official pages via search (Oct 2026 review)",
       "docs_url": "https://developers.weixin.qq.com/doc/offiaccount/en/Getting_Started/Overview.html",
-      "user_login": "—",
-      "post_on_users_behalf": "Unverified",
+      "user_login": "None for publishing (own account via AppID/AppSecret; service providers use Third-party Platform authorization)",
+      "post_on_users_behalf": "No - own Official Account only (or via WeChat Open Platform third-party authorization)",
       "login_scopes": "—",
       "review_to_open_to_other_users": "—",
-      "token_lifetime": "—",
-      "needs_server_secret": "—",
+      "token_lifetime": "access_token 7200 s (cgi-bin/token or cgi-bin/stable_token)",
+      "needs_server_secret": "Yes - AppSecret plus server IP on the API IP whitelist",
       "has_upload_api": true,
       "automation_options": [
         {
           "route": "official_api_own_account",
-          "summary": "Post to your own account with the official API (Official Account API (no Channels API)): Official Accounts: media, drafts, publish (verified Chinese entity required to publish).",
+          "summary": "Post to your own account with the official API (Official Account API (no Channels API)): Official Accounts: permanent media, drafts (draft/add), publish (freepublish/submit). Since July 2025 publish APIs revoked for individual-entity accounts, unverified enterprise accounts and accounts that cannot be verified..",
           "access": "Verified corporate/sole-proprietor account; IP whitelist",
-          "cost": "Free (Account verification ~¥300/yr (unverified))",
+          "cost": "Free (WeChat verification ¥300 per year (annual re-verification))",
           "scheduling": "No",
           "limits": "1 mass send/day (subscription accounts)"
         },
@@ -1415,17 +1466,17 @@
       "api_free": "Free",
       "api_cost_detail": "—",
       "approval": "App password or OAuth; no review",
-      "limits": "5,000 points/h (~1,666 posts)",
+      "limits": "5,000 points/hour and 35,000 points/day per account (create=3, update=2, delete=1 -> max ~1,666 posts/h, ~11,666/day); createSession 30 per 5 min and 300/day; 3,000 requests/5 min per IP; images <=1,000,000 bytes each, 4 per post; video <=100 MB / 3 min, 25 videos or 10 GB per day, verified email required",
       "native_scheduling": "No",
       "api_scheduling": "No",
       "schedulers": "Buffer, Hootsuite, Typefully, Ayrshare, Postiz",
       "siri_shortcuts": "Two API calls with an app password",
       "shortcuts_ease": "Easy",
-      "verification": "Official docs via search",
+      "verification": "Verified against official docs (Oct 2026 review)",
       "docs_url": "https://docs.bsky.app/docs/get-started",
       "user_login": "atproto OAuth (PAR + PKCE + DPoP)",
       "post_on_users_behalf": "Yes — the user's account",
-      "login_scopes": "atproto transition:generic (or granular repo:app.bsky.feed.post)",
+      "login_scopes": "atproto + transition:generic, or granular: atproto repo:app.bsky.feed.post blob:*/* (blob scope needed for image/video uploads)",
       "review_to_open_to_other_users": "None",
       "token_lifetime": "Browser sessions 2 weeks; longer with a backend",
       "needs_server_secret": "No",
@@ -1437,12 +1488,12 @@
           "access": "App password or OAuth; no review",
           "cost": "Free",
           "scheduling": "No",
-          "limits": "5,000 points/h (~1,666 posts)"
+          "limits": "5,000 points/hour and 35,000 points/day per account (create=3, update=2, delete=1 -> max ~1,666 posts/h, ~11,666/day); createSession 30 per 5 min and 300/day; 3,000 requests/5 min per IP; images <=1,000,000 bytes each, 4 per post; video <=100 MB / 3 min, 25 videos or 10 GB per day, verified email required"
         },
         {
           "route": "user_sign_in_post_on_behalf",
           "summary": "The user signs in with atproto OAuth (PAR + PKCE + DPoP) and grants permission; the app then posts for them. Yes — the user's account.",
-          "scopes": "atproto transition:generic (or granular repo:app.bsky.feed.post)",
+          "scopes": "atproto + transition:generic, or granular: atproto repo:app.bsky.feed.post blob:*/* (blob scope needed for image/video uploads)",
           "review_to_open_to_other_users": "None",
           "token_lifetime": "Browser sessions 2 weeks; longer with a backend",
           "needs_server_secret": "No"
@@ -1465,51 +1516,6 @@
       ]
     },
     {
-      "platform": "Gab",
-      "category": "Microblog",
-      "content_types": "Text, images, video, groups",
-      "official_api": "Partial — Mastodon-style API (no maintained docs)",
-      "api_can_upload": "Statuses and media (unverified)",
-      "api_free": "Free",
-      "api_cost_detail": "—",
-      "approval": "Developer app in settings",
-      "limits": "Unverified",
-      "native_scheduling": "Unverified",
-      "api_scheduling": "Possibly scheduled_at (unverified)",
-      "schedulers": "None verified",
-      "siri_shortcuts": "Bearer token, one call (if it still works)",
-      "shortcuts_ease": "Easy",
-      "verification": "Search snippets",
-      "docs_url": "https://gab.com",
-      "user_login": "—",
-      "post_on_users_behalf": "Unverified",
-      "login_scopes": "—",
-      "review_to_open_to_other_users": "—",
-      "token_lifetime": "—",
-      "needs_server_secret": "—",
-      "has_upload_api": true,
-      "automation_options": [
-        {
-          "route": "official_api_own_account",
-          "summary": "Post to your own account with the official API (Mastodon-style API (no maintained docs)): Statuses and media (unverified).",
-          "access": "Developer app in settings",
-          "cost": "Free",
-          "scheduling": "Possibly scheduled_at (unverified)",
-          "limits": "Unverified"
-        },
-        {
-          "route": "siri_shortcut",
-          "summary": "Bearer token, one call (if it still works)",
-          "ease": "Easy",
-          "see": "SHORTCUTS.md"
-        },
-        {
-          "route": "manual",
-          "summary": "Post by hand in the app or website (always available)."
-        }
-      ]
-    },
-    {
       "platform": "Mastodon / Fediverse",
       "category": "Microblog",
       "content_types": "Text, photos, video, audio, polls",
@@ -1518,15 +1524,15 @@
       "api_free": "Free",
       "api_cost_detail": "—",
       "approval": "Token from your server's settings; no review",
-      "limits": "300 requests / 5 min",
+      "limits": "300 requests / 5 min per account and per IP; POST /api/v1/media (and v2) 30 per 30 min; deletes/unreblogs 30 per 30 min; check X-RateLimit-* headers. scheduled_at must be >=5 min in the future",
       "native_scheduling": "Via apps",
       "api_scheduling": "Yes — scheduled_at",
       "schedulers": "Buffer, Typefully, Postiz, Mixpost",
       "siri_shortcuts": "One API call with a token (can schedule)",
       "shortcuts_ease": "Easy",
-      "verification": "Official docs via search",
+      "verification": "Verified against official docs (Oct 2026 review)",
       "docs_url": "https://docs.joinmastodon.org/methods/statuses/",
-      "user_login": "Mastodon OAuth (register app per server; PKCE from 4.3)",
+      "user_login": "Mastodon OAuth 2 per server (POST /api/v1/apps on each server); PKCE (S256) supported from 4.3.0; /.well-known/oauth-authorization-server from 4.3.0",
       "post_on_users_behalf": "Yes — the user's account",
       "login_scopes": "write:statuses write:media",
       "review_to_open_to_other_users": "None",
@@ -1540,11 +1546,11 @@
           "access": "Token from your server's settings; no review",
           "cost": "Free",
           "scheduling": "Yes — scheduled_at",
-          "limits": "300 requests / 5 min"
+          "limits": "300 requests / 5 min per account and per IP; POST /api/v1/media (and v2) 30 per 30 min; deletes/unreblogs 30 per 30 min; check X-RateLimit-* headers. scheduled_at must be >=5 min in the future"
         },
         {
           "route": "user_sign_in_post_on_behalf",
-          "summary": "The user signs in with Mastodon OAuth (register app per server; PKCE from 4.3) and grants permission; the app then posts for them. Yes — the user's account.",
+          "summary": "The user signs in with Mastodon OAuth 2 per server (POST /api/v1/apps on each server); PKCE (S256) supported from 4.3.0; /.well-known/oauth-authorization-server from 4.3.0 and grants permission; the app then posts for them. Yes — the user's account.",
           "scopes": "write:statuses write:media",
           "review_to_open_to_other_users": "None",
           "token_lifetime": "Tokens don't expire until revoked",
@@ -1572,19 +1578,19 @@
       "category": "Microblog",
       "content_types": "Text, photos, video, carousels, polls, GIFs, links",
       "official_api": "Yes — Threads API",
-      "api_can_upload": "Text, images, video, carousels (≤20), polls, links, quotes",
+      "api_can_upload": "Text (500 chars), images, video, carousels (2–20 items), polls (2–4 options, text posts only), GIFs (gif_attachment), link_attachment, quote posts (quote_post_id), replies",
       "api_free": "Free",
       "api_cost_detail": "—",
       "approval": "OAuth threads_content_publish",
       "limits": "250 API posts / 24h",
-      "native_scheduling": "Reported in-app (unverified)",
+      "native_scheduling": "Yes — in-app scheduler (three-dot menu in composer; single posts, not thread chains)",
       "api_scheduling": "No",
       "schedulers": "Buffer, Sprout, Ayrshare, IFTTT, Publer",
       "siri_shortcuts": "Open URL threads.com/intent/post?text=… (one tap)",
       "shortcuts_ease": "Easy",
-      "verification": "Official docs via search",
+      "verification": "Official pages via search (Oct 2026 review)",
       "docs_url": "https://developers.facebook.com/docs/threads/posts",
-      "user_login": "Threads OAuth",
+      "user_login": "Threads OAuth (threads.net/oauth/authorize; tokens via graph.threads.net)",
       "post_on_users_behalf": "Yes — the user's own profile",
       "login_scopes": "threads_basic, threads_content_publish",
       "review_to_open_to_other_users": "Own + tester accounts without review; App Review for everyone",
@@ -1594,7 +1600,7 @@
       "automation_options": [
         {
           "route": "official_api_own_account",
-          "summary": "Post to your own account with the official API (Threads API): Text, images, video, carousels (≤20), polls, links, quotes.",
+          "summary": "Post to your own account with the official API (Threads API): Text (500 chars), images, video, carousels (2–20 items), polls (2–4 options, text posts only), GIFs (gif_attachment), link_attachment, quote posts (quote_post_id), replies.",
           "access": "OAuth threads_content_publish",
           "cost": "Free",
           "scheduling": "No",
@@ -1602,7 +1608,7 @@
         },
         {
           "route": "user_sign_in_post_on_behalf",
-          "summary": "The user signs in with Threads OAuth and grants permission; the app then posts for them. Yes — the user's own profile.",
+          "summary": "The user signs in with Threads OAuth (threads.net/oauth/authorize; tokens via graph.threads.net) and grants permission; the app then posts for them. Yes — the user's own profile.",
           "scopes": "threads_basic, threads_content_publish",
           "review_to_open_to_other_users": "Own + tester accounts without review; App Review for everyone",
           "token_lifetime": "60-day token, refresh after 24h",
@@ -1620,6 +1626,10 @@
           "see": "SHORTCUTS.md"
         },
         {
+          "route": "native_scheduler",
+          "summary": "Schedule inside the platform itself: Yes — in-app scheduler (three-dot menu in composer; single posts, not thread chains)."
+        },
+        {
           "route": "manual",
           "summary": "Post by hand in the app or website (always available)."
         }
@@ -1634,19 +1644,19 @@
       "api_free": "Free",
       "api_cost_detail": "—",
       "approval": "Real-name developer verification + app review (likely China identity)",
-      "limits": "Unverified",
+      "limits": "statuses/share: text URL-encoded, <=140 Chinese characters, must contain >=1 URL under the app's bound secure domain (else error 10017); one image per post; undisclosed frequency limits.",
       "native_scheduling": "Yes (scheduled posts)",
       "api_scheduling": "No",
       "schedulers": "None verified",
       "siri_shortcuts": "OAuth + domain binding",
       "shortcuts_ease": "Hard",
-      "verification": "Search snippets",
+      "verification": "Official pages via search (Oct 2026 review)",
       "docs_url": "https://open.weibo.com/wiki/",
       "user_login": "Weibo OAuth 2.0",
       "post_on_users_behalf": "Limited — statuses/share with your domain link only",
       "login_scopes": "Default",
       "review_to_open_to_other_users": "Real-name developer verification + app review",
-      "token_lifetime": "No refresh for web apps",
+      "token_lifetime": "Depends on app review level; developer's own authorization reportedly long-lived (up to 5 years); no refresh token for web apps",
       "needs_server_secret": "Yes",
       "has_upload_api": true,
       "automation_options": [
@@ -1656,14 +1666,14 @@
           "access": "Real-name developer verification + app review (likely China identity)",
           "cost": "Free",
           "scheduling": "No",
-          "limits": "Unverified"
+          "limits": "statuses/share: text URL-encoded, <=140 Chinese characters, must contain >=1 URL under the app's bound secure domain (else error 10017); one image per post; undisclosed frequency limits."
         },
         {
           "route": "user_sign_in_post_on_behalf",
           "summary": "The user signs in with Weibo OAuth 2.0 and grants permission; the app then posts for them. Limited — statuses/share with your domain link only.",
           "scopes": "Default",
           "review_to_open_to_other_users": "Real-name developer verification + app review",
-          "token_lifetime": "No refresh for web apps",
+          "token_lifetime": "Depends on app review level; developer's own authorization reportedly long-lived (up to 5 years); no refresh token for web apps",
           "needs_server_secret": "Yes"
         },
         {
@@ -1689,21 +1699,21 @@
       "official_api": "Yes — X API v2",
       "api_can_upload": "Text, images, video, polls, threads, links",
       "api_free": "Paid",
-      "api_cost_detail": "Pay-per-use: ~$0.015 per post, ~$0.20 per post with a link; no free tier since Feb 2026",
+      "api_cost_detail": "Pay-per-use credits only for new developers since 6 Feb 2026 (Basic/Pro legacy, closed to new signups; Enterprise otherwise). Post create $0.015/request; post containing a URL $0.20/request (April 2026 repricing). Reads capped at 2M/month. Prices change: Developer Console is the source of truth.",
       "approval": "Developer account; OAuth 2.0 or 1.0a",
       "limits": "2M post reads/month cap",
-      "native_scheduling": "Yes (web; reportedly Premium) / X Pro (Premium+)",
+      "native_scheduling": "Yes — scheduler in the x.com web composer (calendar icon); mobile/X Pro scheduling tied to Premium",
       "api_scheduling": "No",
-      "schedulers": "Buffer, Hootsuite, Typefully, Publer, Ayrshare, Postiz, Zapier, IFTTT",
+      "schedulers": "Buffer, Hootsuite, Typefully, Publer, Ayrshare, Postiz, Zapier (several tools now charge an X add-on, e.g. Vista Social $29/mo per X profile since 1 Mar 2026)",
       "siri_shortcuts": "IFTTT applet, or API with an OAuth token that expires every ~2h",
       "shortcuts_ease": "Hard",
-      "verification": "3rd-party summaries of official docs",
+      "verification": "Official pages via search (Oct 2026 review)",
       "docs_url": "https://docs.x.com/x-api/getting-started/pricing",
-      "user_login": "OAuth 2.0 + PKCE (public client, no secret possible)",
+      "user_login": "OAuth 2.0 Authorization Code + PKCE; app can be a confidential client ('Web App/Automated App or Bot', has Client Secret) or public client ('Native App', no secret). OAuth 1.0a user tokens also still work.",
       "post_on_users_behalf": "Yes — the user's own account",
       "login_scopes": "tweet.write tweet.read users.read media.write offline.access",
       "review_to_open_to_other_users": "No app review; developer account + Project",
-      "token_lifetime": "2h access; refresh with offline.access",
+      "token_lifetime": "Access token 2h; refresh token issued only with offline.access; refresh tokens are single-use (each refresh returns a new one), so always store the newest",
       "needs_server_secret": "No (but API calls may need a proxy)",
       "has_upload_api": true,
       "automation_options": [
@@ -1711,21 +1721,21 @@
           "route": "official_api_own_account",
           "summary": "Post to your own account with the official API (X API v2): Text, images, video, polls, threads, links.",
           "access": "Developer account; OAuth 2.0 or 1.0a",
-          "cost": "Paid (Pay-per-use: ~$0.015 per post, ~$0.20 per post with a link; no free tier since Feb 2026)",
+          "cost": "Paid (Pay-per-use credits only for new developers since 6 Feb 2026 (Basic/Pro legacy, closed to new signups; Enterprise otherwise). Post create $0.015/request; post containing a URL $0.20/request (April 2026 repricing). Reads capped at 2M/month. Prices change: Developer Console is the source of truth.)",
           "scheduling": "No",
           "limits": "2M post reads/month cap"
         },
         {
           "route": "user_sign_in_post_on_behalf",
-          "summary": "The user signs in with OAuth 2.0 + PKCE (public client, no secret possible) and grants permission; the app then posts for them. Yes — the user's own account.",
+          "summary": "The user signs in with OAuth 2.0 Authorization Code + PKCE; app can be a confidential client ('Web App/Automated App or Bot', has Client Secret) or public client ('Native App', no secret). OAuth 1.0a user tokens also still work. and grants permission; the app then posts for them. Yes — the user's own account.",
           "scopes": "tweet.write tweet.read users.read media.write offline.access",
           "review_to_open_to_other_users": "No app review; developer account + Project",
-          "token_lifetime": "2h access; refresh with offline.access",
+          "token_lifetime": "Access token 2h; refresh token issued only with offline.access; refresh tokens are single-use (each refresh returns a new one), so always store the newest",
           "needs_server_secret": "No (but API calls may need a proxy)"
         },
         {
           "route": "scheduler_or_automation_tool",
-          "summary": "Connect the account once in a tool that already has platform approval and schedule there: Buffer, Hootsuite, Typefully, Publer, Ayrshare, Postiz, Zapier, IFTTT.",
+          "summary": "Connect the account once in a tool that already has platform approval and schedule there: Buffer, Hootsuite, Typefully, Publer, Ayrshare, Postiz, Zapier (several tools now charge an X add-on, e.g. Vista Social $29/mo per X profile since 1 Mar 2026).",
           "note": "Easiest path when the platform requires app review or an audit; the tool handles login and tokens."
         },
         {
@@ -1736,7 +1746,7 @@
         },
         {
           "route": "native_scheduler",
-          "summary": "Schedule inside the platform itself: Yes (web; reportedly Premium) / X Pro (Premium+)."
+          "summary": "Schedule inside the platform itself: Yes — scheduler in the x.com web composer (calendar icon); mobile/X Pro scheduling tied to Premium."
         },
         {
           "route": "manual",
@@ -1751,15 +1761,15 @@
       "official_api": "Yes — Flickr API",
       "api_can_upload": "Photos, video, metadata, albums",
       "api_free": "Free tier + paid",
-      "api_cost_detail": "API key requests need a Flickr Pro subscription; commercial keys reviewed",
+      "api_cost_detail": "Requesting API keys is limited to Flickr Pro subscribers; choose Non-Commercial or Commercial key (commercial reviewed)",
       "approval": "OAuth 1.0a",
-      "limits": "3,600 queries/hour (unverified)",
+      "limits": "3,600 queries/hour per API key (aggregate across users); abuse can get the key disabled",
       "native_scheduling": "No",
       "api_scheduling": "No",
       "schedulers": "None known",
       "siri_shortcuts": "OAuth 1.0a signing",
       "shortcuts_ease": "Hard",
-      "verification": "Official help via search",
+      "verification": "Official pages via search (Oct 2026 review)",
       "docs_url": "https://www.flickr.com/services/api/",
       "user_login": "OAuth 1.0a",
       "post_on_users_behalf": "Yes — photos and video",
@@ -1773,9 +1783,9 @@
           "route": "official_api_own_account",
           "summary": "Post to your own account with the official API (Flickr API): Photos, video, metadata, albums.",
           "access": "OAuth 1.0a",
-          "cost": "Free tier + paid (API key requests need a Flickr Pro subscription; commercial keys reviewed)",
+          "cost": "Free tier + paid (Requesting API keys is limited to Flickr Pro subscribers; choose Non-Commercial or Commercial key (commercial reviewed))",
           "scheduling": "No",
-          "limits": "3,600 queries/hour (unverified)"
+          "limits": "3,600 queries/hour per API key (aggregate across users); abuse can get the key disabled"
         },
         {
           "route": "user_sign_in_post_on_behalf",
@@ -1802,17 +1812,17 @@
       "category": "Photo (federated)",
       "content_types": "Photos, video, carousels, stories",
       "official_api": "Yes — Mastodon-compatible API",
-      "api_can_upload": "Media + posts",
+      "api_can_upload": "Photos (and video if enabled by the instance) via POST /api/v1/media or /api/v2/media, then POST /api/v1/statuses with media_ids; top-level posts must include media; 'direct' visibility rejected",
       "api_free": "Free",
       "api_cost_detail": "—",
-      "approval": "Personal access token from your server",
-      "limits": "Per server",
-      "native_scheduling": "Unverified",
-      "api_scheduling": "Unverified",
-      "schedulers": "None confirmed",
+      "approval": "Personal Access Token created at https://<server>/settings/applications",
+      "limits": "Code defaults: 1,000 statuses/day and 1,250 media uploads/day per account; 4 media per post, 15 MB per photo, 500-char caption, image types jpeg/png/gif unless the admin enables video (all instance-configurable; read GET /api/v1/instance)",
+      "native_scheduling": "No (not in core Pixelfed)",
+      "api_scheduling": "No - POST /api/v1/statuses accepts no scheduled_at",
+      "schedulers": "Fedica, Postpone (third-party claims)",
       "siri_shortcuts": "Bearer token + multipart upload",
       "shortcuts_ease": "Easy",
-      "verification": "Search snippets",
+      "verification": "Verified against official docs (Oct 2026 review)",
       "docs_url": "https://docs.pixelfed.org/",
       "user_login": "Mastodon-compatible OAuth per server",
       "post_on_users_behalf": "Yes",
@@ -1824,11 +1834,11 @@
       "automation_options": [
         {
           "route": "official_api_own_account",
-          "summary": "Post to your own account with the official API (Mastodon-compatible API): Media + posts.",
-          "access": "Personal access token from your server",
+          "summary": "Post to your own account with the official API (Mastodon-compatible API): Photos (and video if enabled by the instance) via POST /api/v1/media or /api/v2/media, then POST /api/v1/statuses with media_ids; top-level posts must include media; 'direct' visibility rejected.",
+          "access": "Personal Access Token created at https://<server>/settings/applications",
           "cost": "Free",
-          "scheduling": "Unverified",
-          "limits": "Per server"
+          "scheduling": "No - POST /api/v1/statuses accepts no scheduled_at",
+          "limits": "Code defaults: 1,000 statuses/day and 1,250 media uploads/day per account; 4 media per post, 15 MB per photo, 500-char caption, image types jpeg/png/gif unless the admin enables video (all instance-configurable; read GET /api/v1/instance)"
         },
         {
           "route": "user_sign_in_post_on_behalf",
@@ -1837,6 +1847,11 @@
           "review_to_open_to_other_users": "None",
           "token_lifetime": "Long-lived",
           "needs_server_secret": "No"
+        },
+        {
+          "route": "scheduler_or_automation_tool",
+          "summary": "Connect the account once in a tool that already has platform approval and schedule there: Fedica, Postpone (third-party claims).",
+          "note": "Easiest path when the platform requires app review or an audit; the tool handles login and tokens."
         },
         {
           "route": "siri_shortcut",
@@ -1859,16 +1874,16 @@
       "api_free": "Free",
       "api_cost_detail": "—",
       "approval": "Podcasts Connect account",
-      "limits": "Feed requirements",
+      "limits": "Show needs ≥1 episode, 1400–3000 px square artwork, description, owner email; RSS changes appear within hours (refresh after 24–48 h)",
       "native_scheduling": "Yes (pubDate / host)",
       "api_scheduling": "Via your host",
       "schedulers": "Any podcast host",
       "siri_shortcuts": "Edit a self-hosted RSS feed",
       "shortcuts_ease": "—",
-      "verification": "Official docs via search",
+      "verification": "Verified against official docs (Oct 2026 review)",
       "docs_url": "https://podcasters.apple.com/support/823-podcast-requirements",
-      "user_login": "—",
-      "post_on_users_behalf": "Unverified",
+      "user_login": "None for creators — Apple has no public publish API; Podcasts Connect API keys (Account tab, Apple Podcasters Program members) are shared with Delegated Delivery hosts only",
+      "post_on_users_behalf": "Not directly — episodes reach Apple via your RSS feed (host). Hosts with Delegated Delivery (e.g. Acast, ART19, Blubrry, Buzzsprout, Libsyn, Omny, RSS.com) can publish to Apple on your behalf",
       "login_scopes": "—",
       "review_to_open_to_other_users": "—",
       "token_lifetime": "—",
@@ -1881,7 +1896,7 @@
           "access": "Podcasts Connect account",
           "cost": "Free",
           "scheduling": "Via your host",
-          "limits": "Feed requirements"
+          "limits": "Show needs ≥1 episode, 1400–3000 px square artwork, description, owner email; RSS changes appear within hours (refresh after 24–48 h)"
         },
         {
           "route": "scheduler_or_automation_tool",
@@ -1915,17 +1930,17 @@
       "approval": "Personal: self-serve; company pages: access request",
       "limits": "150 req/member/day",
       "native_scheduling": "Yes (up to 3 months)",
-      "api_scheduling": "Unverified",
+      "api_scheduling": "No — POST /rest/posts publishes immediately (lifecycleState PUBLISHED; DRAFT exists but no scheduled-publish field). Agent must hold posts until due.",
       "schedulers": "Buffer, Hootsuite, Ayrshare, n8n",
       "siri_shortcuts": "OAuth needed — use a scheduler",
       "shortcuts_ease": "Hard",
-      "verification": "Official docs via search",
+      "verification": "Official pages via search (Oct 2026 review)",
       "docs_url": "https://learn.microsoft.com/en-us/linkedin/consumer/integrations/self-serve/share-on-linkedin",
       "user_login": "Sign In with LinkedIn (OIDC) + Share on LinkedIn",
       "post_on_users_behalf": "Yes — personal profile; company pages need Community Management API",
-      "login_scopes": "w_member_social (w_organization_social for pages)",
+      "login_scopes": "openid profile w_member_social (email optional); w_organization_social for pages requires Community Management API",
       "review_to_open_to_other_users": "None for personal; pages need an approved application",
-      "token_lifetime": "60 days, no refresh (re-login every 60 days)",
+      "token_lifetime": "60-day access token; no refresh token for self-serve 'Share on LinkedIn' apps (programmatic refresh tokens, 365 days, only for approved partner programs) — user re-authorizes every 60 days",
       "needs_server_secret": "Yes (client secret)",
       "has_upload_api": true,
       "automation_options": [
@@ -1934,15 +1949,15 @@
           "summary": "Post to your own account with the official API (Posts API / Share on LinkedIn): Text, images, video, articles, carousels, polls.",
           "access": "Personal: self-serve; company pages: access request",
           "cost": "Free",
-          "scheduling": "Unverified",
+          "scheduling": "No — POST /rest/posts publishes immediately (lifecycleState PUBLISHED; DRAFT exists but no scheduled-publish field). Agent must hold posts until due.",
           "limits": "150 req/member/day"
         },
         {
           "route": "user_sign_in_post_on_behalf",
           "summary": "The user signs in with Sign In with LinkedIn (OIDC) + Share on LinkedIn and grants permission; the app then posts for them. Yes — personal profile; company pages need Community Management API.",
-          "scopes": "w_member_social (w_organization_social for pages)",
+          "scopes": "openid profile w_member_social (email optional); w_organization_social for pages requires Community Management API",
           "review_to_open_to_other_users": "None for personal; pages need an approved application",
-          "token_lifetime": "60 days, no refresh (re-login every 60 days)",
+          "token_lifetime": "60-day access token; no refresh token for self-serve 'Share on LinkedIn' apps (programmatic refresh tokens, 365 days, only for approved partner programs) — user re-authorizes every 60 days",
           "needs_server_secret": "Yes (client secret)"
         },
         {
@@ -1971,17 +1986,17 @@
       "category": "Social network",
       "content_types": "Text, photos, video, Reels, Stories, links, live, events",
       "official_api": "Yes — Graph API (Pages API)",
-      "api_can_upload": "Text, links, photos, video",
+      "api_can_upload": "Text, links, photos, video, Reels (/video_reels, 30 API Reels per 24h), Stories (/photo_stories, /video_stories)",
       "api_free": "Free",
       "api_cost_detail": "—",
-      "approval": "Meta developer app; App Review for pages_manage_posts",
+      "approval": "Meta developer app; own Pages work in Development mode via app role (Standard Access); App Review (Advanced Access) for pages_manage_posts only to serve other people's Pages",
       "limits": "4,800 calls × engaged users / 24h",
       "native_scheduling": "Yes (Meta Business Suite)",
       "api_scheduling": "Yes — scheduled_publish_time (10 min–30 days)",
       "schedulers": "Buffer, Hootsuite, Ayrshare, n8n, IFTTT",
       "siri_shortcuts": "API call with a stored Page token",
       "shortcuts_ease": "Medium",
-      "verification": "Official docs via search",
+      "verification": "Official pages via search (Oct 2026 review)",
       "docs_url": "https://developers.facebook.com/docs/pages-api/posts",
       "user_login": "Facebook Login (PKCE supported)",
       "post_on_users_behalf": "Yes — Pages the user manages (not personal profiles)",
@@ -1993,8 +2008,8 @@
       "automation_options": [
         {
           "route": "official_api_own_account",
-          "summary": "Post to your own account with the official API (Graph API (Pages API)): Text, links, photos, video.",
-          "access": "Meta developer app; App Review for pages_manage_posts",
+          "summary": "Post to your own account with the official API (Graph API (Pages API)): Text, links, photos, video, Reels (/video_reels, 30 API Reels per 24h), Stories (/photo_stories, /video_stories).",
+          "access": "Meta developer app; own Pages work in Development mode via app role (Standard Access); App Review (Advanced Access) for pages_manage_posts only to serve other people's Pages",
           "cost": "Free",
           "scheduling": "Yes — scheduled_publish_time (10 min–30 days)",
           "limits": "4,800 calls × engaged users / 24h"
@@ -2033,17 +2048,17 @@
       "category": "Social network",
       "content_types": "Photos, video, Reels, Stories, carousels, live",
       "official_api": "Yes — Instagram Content Publishing API",
-      "api_can_upload": "Images, video, Reels, Stories, carousels (≤10)",
+      "api_can_upload": "Images (JPEG), videos, Reels, Stories, carousels (≤10 items)",
       "api_free": "Free",
       "api_cost_detail": "—",
-      "approval": "Business/Creator account; App Review",
-      "limits": "50 API posts / 24h; media must be at a public URL",
-      "native_scheduling": "Yes (Meta Business Suite)",
+      "approval": "Professional (Business or Creator) account; own account works in Development mode with Standard Access (app role + Instagram tester); App Review/Advanced Access only for other users",
+      "limits": "100 API-published posts per 24h rolling (carousels count as 1; check GET /{ig-id}/content_publishing_limit); media must be at a public URL (or resumable upload for video via rupload)",
+      "native_scheduling": "Yes — in the Instagram app for professional accounts (up to 75 days) and Meta Business Suite",
       "api_scheduling": "No (schedulers hold the post)",
       "schedulers": "Buffer, Later, Hootsuite, Ayrshare",
       "siri_shortcuts": "API call with a token (media hosted at a URL)",
       "shortcuts_ease": "Medium",
-      "verification": "Official docs via search",
+      "verification": "Official pages via search (Oct 2026 review)",
       "docs_url": "https://developers.facebook.com/docs/instagram-platform/content-publishing",
       "user_login": "Instagram Login or Facebook Login",
       "post_on_users_behalf": "Yes — Business/Creator accounts only",
@@ -2055,11 +2070,11 @@
       "automation_options": [
         {
           "route": "official_api_own_account",
-          "summary": "Post to your own account with the official API (Instagram Content Publishing API): Images, video, Reels, Stories, carousels (≤10).",
-          "access": "Business/Creator account; App Review",
+          "summary": "Post to your own account with the official API (Instagram Content Publishing API): Images (JPEG), videos, Reels, Stories, carousels (≤10 items).",
+          "access": "Professional (Business or Creator) account; own account works in Development mode with Standard Access (app role + Instagram tester); App Review/Advanced Access only for other users",
           "cost": "Free",
           "scheduling": "No (schedulers hold the post)",
-          "limits": "50 API posts / 24h; media must be at a public URL"
+          "limits": "100 API-published posts per 24h rolling (carousels count as 1; check GET /{ig-id}/content_publishing_limit); media must be at a public URL (or resumable upload for video via rupload)"
         },
         {
           "route": "user_sign_in_post_on_behalf",
@@ -2082,7 +2097,7 @@
         },
         {
           "route": "native_scheduler",
-          "summary": "Schedule inside the platform itself: Yes (Meta Business Suite)."
+          "summary": "Schedule inside the platform itself: Yes — in the Instagram app for professional accounts (up to 75 days) and Meta Business Suite."
         },
         {
           "route": "manual",
@@ -2094,19 +2109,19 @@
       "platform": "MeWe",
       "category": "Social network",
       "content_types": "Text, photos, video, groups, stories",
-      "official_api": "Partial — Developer Program (limited beta)",
-      "api_can_upload": "Timeline and group posts with photos",
+      "official_api": "Yes — MeWe Developer Program (beta, limited spots, application reviewed)",
+      "api_can_upload": "Posts to your own timeline and to groups you belong to, with photo attachments (as exposed via Postiz)",
       "api_free": "Free (unverified)",
       "api_cost_detail": "—",
-      "approval": "Apply to developer program",
+      "approval": "Apply in the MeWe Developer Portal; MeWe team reviews; then create a 'Standalone App' to get App ID + API Key",
       "limits": "Unverified",
       "native_scheduling": "Unverified",
       "api_scheduling": "Unverified",
-      "schedulers": "Postiz",
+      "schedulers": "Postiz (cloud and self-hosted)",
       "siri_shortcuts": "OAuth (beta access)",
       "shortcuts_ease": "Hard",
-      "verification": "Search snippets",
-      "docs_url": "https://docs.postiz.com/providers/mewe",
+      "verification": "Official pages via search (Oct 2026 review)",
+      "docs_url": "https://docs.postiz.com/providers/mewe (MeWe's own developer docs are behind the developer program login)",
       "user_login": "MeWe OAuth (beta)",
       "post_on_users_behalf": "Yes — timeline and groups",
       "login_scopes": "Unverified",
@@ -2117,8 +2132,8 @@
       "automation_options": [
         {
           "route": "official_api_own_account",
-          "summary": "Post to your own account with the official API (Developer Program (limited beta)): Timeline and group posts with photos.",
-          "access": "Apply to developer program",
+          "summary": "Post to your own account with the official API (MeWe Developer Program (beta, limited spots, application reviewed)): Posts to your own timeline and to groups you belong to, with photo attachments (as exposed via Postiz).",
+          "access": "Apply in the MeWe Developer Portal; MeWe team reviews; then create a 'Standalone App' to get App ID + API Key",
           "cost": "Free (unverified)",
           "scheduling": "Unverified",
           "limits": "Unverified"
@@ -2133,7 +2148,7 @@
         },
         {
           "route": "scheduler_or_automation_tool",
-          "summary": "Connect the account once in a tool that already has platform approval and schedule there: Postiz.",
+          "summary": "Connect the account once in a tool that already has platform approval and schedule there: Postiz (cloud and self-hosted).",
           "note": "Easiest path when the platform requires app review or an audit; the tool handles login and tokens."
         },
         {
@@ -2149,55 +2164,6 @@
       ]
     },
     {
-      "platform": "Minds",
-      "category": "Social network",
-      "content_types": "Text, images, video, blogs, groups",
-      "official_api": "Partial — unofficial/undocumented",
-      "api_can_upload": "Posts via unofficial clients",
-      "api_free": "Free",
-      "api_cost_detail": "—",
-      "approval": "Login session",
-      "limits": "Unverified",
-      "native_scheduling": "Yes",
-      "api_scheduling": "Unofficial",
-      "schedulers": "None verified",
-      "siri_shortcuts": "Session login",
-      "shortcuts_ease": "Hard",
-      "verification": "Search snippets",
-      "docs_url": "https://gitlab.com/minds",
-      "user_login": "—",
-      "post_on_users_behalf": "Unverified",
-      "login_scopes": "—",
-      "review_to_open_to_other_users": "—",
-      "token_lifetime": "—",
-      "needs_server_secret": "—",
-      "has_upload_api": true,
-      "automation_options": [
-        {
-          "route": "official_api_own_account",
-          "summary": "Post to your own account with the official API (unofficial/undocumented): Posts via unofficial clients.",
-          "access": "Login session",
-          "cost": "Free",
-          "scheduling": "Unofficial",
-          "limits": "Unverified"
-        },
-        {
-          "route": "siri_shortcut",
-          "summary": "Not practical directly (Session login). Have the Shortcut call a scheduler's API or your own n8n/Zapier webhook instead.",
-          "ease": "Hard",
-          "see": "SHORTCUTS.md"
-        },
-        {
-          "route": "native_scheduler",
-          "summary": "Schedule inside the platform itself: Yes."
-        },
-        {
-          "route": "manual",
-          "summary": "Post by hand in the app or website (always available)."
-        }
-      ]
-    },
-    {
       "platform": "OK.ru",
       "category": "Social network",
       "content_types": "Text, photos, video, Moments, live, polls",
@@ -2205,30 +2171,38 @@
       "api_can_upload": "Media topics with text, photos, links, polls",
       "api_free": "Free",
       "api_cost_detail": "—",
-      "approval": "App + permissions requested from OK support",
+      "approval": "Register as developer and create an app, then email api-support@ok.ru with app ID + needed permissions (VALUABLE_ACCESS, GROUP_CONTENT, PHOTO_CONTENT, LONG_ACCESS_TOKEN) and use case",
       "limits": "Unverified",
       "native_scheduling": "Yes",
-      "api_scheduling": "Yes — publishAt",
+      "api_scheduling": "Yes - publishAt inside the attachment JSON ('YYYY-MM-DD HH:MM:SS')",
       "schedulers": "SMMplanner",
       "siri_shortcuts": "MD5 signature + token",
       "shortcuts_ease": "Hard",
-      "verification": "Official docs via search",
+      "verification": "Official pages via search (Oct 2026 review)",
       "docs_url": "https://apiok.ru/en/dev/sdk/js/ui.postMediatopic/",
-      "user_login": "—",
-      "post_on_users_behalf": "Unverified",
-      "login_scopes": "—",
-      "review_to_open_to_other_users": "—",
-      "token_lifetime": "—",
-      "needs_server_secret": "—",
+      "user_login": "OK OAuth 2.0 (connect.ok.ru/oauth/authorize)",
+      "post_on_users_behalf": "Yes - mediatopic.post to the user's own feed or groups they admin, once OK support grants the permissions",
+      "login_scopes": "VALUABLE_ACCESS;GROUP_CONTENT;PHOTO_CONTENT;VIDEO_CONTENT;LONG_ACCESS_TOKEN",
+      "review_to_open_to_other_users": "Permissions granted manually by OK support (api-support@ok.ru); app approval",
+      "token_lifetime": "Standard OAuth access_token ~30 min; with LONG_ACCESS_TOKEN 30 days, auto-extended when used regularly; refresh_token available",
+      "needs_server_secret": "Yes - application secret key used to derive session_secret_key = md5(access_token + application_secret_key) for MD5 request signatures",
       "has_upload_api": true,
       "automation_options": [
         {
           "route": "official_api_own_account",
           "summary": "Post to your own account with the official API (OK REST API): Media topics with text, photos, links, polls.",
-          "access": "App + permissions requested from OK support",
+          "access": "Register as developer and create an app, then email api-support@ok.ru with app ID + needed permissions (VALUABLE_ACCESS, GROUP_CONTENT, PHOTO_CONTENT, LONG_ACCESS_TOKEN) and use case",
           "cost": "Free",
-          "scheduling": "Yes — publishAt",
+          "scheduling": "Yes - publishAt inside the attachment JSON ('YYYY-MM-DD HH:MM:SS')",
           "limits": "Unverified"
+        },
+        {
+          "route": "user_sign_in_post_on_behalf",
+          "summary": "The user signs in with OK OAuth 2.0 (connect.ok.ru/oauth/authorize) and grants permission; the app then posts for them. Yes - mediatopic.post to the user's own feed or groups they admin, once OK support grants the permissions.",
+          "scopes": "VALUABLE_ACCESS;GROUP_CONTENT;PHOTO_CONTENT;VIDEO_CONTENT;LONG_ACCESS_TOKEN",
+          "review_to_open_to_other_users": "Permissions granted manually by OK support (api-support@ok.ru); app approval",
+          "token_lifetime": "Standard OAuth access_token ~30 min; with LONG_ACCESS_TOKEN 30 days, auto-extended when used regularly; refresh_token available",
+          "needs_server_secret": "Yes - application secret key used to derive session_secret_key = md5(access_token + application_secret_key) for MD5 request signatures"
         },
         {
           "route": "scheduler_or_automation_tool",
@@ -2260,18 +2234,18 @@
       "api_free": "Free (reported 10k calls/month until business verification, unverified)",
       "api_cost_detail": "—",
       "approval": "VK ID app or community token",
-      "limits": "3 requests/s per user token",
+      "limits": "User token: 3 requests/s; community token: 20 requests/s; reported cap of ~50 wall posts per day per community; quantity limits on same-type methods are undisclosed (captcha/temporary block when exceeded).",
       "native_scheduling": "Yes (deferred posts)",
       "api_scheduling": "Yes — publish_date",
       "schedulers": "SMMplanner, Postiz, Make",
       "siri_shortcuts": "Community token in one call",
       "shortcuts_ease": "Easy",
-      "verification": "Official docs via search",
+      "verification": "Official pages via search (Oct 2026 review)",
       "docs_url": "https://dev.vk.ru/en/method/wall.post",
       "user_login": "VK ID (OAuth 2.1 + PKCE)",
       "post_on_users_behalf": "Yes — wall posts, photos, video",
       "login_scopes": "wall photos video",
-      "review_to_open_to_other_users": "VK ID business app with passport details and approval",
+      "review_to_open_to_other_users": "VK ID app: developer verification (individual: passport + face check on camera; business: VK Business ID with company details verified via bank or documents)",
       "token_lifetime": "~1h + refresh",
       "needs_server_secret": "Yes",
       "has_upload_api": true,
@@ -2282,13 +2256,13 @@
           "access": "VK ID app or community token",
           "cost": "Free (reported 10k calls/month until business verification, unverified)",
           "scheduling": "Yes — publish_date",
-          "limits": "3 requests/s per user token"
+          "limits": "User token: 3 requests/s; community token: 20 requests/s; reported cap of ~50 wall posts per day per community; quantity limits on same-type methods are undisclosed (captcha/temporary block when exceeded)."
         },
         {
           "route": "user_sign_in_post_on_behalf",
           "summary": "The user signs in with VK ID (OAuth 2.1 + PKCE) and grants permission; the app then posts for them. Yes — wall posts, photos, video.",
           "scopes": "wall photos video",
-          "review_to_open_to_other_users": "VK ID business app with passport details and approval",
+          "review_to_open_to_other_users": "VK ID app: developer verification (individual: passport + face check on camera; business: VK Business ID with company details verified via bank or documents)",
           "token_lifetime": "~1h + refresh",
           "needs_server_secret": "Yes"
         },
@@ -2328,14 +2302,14 @@
       "schedulers": "None (unofficial biliup CLI)",
       "siri_shortcuts": "OAuth + approval",
       "shortcuts_ease": "Hard",
-      "verification": "Search snippets",
+      "verification": "Official pages via search (Oct 2026 review)",
       "docs_url": "https://openhome.bilibili.com/doc",
-      "user_login": "—",
-      "post_on_users_behalf": "Unverified",
+      "user_login": "Bilibili OAuth 2.0 (token: POST https://api.bilibili.com/x/account-oauth2/v1/token)",
+      "post_on_users_behalf": "Yes - video submission (arcopen/fn/archive: init -> upload -> complete -> add-by-utoken) for authorizing users, if the app has the submission capability",
       "login_scopes": "—",
       "review_to_open_to_other_users": "—",
-      "token_lifetime": "—",
-      "needs_server_secret": "—",
+      "token_lifetime": "access_token with expires_in + refresh_token (exact durations unverified)",
+      "needs_server_secret": "Yes (client_secret)",
       "has_upload_api": true,
       "automation_options": [
         {
@@ -2345,6 +2319,14 @@
           "cost": "Free (unverified)",
           "scheduling": "Unverified",
           "limits": "Unverified"
+        },
+        {
+          "route": "user_sign_in_post_on_behalf",
+          "summary": "The user signs in with Bilibili OAuth 2.0 (token: POST https://api.bilibili.com/x/account-oauth2/v1/token) and grants permission; the app then posts for them. Yes - video submission (arcopen/fn/archive: init -> upload -> complete -> add-by-utoken) for authorizing users, if the app has the submission capability.",
+          "scopes": "—",
+          "review_to_open_to_other_users": "—",
+          "token_lifetime": "access_token with expires_in + refresh_token (exact durations unverified)",
+          "needs_server_secret": "Yes (client_secret)"
         },
         {
           "route": "scheduler_or_automation_tool",
@@ -2375,14 +2357,14 @@
       "api_can_upload": "Video (upload URL → upload → publish), live events",
       "api_free": "Free",
       "api_cost_detail": "—",
-      "approval": "API key + OAuth user token",
-      "limits": "Daily upload quotas (figures unverified)",
+      "approval": "Public API key created self-serve in Dailymotion Studio (Organization → API keys → Create API key, Owner/Admin role) + OAuth user token with manage_videos. Private API keys only work with partner.api.dailymotion.com.",
+      "limits": "Standard accounts: ≤2 h and ≤4 GB per video; 15 videos / 10 h total per 24 h. Verified Partners: no per-video limit, up to 96 videos/24 h. Check GET /user/<id>?fields=limits.",
       "native_scheduling": "Unverified",
-      "api_scheduling": "Partial — publish_date field",
+      "api_scheduling": "Unverified — publish_date field not confirmed in current docs; mandatory publish fields are url, title, is_created_for_kids (+ published=true)",
       "schedulers": "None confirmed",
       "siri_shortcuts": "Several API steps",
       "shortcuts_ease": "Medium",
-      "verification": "Official docs via search",
+      "verification": "Official pages via search (Oct 2026 review)",
       "docs_url": "https://developers.dailymotion.com/guides/upload/",
       "user_login": "Dailymotion OAuth 2.0 (public API key)",
       "post_on_users_behalf": "Yes — the user's channel",
@@ -2395,10 +2377,10 @@
         {
           "route": "official_api_own_account",
           "summary": "Post to your own account with the official API (Data API / Partner API): Video (upload URL → upload → publish), live events.",
-          "access": "API key + OAuth user token",
+          "access": "Public API key created self-serve in Dailymotion Studio (Organization → API keys → Create API key, Owner/Admin role) + OAuth user token with manage_videos. Private API keys only work with partner.api.dailymotion.com.",
           "cost": "Free",
-          "scheduling": "Partial — publish_date field",
-          "limits": "Daily upload quotas (figures unverified)"
+          "scheduling": "Unverified — publish_date field not confirmed in current docs; mandatory publish fields are url, title, is_created_for_kids (+ published=true)",
+          "limits": "Standard accounts: ≤2 h and ≤4 GB per video; 15 videos / 10 h total per 24 h. Verified Partners: no per-video limit, up to 96 videos/24 h. Check GET /user/<id>?fields=limits."
         },
         {
           "route": "user_sign_in_post_on_behalf",
@@ -2431,18 +2413,18 @@
       "approval": "Open Platform app (Chinese entity, unverified) + scope approval",
       "limits": "Unverified",
       "native_scheduling": "Yes",
-      "api_scheduling": "Unverified",
+      "api_scheduling": "No schedule parameter found in public docs (native creator-center timed publish only)",
       "schedulers": "None official",
       "siri_shortcuts": "OAuth",
       "shortcuts_ease": "Hard",
-      "verification": "Search snippets",
+      "verification": "Official pages via search (Oct 2026 review)",
       "docs_url": "https://developer.open-douyin.com/",
-      "user_login": "—",
-      "post_on_users_behalf": "Unverified",
-      "login_scopes": "—",
+      "user_login": "Douyin OAuth 2.0 (open.douyin.com/platform/oauth/connect)",
+      "post_on_users_behalf": "Yes - video publish to the authorizing user's account with video.create scope (app must hold the capability)",
+      "login_scopes": "user_info,video.create",
       "review_to_open_to_other_users": "—",
-      "token_lifetime": "—",
-      "needs_server_secret": "—",
+      "token_lifetime": "access_token 15 days; refresh_token 30 days (refresh does not extend refresh_token)",
+      "needs_server_secret": "Yes (client_secret for token exchange)",
       "has_upload_api": true,
       "automation_options": [
         {
@@ -2450,8 +2432,16 @@
           "summary": "Post to your own account with the official API (Douyin Open Platform): Video publish (video.create), may be limited to approved apps.",
           "access": "Open Platform app (Chinese entity, unverified) + scope approval",
           "cost": "Free",
-          "scheduling": "Unverified",
+          "scheduling": "No schedule parameter found in public docs (native creator-center timed publish only)",
           "limits": "Unverified"
+        },
+        {
+          "route": "user_sign_in_post_on_behalf",
+          "summary": "The user signs in with Douyin OAuth 2.0 (open.douyin.com/platform/oauth/connect) and grants permission; the app then posts for them. Yes - video publish to the authorizing user's account with video.create scope (app must hold the capability).",
+          "scopes": "user_info,video.create",
+          "review_to_open_to_other_users": "—",
+          "token_lifetime": "access_token 15 days; refresh_token 30 days (refresh does not extend refresh_token)",
+          "needs_server_secret": "Yes (client_secret for token exchange)"
         },
         {
           "route": "siri_shortcut",
@@ -2484,14 +2474,14 @@
       "schedulers": "None",
       "siri_shortcuts": "OAuth",
       "shortcuts_ease": "Hard",
-      "verification": "Search snippets",
+      "verification": "Partly unverified (Oct 2026 review)",
       "docs_url": "https://open.kuaishou.com",
-      "user_login": "—",
-      "post_on_users_behalf": "Unverified",
+      "user_login": "Kuaishou OAuth 2.0 (open.kuaishou.com)",
+      "post_on_users_behalf": "Yes (China) - video publish via Open Platform content-publishing API for authorizing users; international Kwai has no public posting API found",
       "login_scopes": "—",
       "review_to_open_to_other_users": "—",
       "token_lifetime": "—",
-      "needs_server_secret": "—",
+      "needs_server_secret": "Yes (app_secret)",
       "has_upload_api": true,
       "automation_options": [
         {
@@ -2501,6 +2491,14 @@
           "cost": "Free (unverified)",
           "scheduling": "Unverified",
           "limits": "Unverified"
+        },
+        {
+          "route": "user_sign_in_post_on_behalf",
+          "summary": "The user signs in with Kuaishou OAuth 2.0 (open.kuaishou.com) and grants permission; the app then posts for them. Yes (China) - video publish via Open Platform content-publishing API for authorizing users; international Kwai has no public posting API found.",
+          "scopes": "—",
+          "review_to_open_to_other_users": "—",
+          "token_lifetime": "—",
+          "needs_server_secret": "Yes (app_secret)"
         },
         {
           "route": "siri_shortcut",
@@ -2524,15 +2522,15 @@
       "api_cost_detail": "Small LBC blockchain fees",
       "approval": "None (livestream needs 50 LBC)",
       "limits": "Web upload ≤4 GB",
-      "native_scheduling": "Unverified",
-      "api_scheduling": "Unverified",
+      "native_scheduling": "Unverified (no documented scheduled-publish feature found)",
+      "api_scheduling": "No — release_time can only be set to the current or a past time",
       "schedulers": "None",
       "siri_shortcuts": "Not practical (needs a local daemon)",
       "shortcuts_ease": "—",
-      "verification": "Search snippets",
+      "verification": "Official pages via search (Oct 2026 review)",
       "docs_url": "https://lbry.tech/api/sdk",
-      "user_login": "—",
-      "post_on_users_behalf": "Unverified",
+      "user_login": "None — no OAuth; posting is done by a self-run lbrynet daemon holding the channel's wallet/keys",
+      "post_on_users_behalf": "Only for your own channel via your own lbrynet wallet (no third-party auth)",
       "login_scopes": "—",
       "review_to_open_to_other_users": "—",
       "token_lifetime": "—",
@@ -2544,8 +2542,16 @@
           "summary": "Post to your own account with the official API (LBRY SDK (lbrynet JSON-RPC)): Any file via a self-run daemon + wallet.",
           "access": "None (livestream needs 50 LBC)",
           "cost": "Free (Small LBC blockchain fees)",
-          "scheduling": "Unverified",
+          "scheduling": "No — release_time can only be set to the current or a past time",
           "limits": "Web upload ≤4 GB"
+        },
+        {
+          "route": "user_sign_in_post_on_behalf",
+          "summary": "The user signs in with None — no OAuth; posting is done by a self-run lbrynet daemon holding the channel's wallet/keys and grants permission; the app then posts for them. Only for your own channel via your own lbrynet wallet (no third-party auth).",
+          "scopes": "—",
+          "review_to_open_to_other_users": "—",
+          "token_lifetime": "—",
+          "needs_server_secret": "—"
         },
         {
           "route": "siri_shortcut",
@@ -2564,17 +2570,17 @@
       "category": "Video",
       "content_types": "Snaps, Stories, Spotlight",
       "official_api": "Partial — Public Profile API (allowlist)",
-      "api_can_upload": "Stories, Spotlight video (allowlisted apps only)",
+      "api_can_upload": "Stories, Saved Stories, Spotlight (allowlisted apps only)",
       "api_free": "Unverified",
       "api_cost_detail": "—",
-      "approval": "Allowlist via a Snap contact",
+      "approval": "Public Profile API is allowlist-only: create an OAuth app in Snap Business Manager, email your Snap point of contact the OAuth client ID and intended use",
       "limits": "Unverified",
-      "native_scheduling": "Unverified",
+      "native_scheduling": "No — no native scheduling for Stories/Spotlight (drafts only, publish manually)",
       "api_scheduling": "No",
-      "schedulers": "Later, Ayrshare, Metricool",
+      "schedulers": "Later, Ayrshare, Metricool, OneUp, Sked Social",
       "siri_shortcuts": "Share sheet only",
       "shortcuts_ease": "—",
-      "verification": "Official docs via search",
+      "verification": "Official pages via search (Oct 2026 review)",
       "docs_url": "https://developers.snap.com/marketing-api/Public-Profile-API/Introduction",
       "user_login": "Snap Login Kit / Public Profile API",
       "post_on_users_behalf": "Limited — allowlisted apps; otherwise Creative Kit (user taps share)",
@@ -2586,8 +2592,8 @@
       "automation_options": [
         {
           "route": "official_api_own_account",
-          "summary": "Post to your own account with the official API (Public Profile API (allowlist)): Stories, Spotlight video (allowlisted apps only).",
-          "access": "Allowlist via a Snap contact",
+          "summary": "Post to your own account with the official API (Public Profile API (allowlist)): Stories, Saved Stories, Spotlight (allowlisted apps only).",
+          "access": "Public Profile API is allowlist-only: create an OAuth app in Snap Business Manager, email your Snap point of contact the OAuth client ID and intended use",
           "cost": "Unverified",
           "scheduling": "No",
           "limits": "Unverified"
@@ -2602,7 +2608,7 @@
         },
         {
           "route": "scheduler_or_automation_tool",
-          "summary": "Connect the account once in a tool that already has platform approval and schedule there: Later, Ayrshare, Metricool.",
+          "summary": "Connect the account once in a tool that already has platform approval and schedule there: Later, Ayrshare, Metricool, OneUp, Sked Social.",
           "note": "Easiest path when the platform requires app review or an audit; the tool handles login and tokens."
         },
         {
@@ -2625,37 +2631,37 @@
       "api_can_upload": "Videos, photo posts (direct or to drafts)",
       "api_free": "Free",
       "api_cost_detail": "—",
-      "approval": "OAuth + audit (unaudited apps post privately, 5 users/day)",
-      "limits": "~15 direct posts/day per account",
+      "approval": "App review (Login Kit + Content Posting API) then Content Posting audit for public posting. Unaudited clients: max 5 users posting per 24h, accounts must be private at posting time, content SELF_ONLY only",
+      "limits": "Per-creator Direct Post cap typically ~15 posts/24h (shared across all API clients); per-client daily active-creator cap set from audit estimates",
       "native_scheduling": "Yes (TikTok Studio web, 10 days)",
-      "api_scheduling": "Unverified",
+      "api_scheduling": "No (no scheduled-publish parameter in Direct Post; agent holds posts until due)",
       "schedulers": "Buffer, Hootsuite, Later, Publer, Metricool, Ayrshare",
       "siri_shortcuts": "Share sheet or webhook",
       "shortcuts_ease": "Hard",
-      "verification": "Official docs via search",
+      "verification": "Official pages via search (Oct 2026 review)",
       "docs_url": "https://developers.tiktok.com/doc/content-posting-api-get-started",
       "user_login": "TikTok Login Kit",
       "post_on_users_behalf": "Yes — direct post or to the user's drafts",
       "login_scopes": "video.publish and/or video.upload",
       "review_to_open_to_other_users": "App review + Content Posting audit (before: private posts only, 5 users/day)",
-      "token_lifetime": "24h access; 365-day refresh",
+      "token_lifetime": "Access token 24h; refresh token 365 days (refresh without user consent)",
       "needs_server_secret": "Yes (client secret)",
       "has_upload_api": true,
       "automation_options": [
         {
           "route": "official_api_own_account",
           "summary": "Post to your own account with the official API (Content Posting API): Videos, photo posts (direct or to drafts).",
-          "access": "OAuth + audit (unaudited apps post privately, 5 users/day)",
+          "access": "App review (Login Kit + Content Posting API) then Content Posting audit for public posting. Unaudited clients: max 5 users posting per 24h, accounts must be private at posting time, content SELF_ONLY only",
           "cost": "Free",
-          "scheduling": "Unverified",
-          "limits": "~15 direct posts/day per account"
+          "scheduling": "No (no scheduled-publish parameter in Direct Post; agent holds posts until due)",
+          "limits": "Per-creator Direct Post cap typically ~15 posts/24h (shared across all API clients); per-client daily active-creator cap set from audit estimates"
         },
         {
           "route": "user_sign_in_post_on_behalf",
           "summary": "The user signs in with TikTok Login Kit and grants permission; the app then posts for them. Yes — direct post or to the user's drafts.",
           "scopes": "video.publish and/or video.upload",
           "review_to_open_to_other_users": "App review + Content Posting audit (before: private posts only, 5 users/day)",
-          "token_lifetime": "24h access; 365-day refresh",
+          "token_lifetime": "Access token 24h; refresh token 365 days (refresh without user consent)",
           "needs_server_secret": "Yes (client secret)"
         },
         {
@@ -2687,14 +2693,14 @@
       "api_can_upload": "Video (resumable, form, or pull from URL), thumbnails, captions, metadata",
       "api_free": "Free",
       "api_cost_detail": "Free API; paid plans get higher limits",
-      "approval": "upload scope; automatic on paid plans, manual review (≤5 days) on free accounts",
-      "limits": "250 req/15 min (free), 1,000 (paid)",
-      "native_scheduling": "Only on Vimeo OTT (unverified for core)",
-      "api_scheduling": "Unverified",
+      "approval": "Self-serve app at developer.vimeo.com/apps. Upload access is automatic for paid plans; free-plan developers must click 'Request Additional Access' under Permissions → Upload Access (manual review, up to 5 business days).",
+      "limits": "Rolling 15-min window by plan: Basic/Free 250, Plus 250, Pro 500, Business 1,000 requests (x-ratelimit-* headers; 429 when exceeded). Upload storage/quota depends on plan (see GET /me upload_quota).",
+      "native_scheduling": "No scheduled publish on core Vimeo found; scheduled release/expiry exists only on Vimeo OTT",
+      "api_scheduling": "No (core API has no publish-at field; workaround: upload with privacy.view=nobody/unlisted, then PATCH privacy at the desired time from the agent's own scheduler)",
       "schedulers": "Zapier (Upload Video), Make/n8n (unverified)",
       "siri_shortcuts": "One API call with a personal token (pull upload from a link)",
       "shortcuts_ease": "Easy",
-      "verification": "Official help via search",
+      "verification": "Official pages via search (Oct 2026 review)",
       "docs_url": "https://developer.vimeo.com/api/upload/videos",
       "user_login": "Vimeo OAuth 2.0",
       "post_on_users_behalf": "Yes — the user's videos",
@@ -2707,10 +2713,10 @@
         {
           "route": "official_api_own_account",
           "summary": "Post to your own account with the official API (Vimeo API): Video (resumable, form, or pull from URL), thumbnails, captions, metadata.",
-          "access": "upload scope; automatic on paid plans, manual review (≤5 days) on free accounts",
+          "access": "Self-serve app at developer.vimeo.com/apps. Upload access is automatic for paid plans; free-plan developers must click 'Request Additional Access' under Permissions → Upload Access (manual review, up to 5 business days).",
           "cost": "Free (Free API; paid plans get higher limits)",
-          "scheduling": "Unverified",
-          "limits": "250 req/15 min (free), 1,000 (paid)"
+          "scheduling": "No (core API has no publish-at field; workaround: upload with privacy.view=nobody/unlisted, then PATCH privacy at the desired time from the agent's own scheduler)",
+          "limits": "Rolling 15-min window by plan: Basic/Free 250, Plus 250, Pro 500, Business 1,000 requests (x-ratelimit-* headers; 429 when exceeded). Upload storage/quota depends on plan (see GET /me upload_quota)."
         },
         {
           "route": "user_sign_in_post_on_behalf",
@@ -2742,39 +2748,39 @@
       "category": "Video",
       "content_types": "Long video, Shorts, live, Community posts",
       "official_api": "Yes — YouTube Data API v3",
-      "api_can_upload": "Videos and Shorts (by format), live broadcasts; not Community posts",
+      "api_can_upload": "Videos (Shorts are ordinary uploads ≤3 min, vertical/square; no Shorts flag), thumbnails, captions, playlists, live broadcasts (liveBroadcasts API). Not Community/text/image posts.",
       "api_free": "Free",
       "api_cost_detail": "—",
-      "approval": "OAuth; uploads stay private until the app passes an audit",
-      "limits": "10,000 units/day; ~100 uploads/day bucket",
+      "approval": "Google OAuth (youtube.upload is a sensitive scope; Testing mode OK for own account). Projects created after 28 Jul 2020 that haven't passed the YouTube API compliance audit have all uploads forced to private.",
+      "limits": "Since 1 Jun 2026 granular quota: videos.insert has its own bucket of 100 calls/day (1 unit per upload); search.list its own 100/day; 10,000 units/day for all other endpoints. Increases via quota extension form (requires compliance audit).",
       "native_scheduling": "Yes (YouTube Studio)",
-      "api_scheduling": "Yes — status.publishAt",
+      "api_scheduling": "Yes — status.publishAt (only while privacyStatus=private and the video has never been public)",
       "schedulers": "Buffer, Hootsuite, Later, Publer, Metricool, Ayrshare, n8n, Zapier",
       "siri_shortcuts": "No upload action; share sheet or webhook",
       "shortcuts_ease": "Hard",
-      "verification": "Official docs via search",
+      "verification": "Official pages via search (Oct 2026 review)",
       "docs_url": "https://developers.google.com/youtube/v3/docs/videos/insert",
       "user_login": "Google OAuth 2.0",
       "post_on_users_behalf": "Yes — the user's channel",
       "login_scopes": "youtube.upload",
-      "review_to_open_to_other_users": "Google OAuth verification (100-user cap before; Testing mode refresh tokens last 7 days) + YouTube audit or uploads stay private",
+      "review_to_open_to_other_users": "Google OAuth app verification for sensitive scope (Testing mode: max 100 test users, refresh tokens expire 7 days after consent) + YouTube API Services compliance audit, otherwise uploads stay private",
       "token_lifetime": "1h access; refresh token",
       "needs_server_secret": "For long-lived access",
       "has_upload_api": true,
       "automation_options": [
         {
           "route": "official_api_own_account",
-          "summary": "Post to your own account with the official API (YouTube Data API v3): Videos and Shorts (by format), live broadcasts; not Community posts.",
-          "access": "OAuth; uploads stay private until the app passes an audit",
+          "summary": "Post to your own account with the official API (YouTube Data API v3): Videos (Shorts are ordinary uploads ≤3 min, vertical/square; no Shorts flag), thumbnails, captions, playlists, live broadcasts (liveBroadcasts API). Not Community/text/image posts..",
+          "access": "Google OAuth (youtube.upload is a sensitive scope; Testing mode OK for own account). Projects created after 28 Jul 2020 that haven't passed the YouTube API compliance audit have all uploads forced to private.",
           "cost": "Free",
-          "scheduling": "Yes — status.publishAt",
-          "limits": "10,000 units/day; ~100 uploads/day bucket"
+          "scheduling": "Yes — status.publishAt (only while privacyStatus=private and the video has never been public)",
+          "limits": "Since 1 Jun 2026 granular quota: videos.insert has its own bucket of 100 calls/day (1 unit per upload); search.list its own 100/day; 10,000 units/day for all other endpoints. Increases via quota extension form (requires compliance audit)."
         },
         {
           "route": "user_sign_in_post_on_behalf",
           "summary": "The user signs in with Google OAuth 2.0 and grants permission; the app then posts for them. Yes — the user's channel.",
           "scopes": "youtube.upload",
-          "review_to_open_to_other_users": "Google OAuth verification (100-user cap before; Testing mode refresh tokens last 7 days) + YouTube audit or uploads stay private",
+          "review_to_open_to_other_users": "Google OAuth app verification for sensitive scope (Testing mode: max 100 test users, refresh tokens expire 7 days after consent) + YouTube API Services compliance audit, otherwise uploads stay private",
           "token_lifetime": "1h access; refresh token",
           "needs_server_secret": "For long-lived access"
         },
@@ -2807,27 +2813,27 @@
       "api_can_upload": "Video (incl. resumable), live, import by URL, playlists",
       "api_free": "Free",
       "api_cost_detail": "Open source",
-      "approval": "Account on a server; OAuth password grant",
+      "approval": "Account on a server; OAuth password grant (client id/secret from GET /api/v1/oauth-clients/local); x-peertube-otp header if 2FA is on",
       "limits": "Per-server quota",
       "native_scheduling": "Yes (private → scheduled public)",
       "api_scheduling": "Yes — scheduleUpdate",
       "schedulers": "Fedica, n8n (HTTP)",
       "siri_shortcuts": "Two POSTs for a token, then multipart upload",
       "shortcuts_ease": "Medium",
-      "verification": "Official docs via search",
+      "verification": "Verified against official docs (Oct 2026 review)",
       "docs_url": "https://docs.joinpeertube.org/api-rest-reference.html",
       "user_login": "Password grant only",
       "post_on_users_behalf": "Limited — app must handle the user's password",
       "login_scopes": "Full account",
       "review_to_open_to_other_users": "None",
-      "token_lifetime": "Access + refresh",
+      "token_lifetime": "Access token 1 day, refresh token 2 weeks (refresh with grant_type=refresh_token)",
       "needs_server_secret": "No",
       "has_upload_api": true,
       "automation_options": [
         {
           "route": "official_api_own_account",
           "summary": "Post to your own account with the official API (PeerTube REST API (per server)): Video (incl. resumable), live, import by URL, playlists.",
-          "access": "Account on a server; OAuth password grant",
+          "access": "Account on a server; OAuth password grant (client id/secret from GET /api/v1/oauth-clients/local); x-peertube-otp header if 2FA is on",
           "cost": "Free (Open source)",
           "scheduling": "Yes — scheduleUpdate",
           "limits": "Per-server quota"
@@ -2837,7 +2843,7 @@
           "summary": "The user signs in with Password grant only and grants permission; the app then posts for them. Limited — app must handle the user's password.",
           "scopes": "Full account",
           "review_to_open_to_other_users": "None",
-          "token_lifetime": "Access + refresh",
+          "token_lifetime": "Access token 1 day, refresh token 2 weeks (refresh with grant_type=refresh_token)",
           "needs_server_secret": "No"
         },
         {
@@ -2869,37 +2875,37 @@
       "api_can_upload": "Image and video Pins",
       "api_free": "Free",
       "api_cost_detail": "—",
-      "approval": "OAuth; Trial then Standard access",
-      "limits": "Trial 300 writes/day",
-      "native_scheduling": "Yes (30 days, max 10) + RSS auto-publish",
-      "api_scheduling": "Unverified",
+      "approval": "App request approval → Trial access (Pins sandbox-only, visible only to creator) → Standard access via upgrade request with a video of the OAuth flow + a Pin being created (required even for single-user apps; Postman/terminal recordings accepted)",
+      "limits": "Trial: 1,000 requests/day per app universal cap plus per-category caps (pin creation in write category ~300/day); Standard: per-minute per-user limits",
+      "native_scheduling": "Yes — up to 30 days ahead, max 10 scheduled Pins at a time",
+      "api_scheduling": "No (no publish-at parameter for organic Pins in v5; agent holds Pins until due)",
       "schedulers": "Ayrshare, Later, Buffer, Hootsuite",
       "siri_shortcuts": "OAuth needed — use a scheduler",
       "shortcuts_ease": "Hard",
-      "verification": "Official docs via search",
+      "verification": "Official pages via search (Oct 2026 review)",
       "docs_url": "https://developers.pinterest.com/docs/api/v5/pins-create/",
       "user_login": "Pinterest OAuth 2.0",
       "post_on_users_behalf": "Yes — the user's boards",
       "login_scopes": "pins:write, boards:read",
       "review_to_open_to_other_users": "Standard access review (Trial pins are sandbox-only)",
-      "token_lifetime": "30-day access; 60-day rolling refresh",
+      "token_lifetime": "Access token 30 days; refresh token 365 days (continuous refresh available)",
       "needs_server_secret": "Yes",
       "has_upload_api": true,
       "automation_options": [
         {
           "route": "official_api_own_account",
           "summary": "Post to your own account with the official API (API v5): Image and video Pins.",
-          "access": "OAuth; Trial then Standard access",
+          "access": "App request approval → Trial access (Pins sandbox-only, visible only to creator) → Standard access via upgrade request with a video of the OAuth flow + a Pin being created (required even for single-user apps; Postman/terminal recordings accepted)",
           "cost": "Free",
-          "scheduling": "Unverified",
-          "limits": "Trial 300 writes/day"
+          "scheduling": "No (no publish-at parameter for organic Pins in v5; agent holds Pins until due)",
+          "limits": "Trial: 1,000 requests/day per app universal cap plus per-category caps (pin creation in write category ~300/day); Standard: per-minute per-user limits"
         },
         {
           "route": "user_sign_in_post_on_behalf",
           "summary": "The user signs in with Pinterest OAuth 2.0 and grants permission; the app then posts for them. Yes — the user's boards.",
           "scopes": "pins:write, boards:read",
           "review_to_open_to_other_users": "Standard access review (Trial pins are sandbox-only)",
-          "token_lifetime": "30-day access; 60-day rolling refresh",
+          "token_lifetime": "Access token 30 days; refresh token 365 days (continuous refresh available)",
           "needs_server_secret": "Yes"
         },
         {
@@ -2915,7 +2921,7 @@
         },
         {
           "route": "native_scheduler",
-          "summary": "Schedule inside the platform itself: Yes (30 days, max 10) + RSS auto-publish."
+          "summary": "Schedule inside the platform itself: Yes — up to 30 days ahead, max 10 scheduled Pins at a time."
         },
         {
           "route": "manual",
@@ -2926,19 +2932,19 @@
     {
       "platform": "Clubhouse",
       "category": "Audio",
-      "content_types": "Voice chats, voicemails, audio rooms",
+      "content_types": "Product pivoted (2023) from drop-in live audio rooms to asynchronous voice chats among friends/groups; live rooms/Houses still exist in the app",
       "official_api": "No",
       "api_can_upload": "Nothing",
       "api_free": "—",
       "api_cost_detail": "—",
       "approval": "—",
       "limits": "—",
-      "native_scheduling": "Historically (unverified now)",
+      "native_scheduling": "Yes for live events (create event with name, date/time, co-hosts); voice messages cannot be scheduled",
       "api_scheduling": "—",
       "schedulers": "None",
       "siri_shortcuts": "None",
       "shortcuts_ease": "—",
-      "verification": "Search snippets",
+      "verification": "Official pages via search (Oct 2026 review)",
       "docs_url": "https://www.clubhouse.com",
       "user_login": "—",
       "post_on_users_behalf": "No (no posting API)",
@@ -2949,6 +2955,10 @@
       "has_upload_api": false,
       "automation_options": [
         {
+          "route": "native_scheduler",
+          "summary": "Schedule inside the platform itself: Yes for live events (create event with name, date/time, co-hosts); voice messages cannot be scheduled."
+        },
+        {
           "route": "manual",
           "summary": "Post by hand in the app or website (always available)."
         }
@@ -2958,19 +2968,19 @@
       "platform": "Medium",
       "category": "Blog",
       "content_types": "Articles, images, embeds",
-      "official_api": "No — API closed to new integrations (2023)",
+      "official_api": "No for new users: Medium issues no new integration tokens and allows no new integrations; tokens created before the cutoff still work",
       "api_can_upload": "Nothing for new users",
       "api_free": "—",
       "api_cost_detail": "—",
       "approval": "—",
       "limits": "—",
-      "native_scheduling": "Unverified",
+      "native_scheduling": "Yes: Publish > Schedule for later; publishes within ~5 min of set time (local timezone); edits before publish time are included",
       "api_scheduling": "—",
-      "schedulers": "—",
+      "schedulers": "Official import tool: Stories > Import a story from a URL (backdates + adds canonical link); outbound RSS available",
       "siri_shortcuts": "None",
       "shortcuts_ease": "—",
-      "verification": "Official GitHub",
-      "docs_url": "https://github.com/Medium/medium-api-docs",
+      "verification": "Official pages via search (Oct 2026 review)",
+      "docs_url": "https://help.medium.com/hc/en-us/articles/213480228-API-Importing",
       "user_login": "—",
       "post_on_users_behalf": "No (no posting API)",
       "login_scopes": "—",
@@ -2980,6 +2990,15 @@
       "has_upload_api": false,
       "automation_options": [
         {
+          "route": "scheduler_or_automation_tool",
+          "summary": "Connect the account once in a tool that already has platform approval and schedule there: Official import tool: Stories > Import a story from a URL (backdates + adds canonical link); outbound RSS available.",
+          "note": "Easiest path when the platform requires app review or an audit; the tool handles login and tokens."
+        },
+        {
+          "route": "native_scheduler",
+          "summary": "Schedule inside the platform itself: Yes: Publish > Schedule for later; publishes within ~5 min of set time (local timezone); edits before publish time are included."
+        },
+        {
           "route": "manual",
           "summary": "Post by hand in the app or website (always available)."
         }
@@ -2988,19 +3007,19 @@
     {
       "platform": "Naver Blog",
       "category": "Blog",
-      "content_types": "Blog posts, clips",
-      "official_api": "No (write API shut down)",
+      "content_types": "Blog posts, clips (Naver Post service is being shut down; Naver focusing on Blog)",
+      "official_api": "No: blog write API (incl. XML-RPC) no longer usable; only search/read APIs on Naver Developers",
       "api_can_upload": "Nothing",
       "api_free": "—",
       "api_cost_detail": "—",
       "approval": "—",
       "limits": "—",
-      "native_scheduling": "Yes",
+      "native_scheduling": "Yes: SmartEditor ONE publish options include 예약 발행 (scheduled publish)",
       "api_scheduling": "No",
       "schedulers": "None",
       "siri_shortcuts": "None",
       "shortcuts_ease": "—",
-      "verification": "Search snippets",
+      "verification": "Official pages via search (Oct 2026 review)",
       "docs_url": "https://developers.naver.com/",
       "user_login": "—",
       "post_on_users_behalf": "No (no posting API)",
@@ -3012,7 +3031,7 @@
       "automation_options": [
         {
           "route": "native_scheduler",
-          "summary": "Schedule inside the platform itself: Yes."
+          "summary": "Schedule inside the platform itself: Yes: SmartEditor ONE publish options include 예약 발행 (scheduled publish)."
         },
         {
           "route": "manual",
@@ -3025,17 +3044,17 @@
       "category": "Creator",
       "content_types": "Posts (text, image, video, audio, polls), shop",
       "official_api": "Partial — API v2 (mostly read-only)",
-      "api_can_upload": "Posting not supported",
+      "api_can_upload": "Posting not supported: API v2 reads campaigns/members/posts and webhooks; no public create-post endpoint",
       "api_free": "Free",
       "api_cost_detail": "—",
       "approval": "OAuth client; developer support paused since 2020",
       "limits": "Unverified",
-      "native_scheduling": "Yes",
+      "native_scheduling": "Yes: post editor > set publish date/time (web and mobile); scheduled posts listed in Library",
       "api_scheduling": "No",
-      "schedulers": "None",
+      "schedulers": "Official podcast RSS sync: Settings > Podcast and audio > New podcast > Sync with another platform; new episodes auto-sync from your host (publish immediately or as drafts); audio only, video not imported",
       "siri_shortcuts": "None for posting",
       "shortcuts_ease": "—",
-      "verification": "Official support via search",
+      "verification": "Official pages via search (Oct 2026 review)",
       "docs_url": "https://docs.patreon.com/",
       "user_login": "Patreon OAuth 2.0",
       "post_on_users_behalf": "No — no post-creation endpoint",
@@ -3046,8 +3065,13 @@
       "has_upload_api": false,
       "automation_options": [
         {
+          "route": "scheduler_or_automation_tool",
+          "summary": "Connect the account once in a tool that already has platform approval and schedule there: Official podcast RSS sync: Settings > Podcast and audio > New podcast > Sync with another platform; new episodes auto-sync from your host (publish immediately or as drafts); audio only, video not imported.",
+          "note": "Easiest path when the platform requires app review or an audit; the tool handles login and tokens."
+        },
+        {
           "route": "native_scheduler",
-          "summary": "Schedule inside the platform itself: Yes."
+          "summary": "Schedule inside the platform itself: Yes: post editor > set publish date/time (web and mobile); scheduled posts listed in Library."
         },
         {
           "route": "manual",
@@ -3063,14 +3087,14 @@
       "api_can_upload": "Nothing",
       "api_free": "—",
       "api_cost_detail": "—",
-      "approval": "—",
+      "approval": "N/A; note US operations run by TikTok USDS Joint Venture since 2026-01-22",
       "limits": "≤3 photos/videos per post",
-      "native_scheduling": "None found",
+      "native_scheduling": "None found (unverified)",
       "api_scheduling": "—",
-      "schedulers": "None confirmed",
+      "schedulers": "None; TikTok account login and in-app content repurposing between TikTok and Lemon8 exist, but no API",
       "siri_shortcuts": "None",
       "shortcuts_ease": "—",
-      "verification": "3rd-party",
+      "verification": "Partly unverified (Oct 2026 review)",
       "docs_url": "https://www.lemon8-app.com",
       "user_login": "—",
       "post_on_users_behalf": "No (no posting API)",
@@ -3081,6 +3105,11 @@
       "has_upload_api": false,
       "automation_options": [
         {
+          "route": "scheduler_or_automation_tool",
+          "summary": "Connect the account once in a tool that already has platform approval and schedule there: None; TikTok account login and in-app content repurposing between TikTok and Lemon8 exist, but no API.",
+          "note": "Easiest path when the platform requires app review or an audit; the tool handles login and tokens."
+        },
+        {
           "route": "manual",
           "summary": "Post by hand in the app or website (always available)."
         }
@@ -3090,18 +3119,18 @@
       "platform": "Xiaohongshu (RedNote)",
       "category": "Lifestyle",
       "content_types": "Image notes, video notes, live",
-      "official_api": "No public publishing API",
+      "official_api": "No public publishing API for individuals; open platform APIs are for certified enterprises/partners; publishing endpoints circulating online are unofficial",
       "api_can_upload": "Nothing",
       "api_free": "—",
       "api_cost_detail": "—",
       "approval": "Enterprise certification for partner APIs",
       "limits": "—",
-      "native_scheduling": "Yes",
+      "native_scheduling": "Yes: creator web platform creator.xiaohongshu.com supports image/video/long-form notes, batch upload, drafts and 定时发布 (scheduled publishing)",
       "api_scheduling": "No",
       "schedulers": "None legitimate",
       "siri_shortcuts": "None",
       "shortcuts_ease": "—",
-      "verification": "Search snippets",
+      "verification": "Official pages via search (Oct 2026 review)",
       "docs_url": "https://open.xiaohongshu.com/",
       "user_login": "—",
       "post_on_users_behalf": "No (no posting API)",
@@ -3113,7 +3142,7 @@
       "automation_options": [
         {
           "route": "native_scheduler",
-          "summary": "Schedule inside the platform itself: Yes."
+          "summary": "Schedule inside the platform itself: Yes: creator web platform creator.xiaohongshu.com supports image/video/long-form notes, batch upload, drafts and 定时发布 (scheduled publishing)."
         },
         {
           "route": "manual",
@@ -3122,64 +3151,34 @@
       ]
     },
     {
-      "platform": "Kick",
-      "category": "Live video",
-      "content_types": "Live streams, clips, chat",
-      "official_api": "Partial — Kick API",
-      "api_can_upload": "No uploads; title/category, chat",
+      "platform": "Messenger",
+      "category": "Messaging",
+      "content_types": "Messages, photos, video",
+      "official_api": "Partial — Send API",
+      "api_can_upload": "Send API: text/media replies to users who messaged the Page within 24h (plus HUMAN_AGENT tag 7 days); Recurring Notifications discontinued 10 Feb 2026 (except AU, EU, JP, KR, UK); tags CONFIRMED_EVENT_UPDATE/ACCOUNT_UPDATE/POST_PURCHASE_UPDATE removed (2026); paid Marketing Messages API replaces broadcasts",
       "api_free": "Free",
       "api_cost_detail": "—",
-      "approval": "OAuth 2.1",
-      "limits": "Unverified",
-      "native_scheduling": "Unverified",
-      "api_scheduling": "Unverified",
-      "schedulers": "—",
+      "approval": "Page + App Review",
+      "limits": "—",
+      "native_scheduling": "No",
+      "api_scheduling": "No",
+      "schedulers": "Inbox tools only",
       "siri_shortcuts": "None",
       "shortcuts_ease": "—",
-      "verification": "Docs via search",
-      "docs_url": "https://docs.kick.com",
-      "user_login": "—",
-      "post_on_users_behalf": "No (no posting API)",
-      "login_scopes": "—",
-      "review_to_open_to_other_users": "—",
-      "token_lifetime": "—",
-      "needs_server_secret": "—",
+      "verification": "Official pages via search (Oct 2026 review)",
+      "docs_url": "https://developers.facebook.com/docs/messenger-platform/send-messages",
+      "user_login": "Facebook Login (Page token)",
+      "post_on_users_behalf": "No — messages as a Page to people who contacted it; no feed/post publishing",
+      "login_scopes": "pages_messaging, pages_show_list (pages_manage_metadata for webhooks)",
+      "review_to_open_to_other_users": "App Review (Advanced Access for pages_messaging) + Business Verification; own Page works in Development mode",
+      "token_lifetime": "Page token from long-lived user token doesn't expire",
+      "needs_server_secret": "Yes (webhook verification + app secret)",
       "has_upload_api": false,
       "automation_options": [
         {
-          "route": "manual",
-          "summary": "Post by hand in the app or website (always available)."
-        }
-      ]
-    },
-    {
-      "platform": "Twitch",
-      "category": "Live video",
-      "content_types": "Live streams, clips, VODs, chat",
-      "official_api": "Partial — Helix API",
-      "api_can_upload": "No uploads; titles, schedule, chat, polls, clips",
-      "api_free": "Free",
-      "api_cost_detail": "—",
-      "approval": "OAuth",
-      "limits": "Points-per-minute",
-      "native_scheduling": "Yes (stream schedule)",
-      "api_scheduling": "Yes (schedule segments)",
-      "schedulers": "—",
-      "siri_shortcuts": "None",
-      "shortcuts_ease": "—",
-      "verification": "Official docs via search",
-      "docs_url": "https://dev.twitch.tv/docs/api/reference",
-      "user_login": "Twitch OAuth (public client possible)",
-      "post_on_users_behalf": "No uploads — clips and channel info only",
-      "login_scopes": "clips:edit, channel:manage:broadcast",
-      "review_to_open_to_other_users": "None",
-      "token_lifetime": "~4h, refreshable",
-      "needs_server_secret": "No",
-      "has_upload_api": false,
-      "automation_options": [
-        {
-          "route": "native_scheduler",
-          "summary": "Schedule inside the platform itself: Yes (stream schedule)."
+          "route": "scheduler_or_automation_tool",
+          "summary": "Connect the account once in a tool that already has platform approval and schedule there: Inbox tools only.",
+          "note": "Easiest path when the platform requires app review or an audit; the tool handles login and tokens."
         },
         {
           "route": "manual",
@@ -3197,13 +3196,13 @@
       "api_cost_detail": "—",
       "approval": "—",
       "limits": "—",
-      "native_scheduling": "Unverified",
+      "native_scheduling": "Yes on Android only: long-press send > schedule; queued on device (device must be on); not on Desktop/iOS",
       "api_scheduling": "—",
       "schedulers": "—",
       "siri_shortcuts": "Manual send only",
       "shortcuts_ease": "—",
-      "verification": "GitHub",
-      "docs_url": "https://github.com/AsamK/signal-cli",
+      "verification": "Official pages via search (Oct 2026 review)",
+      "docs_url": "https://support.signal.org/hc/articles/5365881590682-Schedule-a-Message-on-Signal-Android (signal-cli is unofficial)",
       "user_login": "—",
       "post_on_users_behalf": "No (no posting API)",
       "login_scopes": "—",
@@ -3219,6 +3218,52 @@
           "see": "SHORTCUTS.md"
         },
         {
+          "route": "native_scheduler",
+          "summary": "Schedule inside the platform itself: Yes on Android only: long-press send > schedule; queued on device (device must be on); not on Desktop/iOS."
+        },
+        {
+          "route": "manual",
+          "summary": "Post by hand in the app or website (always available)."
+        }
+      ]
+    },
+    {
+      "platform": "Gab",
+      "category": "Microblog",
+      "content_types": "Text, images, video, groups",
+      "official_api": "No documented, sanctioned public posting API. Gab historically ran a Mastodon fork, so Mastodon-style endpoints may respond, but Gab publishes no developer docs or terms for them. Treat as unofficial.",
+      "api_can_upload": "Statuses and media (unverified)",
+      "api_free": "Free",
+      "api_cost_detail": "—",
+      "approval": "Unverified — no official developer-app flow could be confirmed",
+      "limits": "Unverified",
+      "native_scheduling": "Unverified",
+      "api_scheduling": "Unofficial only (Mastodon scheduled_at, if Gab still honors it)",
+      "schedulers": "None found: mainstream schedulers (Buffer, Publer, Postiz, Ayrshare, Metricool, Later) do not list Gab",
+      "siri_shortcuts": "Manual share-sheet to the Gab app/web; token route is unofficial",
+      "shortcuts_ease": "Hard (no sanctioned API)",
+      "verification": "Partly unverified (Oct 2026 review)",
+      "docs_url": "https://gab.com",
+      "user_login": "—",
+      "post_on_users_behalf": "No (no posting API)",
+      "login_scopes": "—",
+      "review_to_open_to_other_users": "—",
+      "token_lifetime": "—",
+      "needs_server_secret": "—",
+      "has_upload_api": false,
+      "automation_options": [
+        {
+          "route": "scheduler_or_automation_tool",
+          "summary": "Connect the account once in a tool that already has platform approval and schedule there: None found: mainstream schedulers (Buffer, Publer, Postiz, Ayrshare, Metricool, Later) do not list Gab.",
+          "note": "Easiest path when the platform requires app review or an audit; the tool handles login and tokens."
+        },
+        {
+          "route": "siri_shortcut",
+          "summary": "Not practical directly (Manual share-sheet to the Gab app/web; token route is unofficial). Have the Shortcut call a scheduler's API or your own n8n/Zapier webhook instead.",
+          "ease": "Hard (no sanctioned API)",
+          "see": "SHORTCUTS.md"
+        },
+        {
           "route": "manual",
           "summary": "Post by hand in the app or website (always available)."
         }
@@ -3227,7 +3272,7 @@
     {
       "platform": "Gettr",
       "category": "Microblog",
-      "content_types": "Text, images, video, live",
+      "content_types": "Text, images, video, live; company reported mass layoffs and near-shutdown in 2024; current operating status unclear",
       "official_api": "No",
       "api_can_upload": "Nothing",
       "api_free": "—",
@@ -3239,7 +3284,7 @@
       "schedulers": "None",
       "siri_shortcuts": "None",
       "shortcuts_ease": "—",
-      "verification": "Search snippets",
+      "verification": "Partly unverified (Oct 2026 review)",
       "docs_url": "https://gettr.com",
       "user_login": "—",
       "post_on_users_behalf": "No (no posting API)",
@@ -3259,18 +3304,18 @@
       "platform": "Truth Social",
       "category": "Microblog",
       "content_types": "Text, images, video",
-      "official_api": "No public API (unofficial Mastodon-style)",
+      "official_api": "No public posting API. The official 'Truth API' (TMTG, launched for B2B from Aug 1 2026) is a paid, read-only real-time feed of selected influential accounts for businesses/traders — it cannot post.",
       "api_can_upload": "Unofficial only",
       "api_free": "—",
       "api_cost_detail": "—",
       "approval": "—",
       "limits": "—",
-      "native_scheduling": "Yes (paid feature)",
+      "native_scheduling": "Yes — 'Schedule Truths' is a premium feature for Patriot Package (Truth+) subscribers (announced 9 Sep 2025)",
       "api_scheduling": "Unofficial",
-      "schedulers": "FS Poster (claimed)",
+      "schedulers": "None verified (FS Poster claim unverified and would rely on unofficial access)",
       "siri_shortcuts": "Unofficial",
       "shortcuts_ease": "Hard",
-      "verification": "Search snippets",
+      "verification": "Official pages via search (Oct 2026 review)",
       "docs_url": "https://www.globenewswire.com/news-release/2025/09/09/3146910/0/en/Truth-Social-Enhances-Platform.html",
       "user_login": "—",
       "post_on_users_behalf": "No (no posting API)",
@@ -3282,7 +3327,7 @@
       "automation_options": [
         {
           "route": "scheduler_or_automation_tool",
-          "summary": "Connect the account once in a tool that already has platform approval and schedule there: FS Poster (claimed).",
+          "summary": "Connect the account once in a tool that already has platform approval and schedule there: None verified (FS Poster claim unverified and would rely on unofficial access).",
           "note": "Easiest path when the platform requires app review or an audit; the tool handles login and tokens."
         },
         {
@@ -3293,7 +3338,7 @@
         },
         {
           "route": "native_scheduler",
-          "summary": "Schedule inside the platform itself: Yes (paid feature)."
+          "summary": "Schedule inside the platform itself: Yes — 'Schedule Truths' is a premium feature for Patriot Package (Truth+) subscribers (announced 9 Sep 2025)."
         },
         {
           "route": "manual",
@@ -3305,18 +3350,18 @@
       "platform": "Substack",
       "category": "Newsletter",
       "content_types": "Posts, newsletters, podcasts, video, Notes",
-      "official_api": "No public API",
+      "official_api": "No public publishing API; a narrow official Developer API (2026) only looks up public profiles, no posting",
       "api_can_upload": "Nothing",
       "api_free": "—",
       "api_cost_detail": "—",
       "approval": "—",
       "limits": "—",
-      "native_scheduling": "Yes (posts up to 3 months; Notes)",
+      "native_scheduling": "Yes: posts scheduled in editor; Notes scheduling native since 2026 (up to ~3 months, one at a time)",
       "api_scheduling": "—",
-      "schedulers": "—",
+      "schedulers": "Official post importer: Settings > Import/Export > Import posts (WordPress, Medium, Ghost, Mailchimp, Beehiiv, Tumblr, Blogspot, or any RSS feed); podcast import by RSS; Buffer offers Notes scheduling",
       "siri_shortcuts": "None",
       "shortcuts_ease": "—",
-      "verification": "Help center via search",
+      "verification": "Official pages via search (Oct 2026 review)",
       "docs_url": "https://support.substack.com/hc/en-us/articles/360037870412-How-do-I-schedule-a-post-for-a-future-date",
       "user_login": "—",
       "post_on_users_behalf": "No (no posting API)",
@@ -3327,8 +3372,13 @@
       "has_upload_api": false,
       "automation_options": [
         {
+          "route": "scheduler_or_automation_tool",
+          "summary": "Connect the account once in a tool that already has platform approval and schedule there: Official post importer: Settings > Import/Export > Import posts (WordPress, Medium, Ghost, Mailchimp, Beehiiv, Tumblr, Blogspot, or any RSS feed); podcast import by RSS; Buffer offers Notes scheduling.",
+          "note": "Easiest path when the platform requires app review or an audit; the tool handles login and tokens."
+        },
+        {
           "route": "native_scheduler",
-          "summary": "Schedule inside the platform itself: Yes (posts up to 3 months; Notes)."
+          "summary": "Schedule inside the platform itself: Yes: posts scheduled in editor; Notes scheduling native since 2026 (up to ~3 months, one at a time)."
         },
         {
           "route": "manual",
@@ -3351,7 +3401,7 @@
       "schedulers": "None",
       "siri_shortcuts": "None",
       "shortcuts_ease": "—",
-      "verification": "Search snippets",
+      "verification": "Official pages via search (Oct 2026 review)",
       "docs_url": "https://bereal.com",
       "user_login": "—",
       "post_on_users_behalf": "No (no posting API)",
@@ -3372,17 +3422,17 @@
       "category": "Podcast",
       "content_types": "Audio/video podcast episodes, polls, Q&A",
       "official_api": "No public upload API",
-      "api_can_upload": "Nothing (RSS from your host; video distribution for partner hosts only)",
+      "api_can_upload": "No public upload API for individuals; Spotify's video Distribution API is for hosting partners (Acast, Audioboom, Libsyn, Omny, Podigee) so creators can publish video to Spotify from those hosts",
       "api_free": "—",
       "api_cost_detail": "—",
       "approval": "Partner hosts only",
       "limits": "—",
-      "native_scheduling": "Yes (publish date)",
+      "native_scheduling": "Yes: set a scheduled publish time for audio and video episodes",
       "api_scheduling": "No",
       "schedulers": "Via your podcast host",
       "siri_shortcuts": "None",
       "shortcuts_ease": "—",
-      "verification": "Official support via search",
+      "verification": "Official pages via search (Oct 2026 review)",
       "docs_url": "https://support.spotify.com/us/creators/article/publishing-audio-episodes/",
       "user_login": "—",
       "post_on_users_behalf": "No (no posting API)",
@@ -3399,7 +3449,7 @@
         },
         {
           "route": "native_scheduler",
-          "summary": "Schedule inside the platform itself: Yes (publish date)."
+          "summary": "Schedule inside the platform itself: Yes: set a scheduled publish time for audio and video episodes."
         },
         {
           "route": "manual",
@@ -3411,18 +3461,18 @@
       "platform": "Behance",
       "category": "Portfolio",
       "content_types": "Projects (images, video), moodboards, livestreams",
-      "official_api": "No (API unavailable; no new keys)",
+      "official_api": "No: API read-only historically; new API keys no longer issued",
       "api_can_upload": "Nothing",
       "api_free": "—",
       "api_cost_detail": "—",
       "approval": "—",
       "limits": "—",
-      "native_scheduling": "Unverified",
+      "native_scheduling": "Yes with Behance Pro: Project Scheduling in Advanced Project Settings",
       "api_scheduling": "—",
       "schedulers": "None",
       "siri_shortcuts": "None",
       "shortcuts_ease": "—",
-      "verification": "Adobe community via search",
+      "verification": "Official pages via search (Oct 2026 review)",
       "docs_url": "https://www.behance.net/dev",
       "user_login": "—",
       "post_on_users_behalf": "No (no posting API)",
@@ -3432,6 +3482,10 @@
       "needs_server_secret": "—",
       "has_upload_api": false,
       "automation_options": [
+        {
+          "route": "native_scheduler",
+          "summary": "Schedule inside the platform itself: Yes with Behance Pro: Project Scheduling in Advanced Project Settings."
+        },
         {
           "route": "manual",
           "summary": "Post by hand in the app or website (always available)."
@@ -3453,7 +3507,7 @@
       "schedulers": "—",
       "siri_shortcuts": "None",
       "shortcuts_ease": "—",
-      "verification": "3rd-party",
+      "verification": "Official pages via search (Oct 2026 review)",
       "docs_url": "https://help.quora.com/hc/en-us/articles/360000470706-Platform-Policies",
       "user_login": "—",
       "post_on_users_behalf": "No (no posting API)",
@@ -3470,6 +3524,52 @@
       ]
     },
     {
+      "platform": "Minds",
+      "category": "Social network",
+      "content_types": "Text, images, video, blogs, groups",
+      "official_api": "No official public API docs. The Minds engine is open source (gitlab.com/minds), but posting from outside the app is only possible via unofficial clients (e.g. the 'minds' PyPI package) that log in with username/password.",
+      "api_can_upload": "Unofficial only (unofficial Python client supports posts/blogs via password login)",
+      "api_free": "Free",
+      "api_cost_detail": "—",
+      "approval": "None (no developer program); unofficial clients use a password session",
+      "limits": "Unverified",
+      "native_scheduling": "Yes — post scheduler built into Minds for channels and groups (shipped ~2019)",
+      "api_scheduling": "Unofficial",
+      "schedulers": "None found among mainstream schedulers",
+      "siri_shortcuts": "Session login",
+      "shortcuts_ease": "Hard",
+      "verification": "Official pages via search (Oct 2026 review)",
+      "docs_url": "https://gitlab.com/minds",
+      "user_login": "—",
+      "post_on_users_behalf": "No (no posting API)",
+      "login_scopes": "—",
+      "review_to_open_to_other_users": "—",
+      "token_lifetime": "—",
+      "needs_server_secret": "—",
+      "has_upload_api": false,
+      "automation_options": [
+        {
+          "route": "scheduler_or_automation_tool",
+          "summary": "Connect the account once in a tool that already has platform approval and schedule there: None found among mainstream schedulers.",
+          "note": "Easiest path when the platform requires app review or an audit; the tool handles login and tokens."
+        },
+        {
+          "route": "siri_shortcut",
+          "summary": "Not practical directly (Session login). Have the Shortcut call a scheduler's API or your own n8n/Zapier webhook instead.",
+          "ease": "Hard",
+          "see": "SHORTCUTS.md"
+        },
+        {
+          "route": "native_scheduler",
+          "summary": "Schedule inside the platform itself: Yes — post scheduler built into Minds for channels and groups (shipped ~2019)."
+        },
+        {
+          "route": "manual",
+          "summary": "Post by hand in the app or website (always available)."
+        }
+      ]
+    },
+    {
       "platform": "Likee",
       "category": "Video",
       "content_types": "Short video, live",
@@ -3478,13 +3578,13 @@
       "api_free": "—",
       "api_cost_detail": "—",
       "approval": "—",
-      "limits": "—",
+      "limits": "In-app recordings up to ~60s (search snippet)",
       "native_scheduling": "Unverified",
       "api_scheduling": "—",
       "schedulers": "None",
       "siri_shortcuts": "None",
       "shortcuts_ease": "—",
-      "verification": "Search snippets",
+      "verification": "Official pages via search (Oct 2026 review)",
       "docs_url": "https://likee.video",
       "user_login": "—",
       "post_on_users_behalf": "No (no posting API)",
@@ -3504,18 +3604,18 @@
       "platform": "Rumble",
       "category": "Video",
       "content_types": "Video, live",
-      "official_api": "No (read-only live API)",
+      "official_api": "No public upload API; the Live Stream API is read-only stats (third-party claims of an upload API not backed by official docs)",
       "api_can_upload": "Nothing — uploads are manual",
       "api_free": "—",
       "api_cost_detail": "—",
       "approval": "—",
       "limits": "—",
-      "native_scheduling": "Unverified",
+      "native_scheduling": "Yes: schedule publish in Upload Video > Visibility; livestreams schedulable in Rumble Studio",
       "api_scheduling": "No",
-      "schedulers": "—",
+      "schedulers": "Outbound auto syndication from Rumble to YouTube/Facebook/Vimeo; YouTube-to-Rumble sync no longer works (blocked)",
       "siri_shortcuts": "None",
       "shortcuts_ease": "—",
-      "verification": "Search snippets",
+      "verification": "Official pages via search (Oct 2026 review)",
       "docs_url": "https://rumblefaq.groovehq.com/help/how-to-use-rumble-s-live-stream-api",
       "user_login": "—",
       "post_on_users_behalf": "No (no posting API)",
@@ -3526,6 +3626,15 @@
       "has_upload_api": false,
       "automation_options": [
         {
+          "route": "scheduler_or_automation_tool",
+          "summary": "Connect the account once in a tool that already has platform approval and schedule there: Outbound auto syndication from Rumble to YouTube/Facebook/Vimeo; YouTube-to-Rumble sync no longer works (blocked).",
+          "note": "Easiest path when the platform requires app review or an audit; the tool handles login and tokens."
+        },
+        {
+          "route": "native_scheduler",
+          "summary": "Schedule inside the platform itself: Yes: schedule publish in Upload Video > Visibility; livestreams schedulable in Rumble Studio."
+        },
+        {
           "route": "manual",
           "summary": "Post by hand in the app or website (always available)."
         }
@@ -3534,7 +3643,7 @@
     {
       "platform": "Triller",
       "category": "Video",
-      "content_types": "Short music video (app appears defunct since Dec 2025)",
+      "content_types": "App non-functional since Dec 2025 (fails to load videos), $0 media revenue 2025, delisted by Nasdaq; treat as defunct",
       "official_api": "No",
       "api_can_upload": "Nothing",
       "api_free": "—",
@@ -3546,7 +3655,7 @@
       "schedulers": "None",
       "siri_shortcuts": "None",
       "shortcuts_ease": "—",
-      "verification": "Search snippets",
+      "verification": "Official pages via search (Oct 2026 review)",
       "docs_url": "https://en.wikipedia.org/wiki/Triller_(app)",
       "user_login": "—",
       "post_on_users_behalf": "No (no posting API)",

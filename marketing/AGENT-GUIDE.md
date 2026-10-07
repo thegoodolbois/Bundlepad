@@ -92,11 +92,6 @@ user's situation:
   the user before turning it on.
 
 ## 6. Platforms with no posting API
-Clubhouse, Medium, Naver Blog, Patreon (read-only API), Lemon8, Xiaohongshu,
-Kick and Twitch (live metadata only), Signal, Gettr, Truth Social
-(unofficial only), Substack, BeReal, Spotify for Creators (RSS through a
-podcast host), Behance, Quora, Likee, Rumble, Triller (defunct).
+Clubhouse, Medium, Naver Blog, Patreon, Lemon8, Xiaohongshu (RedNote), Messenger, Signal, Gab, Gettr, Truth Social, Substack, BeReal, Spotify for Creators, Behance, Quora, Minds, Likee, Rumble, Triller.
 
-For these, prepare the content (text, sized media, captions) and give the
-user a checklist, or use the platform's own scheduler where `native_scheduling`
-says Yes.
+For each of these, SETUP.md gives the official automation-adjacent route where one exists (built-in scheduler, import from URL or RSS, podcast-host RSS) plus a manual workflow: the agent prepares the content to the platform's specs and the human posts it.

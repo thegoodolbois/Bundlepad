@@ -6,7 +6,8 @@ up their automation. Researched 2026-10-07.
 
 ## For agents: start here
 1. **[AGENT-GUIDE.md](AGENT-GUIDE.md):** what to ask the user, how to pick a
-   route per platform, setup patterns, and rules.
+   route per platform, setup patterns, and rules. Then **[SETUP.md](SETUP.md)**
+   for each platform's exact human and agent steps.
 2. **[data/platforms.json](data/platforms.json):** one record per platform.
    `automation_options` lists **every route to automate posting, best
    first**. The routes are:
@@ -23,6 +24,7 @@ up their automation. Researched 2026-10-07.
 ## Files
 | File | What it is |
 |---|---|
+| [SETUP.md](SETUP.md) | **Step-by-step setup for every platform and hub:** what the human does (exact consoles, clicks, approvals), which secrets to hand over, what the agent does (exact API calls), a test call. Machine-readable: [data/setup.json](data/setup.json) |
 | [PLATFORMS.md](PLATFORMS.md) | Overview table, then every platform with its numbered automation routes |
 | [LOGIN.md](LOGIN.md) | Can a user sign in (Google or the platform's own login) and let an app post for them? Scopes, review, token lifetimes |
 | [SHORTCUTS.md](SHORTCUTS.md) | Siri / Apple Shortcuts recipes (Telegram, Discord, Bluesky, Mastodon, Threads, WhatsApp, Farcaster, Binance Square), timed automations, Android |
@@ -42,7 +44,7 @@ up their automation. Researched 2026-10-07.
 - **Reference:** `verification`, `docs_url`
 
 ## Headline facts
-- **52 of 71** platforms have an API that can post or upload. The other 19
+- **51 of 71** platforms have an API that can post or upload. The other 20
   are manual-only (listed in AGENT-GUIDE.md §6).
 - **Easiest to automate (one HTTPS call with a static token):** Telegram,
   Discord, Bluesky, Mastodon, Pixelfed, Lemmy, VK, Viber, LINE, Vimeo,
