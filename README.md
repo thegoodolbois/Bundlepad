@@ -14,8 +14,10 @@ by SOL committed, straight into each investor's own wallet.
   burn of $BUNDLEPAD. The buyback wallet is controlled by the Bundlepad owner.
 - **No platform selling.** Bundlepad never sells investors' tokens.
 
-Status: the backend, dashboard, on-chain group-buy program and launcher are
-built and tested (`onchain/README.md`). Going live needs hosting, keys, an
+Status: the backend, dashboard, on-chain group-buy program, launcher and
+buyback automation are built and tested (`onchain/README.md`). **Start with
+`docs/GO-LIVE.md`**: it covers setup, running a launch with friends, costs and
+troubleshooting. Going live needs hosting, keys, an
 audit and a legal check (`plan/follow_up/follow_up_4.md`). No outside
 investor's SOL goes through the program before the audit and the legal check.
 
@@ -27,7 +29,9 @@ investor's SOL goes through the program before the audit and the legal check.
 | `src/` | Integrity chain CLI (`node src/index.js --help`) |
 | `src/launch/` | Launch backend: manifests, Google sign-in, wallet signatures, commitments, votes |
 | `launches/` | Launch config, manifests and state |
-| `onchain/` | Group-buy Solana program, its tests, and the launcher |
+| `onchain/` | Group-buy Solana program, its tests, the launcher and buyback |
+| `deploy/` | systemd unit, Caddy (HTTPS) config, and the publish-to-GitHub script |
+| `docs/GO-LIVE.md` | Step-by-step go-live guide |
 | `.chain/` | The integrity chain (blocks, objects, event log) |
 | `plan/`, `memory.json` | Plans and their approval state |
 

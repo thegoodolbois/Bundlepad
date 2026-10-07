@@ -203,7 +203,7 @@ function decodeLaunch(data) {
 
 // Init arguments for a closed launch: the frozen commitment list, the
 // manifest hash and fee, plus the on-chain parameters chosen at launch time.
-function initArgsFromLaunch(manifest, state, { mint, buyback, tokenProgram = TOKEN_2022_PROGRAM, maxSlippageBps = 500, refundAfterSecs = 3600 }) {
+function initArgsFromLaunch(manifest, state, { mint, buyback, tokenProgram = TOKEN_2022_PROGRAM, maxSlippageBps = 500, refundAfterSecs = 86_400 }) {
   if (state.status !== 'closed') throw new Error(`launch ${manifest.id} must be closed first`);
   const launchAt = Math.floor(Date.parse(manifest.launchAt) / 1000);
   return {

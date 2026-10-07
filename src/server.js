@@ -37,7 +37,9 @@ async function handleLaunch(launches, req, url, body, verifyGoogle) {
   const [, id, action] = match;
   const input = JSON.parse(body || '{}');
   if (action === 'bind' || action === 'commit') {
-    const { sub } = await verifyGoogle(input.google, launches.config().googleClientId);
+    // With requireGoogle off (small private launches), the wallet itself is the identity.
+    const cfg = launches.config();
+    const sub = cfg.requireGoogle ? (await verifyGoogle(input.google, cfg.googleClientId)).sub : `wallet:${input.wallet}`;
     return [200, { ok: true, result: launches[action](id, { ...input, sub }) }];
   }
   return [200, { ok: true, result: launches[action](id, input) }];

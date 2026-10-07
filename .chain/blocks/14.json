@@ -1,0 +1,29 @@
+{
+  "header": {
+    "version": 1,
+    "height": 14,
+    "prevHash": "00004e4117edd8e5c3e0676e258a667cc02d2741b6e9479a915d588d7aac3e2e",
+    "timestamp": 1791393855903,
+    "difficulty": 16,
+    "nonce": 14472,
+    "eventsRoot": "3b4261a6ad4d90698ead36176292c7fd7aaa72076e23c323d48b71b51b40d01e",
+    "stateRoot": "267772ced189b6f5dd4e6b1cfba4187c8d9d875da7717b56e3134f40194d4ff8"
+  },
+  "hash": "00009284949747f5b097acbbffecfe0dcd6f9c14ede7f366d5aa02968cbe02c4",
+  "events": [
+    {
+      "id": "c54761caf803718acf332243c4632134e73b38b3814763b1aa0d4447ad6f8ec7",
+      "type": "update",
+      "subject": "memory.transition",
+      "source": "memory",
+      "body": {
+        "ts": "2026-10-07T17:24:15.882Z",
+        "plan": 4,
+        "stage": "awaiting_owner",
+        "note": "Go-live tooling: chain configure, wallet-only mode, auto-settle + --at, 24h launch window, buyback.js (swap+burn, cron-safe), deploy/ (systemd, Caddy, publish cron), docs/GO-LIVE.md"
+      },
+      "ts": 1791393855901,
+      "block": 14
+    }
+  ]
+}

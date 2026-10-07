@@ -221,7 +221,7 @@ test('closed launch → on-chain plan → recorded txs → launched; buyback rec
   assert.strictEqual(plan.launch, onchain.launchAddress(program, creator.address, 'bp-001'));
   assert.deepStrictEqual(plan.commitments, [{ wallet: alice.address, lamports: '1500000000', escrow: onchain.escrowAddress(program, plan.launch, alice.address) }]);
   assert.strictEqual(plan.feeBps, 1000);
-  assert.strictEqual(plan.refundAfter - plan.launchAt, 3600);
+  assert.strictEqual(plan.refundAfter - plan.launchAt, 86_400, "refunds open 24h after launchAt by default");
   assert.strictEqual(chain.tip(store).events.at(-1).subject, 'launch.onchain');
   assert.strictEqual(launches.dashboard().onchain, null, 'dashboard shows on-chain details only after init lands');
 
@@ -240,4 +240,25 @@ test('closed launch → on-chain plan → recorded txs → launched; buyback rec
   assert.deepStrictEqual([bb.feesSol, bb.boughtTokens, bb.burnedTokens], [0.15, 1000, 1000]);
   assert.ok(!('history' in bb));
   assert.deepStrictEqual(chain.verifyChain(store), []);
+});
+
+test('with requireGoogle off, the wallet is the identity (small private launches)', async () => {
+  const { root, store, launches } = setup();
+  fs.mkdirSync(path.join(root, 'launches'), { recursive: true });
+  fs.writeFileSync(path.join(root, 'launches', 'config.json'), JSON.stringify({ requireGoogle: false }));
+  launches.create(manifest(newWallet().address));
+  launches.publish('bp-001');
+  const w = newWallet();
+  const verifyGoogle = async () => { throw new Error('Google must not be called'); };
+  const call = (url, body) => handle(store, { method: 'POST', url }, JSON.stringify(body), { launches, verifyGoogle });
+  const { nonce } = launches.issueNonce();
+  const sub = `wallet:${w.address}`;
+  await call('/api/launch/bp-001/bind', { wallet: w.address, nonce, signature: w.sign(messages.bind(sub, w.address, nonce)) });
+  const { manifestHash } = launches.state('bp-001');
+  await call('/api/launch/bp-001/commit', { wallet: w.address, sol: 1, signature: w.sign(messages.commit('bp-001', 1, w.address, manifestHash)) });
+  assert.deepStrictEqual(launches.dashboard().investors.map((i) => i.wallet), [w.address]);
+  // A second wallet can't reuse the first wallet's identity.
+  const other = newWallet();
+  const n2 = launches.issueNonce().nonce;
+  await assert.rejects(call('/api/launch/bp-001/bind', { wallet: other.address, nonce: n2, signature: other.sign(messages.bind(sub, other.address, n2)) }), /signature is invalid/);
 });

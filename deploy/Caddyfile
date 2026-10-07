@@ -1,0 +1,6 @@
+# Caddy gets and renews the HTTPS certificate automatically.
+# Point an A record for api.example.com at the server, replace the name below, then:
+#   sudo cp deploy/Caddyfile /etc/caddy/Caddyfile && sudo systemctl reload caddy
+api.example.com {
+	reverse_proxy 127.0.0.1:8787
+}

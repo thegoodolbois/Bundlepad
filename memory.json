@@ -124,6 +124,12 @@
       "plan": 4,
       "stage": "awaiting_owner",
       "note": "Plan 4 implemented: group-buy program (7 LiteSVM tests), launcher, dashboard deposits; local-validator smoke tests pass. Go-live steps in follow_up_4.md"
+    },
+    {
+      "ts": "2026-10-07T17:24:15.882Z",
+      "plan": 4,
+      "stage": "awaiting_owner",
+      "note": "Go-live tooling: chain configure, wallet-only mode, auto-settle + --at, 24h launch window, buyback.js (swap+burn, cron-safe), deploy/ (systemd, Caddy, publish cron), docs/GO-LIVE.md"
     }
   ]
 }

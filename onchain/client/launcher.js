@@ -7,7 +7,9 @@
 //   node launcher.js init    ID --keypair creator.json
 //   node launcher.js status  ID
 //   node launcher.js alt     ID --keypair payer.json
-//   node launcher.js launch  ID --keypair creator.json [--payer payer.json] [--tip LAMPORTS] [--no-jito] [--dry-run]
+//   node launcher.js launch  ID --keypair creator.json [--payer payer.json] [--tip LAMPORTS] [--at ISO-TIME]
+//                               [--no-jito] [--no-settle] [--dry-run]
+//                            (settles everyone right after the buy unless --no-settle)
 //   node launcher.js settle  ID --keypair payer.json
 //   node launcher.js refund  ID --keypair payer.json        (after a cancel or the deadline)
 //   node launcher.js cancel  ID --keypair creator.json
@@ -230,6 +232,12 @@ const commands = {
     const payer = opts.payer ? loadKeypair(opts.payer) : creator;
     const mint = loadKeypair(mintKeyFile(id));
     if (creator.publicKey.toBase58() !== plan.creator) throw new Error('keypair is not the launch creator');
+    if (opts.at) {
+      const wait = Date.parse(opts.at) - Date.now();
+      if (Number.isNaN(wait)) throw new Error('--at must be a date, e.g. 2026-11-03T01:00:00Z');
+      if (wait > 0) { console.log(`waiting until ${new Date(Date.parse(opts.at)).toISOString()}`); await new Promise((r) => setTimeout(r, wait)); }
+    }
+    if (Date.now() / 1000 < plan.launchAt) throw new Error(`too early: the program accepts the buy from ${new Date(plan.launchAt * 1000).toISOString()}`);
     const l = await fetchLaunch(conn, plan);
     if (!l || l.state !== 'funding') throw new Error(`launch is ${l ? l.state : 'not initialized'}`);
     const escrows = l.commitments.filter((c) => c.funded).map((c) => onchain.escrowAddress(plan.programId, plan.launch, c.investor));
@@ -270,6 +278,7 @@ const commands = {
       launches.recordTx(id, 'create', await send(conn, createTx, 'create_v2'));
       launches.recordTx(id, 'buy', await send(conn, buyTx, 'execute_buy'));
     }
+    if (!opts['no-settle']) await commands.settle({ ...ctx, opts: { ...opts, keypair: opts.payer ?? opts.keypair } }, id);
   },
 
   async settle(ctx, id) {
@@ -339,12 +348,12 @@ async function main(argv) {
     options: {
       keypair: { type: 'string' }, payer: { type: 'string' }, rpc: { type: 'string' }, jito: { type: 'string' },
       tip: { type: 'string' }, program: { type: 'string' }, slippage: { type: 'string' }, 'refund-after': { type: 'string' },
-      'no-jito': { type: 'boolean' }, 'dry-run': { type: 'boolean' },
+      'no-jito': { type: 'boolean' }, 'dry-run': { type: 'boolean' }, 'no-settle': { type: 'boolean' }, at: { type: 'string' },
     },
   });
   const [command, id] = positionals;
   if (!commands[command] || !id) {
-    console.log(fs.readFileSync(__filename, 'utf8').split('\n').slice(3, 13).map((l) => l.replace(/^\/\/ ?/, '')).join('\n'));
+    console.log(fs.readFileSync(__filename, 'utf8').split('\n').slice(3, 15).map((l) => l.replace(/^\/\/ ?/, '')).join('\n'));
     return 1;
   }
   const launches = openLaunches();

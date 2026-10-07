@@ -12,7 +12,16 @@ Plan 4 (`follow_up_3.md`) is implemented:
 | JS client shared by backend, launcher and tests | `src/launch/onchain.js` | golden vectors from the Rust crate; PDAs match `@solana/web3.js` |
 | Buyback & burn records | `chain buyback` | unit tests |
 
-## Steps, in order (`onchain/README.md` has the commands)
+Added after approval, from the owner's request for a runnable setup:
+- `chain configure`, which sets both config files
+- wallet-only mode for friend launches (`--require-google false`)
+- automatic settle after the buy, and `launch --at` for a scheduled launch
+- a 24h default window to launch before refunds open
+- `buyback.js`: automated swap and burn, recorded on the chain
+- `deploy/`: systemd, Caddy and the publish cron
+- `docs/GO-LIVE.md`
+
+## Steps, in order (`docs/GO-LIVE.md` has the commands)
 
 1. **Hosting.** Run `chain serve` behind HTTPS on an always-on host. A Codespace
    sleeps when idle, so it can't be trusted to run the launch.

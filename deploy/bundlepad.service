@@ -1,0 +1,19 @@
+# systemd unit for the Bundlepad backend (chain + launch API).
+# Install: sudo cp deploy/bundlepad.service /etc/systemd/system/ && sudo systemctl enable --now bundlepad
+# Assumes the repo is cloned to /opt/bundlepad and owned by the "bundlepad" user.
+[Unit]
+Description=Bundlepad backend
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+User=bundlepad
+WorkingDirectory=/opt/bundlepad
+ExecStart=/usr/bin/node src/index.js serve --host 127.0.0.1 --port 8787
+Restart=always
+RestartSec=3
+# The Google-id salt and mint keys live in /opt/bundlepad/.secrets; keep it 0700.
+UMask=0077
+
+[Install]
+WantedBy=multi-user.target

@@ -40,7 +40,10 @@ const USAGE = `usage: chain <command> [options]
                                  fix the on-chain terms of a closed launch (see onchain/client)
   launch tx ID --kind K --sig S  record a landed launch transaction (the launcher does this)
   buyback --kind swap|burn --sig S [--sol N] [--tokens N]   record a buyback swap or burn
-  pages                          write data/dashboard.json and refresh the chain in index.html`;
+  pages                          write data/dashboard.json and refresh the chain in index.html
+  configure [--api-url U] [--rpc-url U] [--google-client-id ID] [--require-google true|false]
+            [--program ID] [--buyback ADDR] [--bundlepad-mint MINT] [--allow-origin URL]
+                                 set launches/config.json and the dashboard's CONFIG together`;
 
 function openStore() {
   const store = new Store(git.toplevel(process.cwd()));
@@ -50,6 +53,25 @@ function openStore() {
 
 function openLaunches(store = openStore()) {
   return new Launches(store.repoRoot, { chainStore: store });
+}
+
+// launches/config.json → the CONFIG line in index.html (one source of truth).
+const CONFIG_FLAGS = {
+  'api-url': 'apiUrl', 'rpc-url': 'rpcUrl', 'google-client-id': 'googleClientId', 'require-google': 'requireGoogle',
+  program: 'groupBuyProgramId', buyback: 'buybackWallet', 'bundlepad-mint': 'bundlepadMint', 'allow-origin': 'allowOrigin',
+};
+
+function dashboardConfigLine(cfg) {
+  const page = {
+    dataUrl: 'data/dashboard.json',
+    apiUrl: cfg.apiUrl ?? '',
+    rpcUrl: cfg.rpcUrl ?? '',
+    googleClientId: cfg.googleClientId ?? '',
+    requireGoogle: cfg.requireGoogle !== false,
+    platformFeeBps: 1000,
+  };
+  const body = Object.entries(page).map(([k, v]) => `${k}: ${typeof v === 'string' ? `'${v.replace(/['\\]/g, '')}'` : v}`).join(', ');
+  return `const CONFIG = { ${body} };`;
 }
 
 // The dashboard's offline fallback: block headers plus event subjects.
@@ -302,6 +324,36 @@ const commands = {
     console.log(`buyback totals: ${bb.feesSol} SOL in, ${bb.boughtTokens} bought, ${bb.burnedTokens} burned`);
   },
 
+  configure(opts) {
+    const root = git.toplevel(process.cwd());
+    const launches = new Launches(root);
+    const file = path.join(launches.dir, 'config.json');
+    const cfg = launches.config();
+    for (const [flag, k] of Object.entries(CONFIG_FLAGS)) {
+      if (opts[flag] === undefined) continue;
+      cfg[k] = k === 'requireGoogle' ? opts[flag] !== 'false' : opts[flag];
+    }
+    for (const k of ['groupBuyProgramId', 'buybackWallet', 'bundlepadMint']) {
+      if (cfg[k] && !/^[1-9A-HJ-NP-Za-km-z]{32,44}$/.test(cfg[k])) throw new Error(`${k} is not a Solana address: ${cfg[k]}`);
+    }
+    for (const k of ['apiUrl', 'rpcUrl', 'allowOrigin']) {
+      if (cfg[k] && !/^https?:\/\/[^\s'"]+$/.test(cfg[k])) throw new Error(`${k} must be an http(s) URL`);
+    }
+    if (cfg.apiUrl && !cfg.apiUrl.startsWith('https://') && !/^http:\/\/(localhost|127\.0\.0\.1)/.test(cfg.apiUrl)) {
+      throw new Error('apiUrl must be https:// (the dashboard is served over HTTPS)');
+    }
+    fs.mkdirSync(launches.dir, { recursive: true });
+    fs.writeFileSync(file, JSON.stringify(cfg, null, 2) + '\n');
+    const html = path.join(root, 'index.html');
+    const src = fs.readFileSync(html, 'utf8');
+    if (!/^const CONFIG = \{.*\};$/m.test(src)) throw new Error('could not find the CONFIG line in index.html');
+    fs.writeFileSync(html, src.replace(/^const CONFIG = \{.*\};$/m, () => dashboardConfigLine(cfg)));
+    for (const [k, v] of Object.entries(cfg)) console.log(`  ${k}: ${v === '' || v === null ? '(not set)' : v}`);
+    const missing = ['apiUrl', 'rpcUrl', 'groupBuyProgramId', 'buybackWallet'].filter((k) => !cfg[k]);
+    if (cfg.requireGoogle && !cfg.googleClientId) missing.push('googleClientId (or --require-google false)');
+    console.log(missing.length ? `still needed before going live: ${missing.join(', ')}` : 'all set');
+  },
+
   pages() {
     const store = openStore();
     const launches = openLaunches(store);
@@ -330,6 +382,9 @@ function main(argv) {
       host: { type: 'string' }, file: { type: 'string' }, mint: { type: 'string' }, program: { type: 'string' },
       slippage: { type: 'string' }, 'refund-after': { type: 'string' }, kind: { type: 'string' }, sig: { type: 'string' },
       sol: { type: 'string' }, tokens: { type: 'string' },
+      'api-url': { type: 'string' }, 'rpc-url': { type: 'string' }, 'google-client-id': { type: 'string' },
+      'require-google': { type: 'string' }, buyback: { type: 'string' }, 'bundlepad-mint': { type: 'string' },
+      'allow-origin': { type: 'string' },
     },
   });
   const [command = 'status', ...rest] = positionals;

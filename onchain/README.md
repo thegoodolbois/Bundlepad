@@ -5,7 +5,7 @@
 | `group-buy/` | The Solana program (native Rust, `solana-program` 2.x, no framework) |
 | `mock-pump/` | A test copy of pump.fun's `buy_exact_quote_in_v2`, used only in tests |
 | `tests/` | LiteSVM end-to-end tests, plus `vectors.rs`, which keeps `test/fixtures/onchain-vectors.json` in sync with the JS client |
-| `client/` | `launcher.js`: init, lookup table, Jito launch bundle, settle, refunds |
+| `client/` | `launcher.js`: init, lookup table, Jito launch bundle, automatic settle, refunds. `buyback.js`: swaps fees for $BUNDLEPAD and burns them |
 
 ## How it works
 
@@ -64,7 +64,7 @@ sh -c "$(curl -sSfL https://release.anza.xyz/v3.0.13/install)"
 (cd group-buy && cargo build-sbf) && (cd mock-pump && cargo build-sbf)
 (cd tests && cargo test)            # LiteSVM end-to-end, 7 tests
 (cd group-buy && cargo test)        # unit tests
-(cd client && npm ci && npm test)   # launcher transaction building
+(cd client && npm ci && npm test)   # launcher transaction building, buyback (mocked RPC + Jupiter)
 npm test                            # (repo root) JS client vs. Rust vectors
 ```
 
@@ -94,8 +94,8 @@ dashboard uses for deposits.
    node client/launcher.js alt ID --keypair payer.json      # lookup table for the buy transaction
    node client/launcher.js status ID                        # watch deposits
    node client/launcher.js launch ID --keypair creator.json --dry-run
-   node client/launcher.js launch ID --keypair creator.json # Jito bundle: create_v2 + execute_buy + tip
-   node client/launcher.js settle ID --keypair payer.json
+   node client/launcher.js launch ID --keypair creator.json --payer payer.json   # Jito bundle, then settles everyone
+   node client/launcher.js settle ID --keypair payer.json   # only needed after --no-settle or a partial settle
    node client/launcher.js close ID --keypair payer.json
    ```
    If the launch has to stop:
@@ -104,11 +104,12 @@ dashboard uses for deposits.
    node client/launcher.js refund ID --keypair payer.json
    ```
    Each landed transaction is recorded on the integrity chain (`launch.tx`).
-3. **Buyback & burn:** swap and burn from the buyback wallet, then record each step:
-   ```sh
-   chain buyback --kind swap --sig SIG --sol N --tokens N
-   chain buyback --kind burn --sig SIG --tokens N
-   ```
+3. **Buyback & burn.** Run `node client/buyback.js --keypair buyback.json`
+   (it's cron-safe). It swaps the fee SOL for $BUNDLEPAD via Jupiter, burns it
+   and records both steps. Or do it by hand and record each step with
+   `chain buyback --kind swap|burn --sig SIG ...`.
+
+The full end-to-end setup (server, HTTPS, config, costs) is in `docs/GO-LIVE.md`.
 
 ## Testing gates before outside money (Plan 3 §7)
 
@@ -153,3 +154,4 @@ On a local `solana-test-validator`:
 Not covered here (no mainnet access from the build environment):
 - the real pump.fun program
 - Jito bundle submission
+- the live Jupiter API (`buyback.js` is tested against a mocked RPC and Jupiter)

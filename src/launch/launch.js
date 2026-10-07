@@ -3,7 +3,8 @@
 // Transparent bundled launches (plan/follow_up/follow_up_2.md), off-chain part.
 //
 // On-disk layout under <repo>/launches:
-//   config.json              googleClientId, allowOrigin, buyback wallet
+//   config.json              googleClientId, requireGoogle, allowOrigin, buybackWallet,
+//                            groupBuyProgramId, rpcUrl (set with "chain configure")
 //   buyback.json             running buyback & burn totals (logged by the buyback job)
 //   <id>/manifest.json       the launch record; frozen once published
 //   <id>/state.json          status, manifestHash, manifestBlock, commitments, bindings, votes
@@ -113,7 +114,9 @@ class Launches {
     fs.renameSync(p + '.tmp', p);
   }
 
-  config() { return this.read('config.json', { googleClientId: '', allowOrigin: '', buybackWallet: null }); }
+  config() {
+    return { googleClientId: '', requireGoogle: true, allowOrigin: '', buybackWallet: null, groupBuyProgramId: '', rpcUrl: '', ...this.read('config.json', {}) };
+  }
 
   ids() {
     if (!fs.existsSync(this.dir)) return [];
@@ -191,7 +194,7 @@ class Launches {
   // Fixes the on-chain terms of a closed launch: program, launch PDA, mint,
   // buyback address and the frozen commitment list in lamports. The launcher
   // sends init_launch from this file; it is logged on the chain first.
-  planOnchain(id, { programId, mint, buyback = this.config().buybackWallet, maxSlippageBps = 500, refundAfterSecs = 3600 }) {
+  planOnchain(id, { programId, mint, buyback = this.config().buybackWallet, maxSlippageBps = 500, refundAfterSecs = 86_400 }) {
     const manifest = this.manifest(id);
     const state = this.state(id);
     if (!programId || !isAddress(programId)) throw new Error('group-buy program id is required (launches/config.json groupBuyProgramId)');

@@ -359,7 +359,7 @@ let CHAIN = [{"header":{"version":1,"height":0,"prevHash":"000000000000000000000
 // Config for the live deployment. Fee is the agreed 10% (follow_up_2.md).
 // apiUrl is the Bundlepad backend ("chain serve"); empty means read-only from dataUrl.
 // rpcUrl is a Solana RPC endpoint for deposits and withdrawals.
-const CONFIG = { dataUrl: 'data/dashboard.json', apiUrl: '', rpcUrl: '', googleClientId: '', platformFeeBps: 1000 };
+const CONFIG = { dataUrl: 'data/dashboard.json', apiUrl: '', rpcUrl: '', googleClientId: '', requireGoogle: true, platformFeeBps: 1000 };
 const WEB3_URL = 'https://cdn.jsdelivr.net/npm/@solana/web3.js@1.99.0/lib/index.iife.min.js';
 
 // pump.fun-style constant-product bonding curve (virtual reserves).
@@ -426,6 +426,7 @@ function render() {
   $('commit-limits').textContent = launch
     ? `Min ${launch.caps.minSol} SOL, max ${launch.caps.maxSolPerInvestor} SOL per Google account.`
     : 'No launch is open for commitments yet.';
+  if (launch && !CONFIG.requireGoogle) $('commit-limits').textContent = `Min ${launch.caps.minSol} SOL, max ${launch.caps.maxSolPerInvestor} SOL per wallet.`;
   const committed = wallet && data.investors.some((i) => i.wallet === wallet.address);
   $('commit-btn').disabled = !(launch?.status === 'open');
   $('cancel-btn').hidden = !(committed && launch?.status === 'open');
@@ -647,8 +648,10 @@ async function api(pathname, body) {
 async function bindWallet(launch) {
   if (bound) return;
   const { nonce } = await api('/api/launch/nonce');
-  const signature = await signText(`Bundlepad bind ${googleUser.sub} ${wallet.address} ${nonce}`);
-  await api(`/api/launch/${launch.id}/bind`, { google: googleUser.credential, wallet: wallet.address, nonce, signature });
+  // Without Google sign-in the backend uses the wallet itself as the identity.
+  const sub = CONFIG.requireGoogle ? googleUser.sub : `wallet:${wallet.address}`;
+  const signature = await signText(`Bundlepad bind ${sub} ${wallet.address} ${nonce}`);
+  await api(`/api/launch/${launch.id}/bind`, { google: googleUser?.credential, wallet: wallet.address, nonce, signature });
   bound = true;
 }
 
@@ -657,7 +660,7 @@ async function commit() {
   if (!launch || launch.status !== 'open') return setStatus('commit-status', 'No launch is open for commitments.');
   const { caps } = launch;
   const sol = Number($('commit-input').value);
-  if (!googleUser) return setStatus('commit-status', 'Sign in with Google first. Each Google account can commit with one wallet.');
+  if (CONFIG.requireGoogle && !googleUser) return setStatus('commit-status', 'Sign in with Google first. Each Google account can commit with one wallet.');
   if (!wallet) return setStatus('commit-status', 'Connect a wallet first.');
   if (data.investors.some((i) => i.wallet === wallet.address)) return setStatus('commit-status', 'This wallet has already committed to this launch.');
   if (!(sol >= caps.minSol && sol <= caps.maxSolPerInvestor)) return setStatus('commit-status', `Enter between ${caps.minSol} and ${caps.maxSolPerInvestor} SOL.`);
@@ -666,7 +669,7 @@ async function commit() {
   try {
     await bindWallet(launch);
     const signature = await signText(`Bundlepad commit ${launch.id} ${sol} SOL ${wallet.address} ${launch.manifestHash}`);
-    await api(`/api/launch/${launch.id}/commit`, { google: googleUser.credential, wallet: wallet.address, sol, signature });
+    await api(`/api/launch/${launch.id}/commit`, { google: googleUser?.credential, wallet: wallet.address, sol, signature });
   } catch (err) {
     return setStatus('commit-status', err?.code === 4001 || /reject|cancel/i.test(err?.message) ? 'Signature was cancelled, so nothing was committed.' : err.message);
   }
@@ -796,6 +799,7 @@ async function sendEscrowTx(tag) {
 function setStatus(id, text) { const el = $(id); if (el) el.textContent = text; }
 
 function setupGoogle() {
+  if (!CONFIG.requireGoogle) { $('google-slot').hidden = true; return; }
   if (!CONFIG.googleClientId) {
     $('google-btn').addEventListener('click', () => setStatus('commit-status', 'Google sign-in isn\'t set up yet. Add a Google OAuth client ID to CONFIG in index.html.'));
     return;
@@ -822,7 +826,9 @@ async function loadChain() {
   const blocks = [];
   for (let h = 0; ; h++) {
     let res;
-    try { res = await fetch(`.chain/blocks/${h}.json`, { cache: 'no-store' }); } catch { break; }
+    // Live from the backend when it is configured; otherwise the copy published with the site.
+    const url = CONFIG.apiUrl ? `${CONFIG.apiUrl.replace(/\/$/, '')}/api/chain/blocks/${h}` : `.chain/blocks/${h}.json`;
+    try { res = await fetch(url, { cache: 'no-store' }); } catch { break; }
     if (!res.ok) break;
     const b = await res.json();
     blocks.push({ header: b.header, hash: b.hash, subjects: b.events.map((e) => e.subject) });
