@@ -1,0 +1,1484 @@
+[
+  {
+    "platform": "DeviantArt",
+    "kind": "platform",
+    "has_upload_api": true,
+    "route": "official_api_own_account",
+    "human_steps": [
+      "deviantart.com/developers → Register your application (redirect URI from the agent)."
+    ],
+    "secrets_to_hand_over": [
+      "DA_CLIENT_ID",
+      "DA_CLIENT_SECRET",
+      "refresh token"
+    ],
+    "agent_steps": [
+      "OAuth with scopes stash publish.",
+      "POST /stash/submit, then POST /stash/publish (fill in the required maturity and AI-generated fields)."
+    ],
+    "test_call": "GET /user/whoami; expect your username.",
+    "notes": "",
+    "content_specs": "",
+    "sources": [],
+    "docs_url": "https://www.deviantart.com/developers/"
+  },
+  {
+    "platform": "SoundCloud",
+    "kind": "platform",
+    "has_upload_api": true,
+    "route": "official_api_own_account",
+    "human_steps": [
+      "Have SoundCloud Artist Pro. Register an app at soundcloud.com/you/apps (self-serve for Artist Pro)."
+    ],
+    "secrets_to_hand_over": [
+      "SOUNDCLOUD_CLIENT_ID",
+      "SOUNDCLOUD_CLIENT_SECRET",
+      "refresh token"
+    ],
+    "agent_steps": [
+      "OAuth 2.1 with PKCE.",
+      "POST /tracks (multipart: track[asset_data], track[title])."
+    ],
+    "test_call": "GET /me; expect your profile.",
+    "notes": "Refresh tokens are single-use; always save the new one.",
+    "content_specs": "",
+    "sources": [],
+    "docs_url": "https://developers.soundcloud.com/docs/api"
+  },
+  {
+    "platform": "Hive",
+    "kind": "platform",
+    "has_upload_api": true,
+    "route": "manual",
+    "human_steps": [
+      "Post in the app or website."
+    ],
+    "secrets_to_hand_over": [],
+    "agent_steps": [
+      "Prepare the text and media for this platform."
+    ],
+    "test_call": "",
+    "notes": "",
+    "content_specs": "",
+    "sources": [],
+    "docs_url": "https://developers.hive.io/"
+  },
+  {
+    "platform": "Blogger",
+    "kind": "platform",
+    "has_upload_api": true,
+    "route": "official_api_own_account",
+    "human_steps": [
+      "Go to console.cloud.google.com, sign in, and create a project.",
+      "Enable 'Blogger API v3'.",
+      "APIs & Services → OAuth consent screen: choose External, fill in the app name, support email and developer email. Add yourself under Test users.",
+      "APIs & Services → Credentials → Create credentials → OAuth client ID. Type: Web application (redirect URI from the agent) or Desktop app.",
+      "Download the client ID and client secret.",
+      "Approve the 'Manage your Blogger account' prompt when signing in."
+    ],
+    "secrets_to_hand_over": [
+      "GOOGLE_CLIENT_ID",
+      "GOOGLE_CLIENT_SECRET",
+      "refresh token",
+      "BLOG_ID (in the Blogger dashboard URL)"
+    ],
+    "agent_steps": [
+      "OAuth with scope https://www.googleapis.com/auth/blogger.",
+      "posts.insert with isDraft=true, then posts.publish with publishDate to schedule."
+    ],
+    "test_call": "posts.insert a draft; expect a post ID.",
+    "notes": "The same Google project and sign-in can also cover YouTube and Business Profile: request all the scopes at once.",
+    "content_specs": "",
+    "sources": [],
+    "docs_url": "https://developers.google.com/blogger/docs/3.0/reference/posts/publish"
+  },
+  {
+    "platform": "Tumblr",
+    "kind": "platform",
+    "has_upload_api": true,
+    "route": "official_api_own_account",
+    "human_steps": [
+      "tumblr.com/oauth/apps → Register application (callback URL from the agent)."
+    ],
+    "secrets_to_hand_over": [
+      "TUMBLR_CLIENT_ID",
+      "TUMBLR_CLIENT_SECRET",
+      "refresh token"
+    ],
+    "agent_steps": [
+      "OAuth 2 with scopes basic write offline_access.",
+      "POST /v2/blog/{blog}/posts (NPF). Schedule with state=queue and publish_on."
+    ],
+    "test_call": "GET /v2/user/info; expect your blogs.",
+    "notes": "",
+    "content_specs": "",
+    "sources": [],
+    "docs_url": "https://www.tumblr.com/docs/en/api/v2"
+  },
+  {
+    "platform": "WordPress (.com and self-hosted)",
+    "kind": "platform",
+    "has_upload_api": true,
+    "route": "official_api_own_account",
+    "human_steps": [
+      "WP admin → Users → Profile → Application Passwords → add a name → copy the password (needs HTTPS)."
+    ],
+    "secrets_to_hand_over": [
+      "SITE_URL",
+      "WP_USERNAME",
+      "WP_APP_PASSWORD"
+    ],
+    "agent_steps": [
+      "Basic auth to /wp-json/wp/v2/media (upload) and /wp-json/wp/v2/posts {title, content, status}. Schedule with status=future and date."
+    ],
+    "test_call": "GET /wp-json/wp/v2/users/me; expect your user.",
+    "notes": "WordPress.com instead: register an app at developer.wordpress.com/apps and use OAuth.",
+    "content_specs": "",
+    "sources": [],
+    "docs_url": "https://developer.wordpress.com/docs/api/"
+  },
+  {
+    "platform": "Ghost",
+    "kind": "platform",
+    "has_upload_api": true,
+    "route": "official_api_own_account",
+    "human_steps": [
+      "Ghost admin → Settings → Integrations → Add custom integration → copy the Admin API key and API URL (Ghost(Pro) needs a plan above Starter)."
+    ],
+    "secrets_to_hand_over": [
+      "GHOST_API_URL",
+      "GHOST_ADMIN_API_KEY"
+    ],
+    "agent_steps": [
+      "Sign a 5-minute HS256 JWT from the key (id:secret), then POST /ghost/api/admin/posts/ (status=scheduled + published_at to schedule)."
+    ],
+    "test_call": "GET /ghost/api/admin/site/; expect the site info.",
+    "notes": "",
+    "content_specs": "",
+    "sources": [],
+    "docs_url": "https://docs.ghost.org/admin-api"
+  },
+  {
+    "platform": "Discord",
+    "kind": "platform",
+    "has_upload_api": true,
+    "route": "official_api_own_account",
+    "human_steps": [
+      "In your server: Channel → Edit channel → Integrations → Webhooks → New webhook → Copy webhook URL (you need Manage Webhooks)."
+    ],
+    "secrets_to_hand_over": [
+      "DISCORD_WEBHOOK_URL"
+    ],
+    "agent_steps": [
+      "POST the webhook URL with JSON {content, username, embeds} (append ?wait=true to get the message back). Files go as multipart."
+    ],
+    "test_call": "POST {content:'test'}; expect 200/204.",
+    "notes": "Treat the webhook URL as a password.",
+    "content_specs": "",
+    "sources": [],
+    "docs_url": "https://docs.discord.com/developers/resources/webhook"
+  },
+  {
+    "platform": "Reddit",
+    "kind": "platform",
+    "has_upload_api": true,
+    "route": "official_api_own_account",
+    "human_steps": [
+      "Read Reddit's Responsible Builder Policy. API access now needs approval: file a request through Reddit's developer support/help center describing the bot.",
+      "Once approved: reddit.com/prefs/apps → create app, type 'script' (just your account) or 'web app'.",
+      "Prefer a dedicated account that follows each subreddit's rules."
+    ],
+    "secrets_to_hand_over": [
+      "REDDIT_CLIENT_ID",
+      "REDDIT_CLIENT_SECRET",
+      "refresh token (or script-app credentials)"
+    ],
+    "agent_steps": [
+      "OAuth with scopes identity submit, duration=permanent.",
+      "POST /api/submit (kind=self or link, sr=subreddit).",
+      "Set a descriptive User-Agent; respect 100 queries/min."
+    ],
+    "test_call": "GET /api/v1/me; expect your username.",
+    "notes": "Ayrshare or n8n can post for you if you'd rather not register.",
+    "content_specs": "",
+    "sources": [],
+    "docs_url": "https://support.reddithelp.com/hc/en-us/articles/16160319875092-Reddit-Data-API-Wiki"
+  },
+  {
+    "platform": "Lemmy",
+    "kind": "platform",
+    "has_upload_api": true,
+    "route": "official_api_own_account",
+    "human_steps": [
+      "Create an account on a Lemmy server (a dedicated one is better)."
+    ],
+    "secrets_to_hand_over": [
+      "INSTANCE_URL",
+      "USERNAME",
+      "PASSWORD"
+    ],
+    "agent_steps": [
+      "POST /api/v3/user/login → JWT, then POST /api/v3/post {name, community_id, body or url}. Images via /pictrs/image."
+    ],
+    "test_call": "GET /api/v3/site with the JWT; expect your user.",
+    "notes": "Default limit: 6 posts per 10 minutes.",
+    "content_specs": "",
+    "sources": [],
+    "docs_url": "https://join-lemmy.org/api/main"
+  },
+  {
+    "platform": "Binance Square",
+    "kind": "platform",
+    "has_upload_api": true,
+    "route": "official_api_own_account",
+    "human_steps": [
+      "Binance → Square → Creator Center → create an OpenAPI key."
+    ],
+    "secrets_to_hand_over": [
+      "BINANCE_SQUARE_API_KEY"
+    ],
+    "agent_steps": [
+      "POST https://www.binance.com/bapi/composite/v1/public/pgc/openApi/content/add with header X-Square-OpenAPI-Key."
+    ],
+    "test_call": "Post a short test text; expect success.",
+    "notes": "Limits: 100 posts/day.",
+    "content_specs": "",
+    "sources": [],
+    "docs_url": "https://github.com/binance/binance-skills-hub"
+  },
+  {
+    "platform": "Farcaster",
+    "kind": "platform",
+    "has_upload_api": true,
+    "route": "official_api_own_account",
+    "human_steps": [
+      "Have a Farcaster account. Sign up at neynar.com and copy the API key.",
+      "When the agent shows a signer approval link or QR, approve it in the Farcaster app."
+    ],
+    "secrets_to_hand_over": [
+      "NEYNAR_API_KEY",
+      "SIGNER_UUID"
+    ],
+    "agent_steps": [
+      "Create a managed signer via Neynar, then show the approval URL to the human.",
+      "POST /v2/farcaster/cast {signer_uuid, text, embeds}."
+    ],
+    "test_call": "Cast 'test'; expect a cast hash.",
+    "notes": "",
+    "content_specs": "",
+    "sources": [],
+    "docs_url": "https://docs.neynar.com/docs/integrate-managed-signers"
+  },
+  {
+    "platform": "Lens",
+    "kind": "platform",
+    "has_upload_api": true,
+    "route": "manual",
+    "human_steps": [
+      "Post in the app or website."
+    ],
+    "secrets_to_hand_over": [],
+    "agent_steps": [
+      "Prepare the text and media for this platform."
+    ],
+    "test_call": "",
+    "notes": "",
+    "content_specs": "",
+    "sources": [],
+    "docs_url": "https://lens.xyz/docs/protocol/best-practices/transaction-lifecycle"
+  },
+  {
+    "platform": "Nostr",
+    "kind": "platform",
+    "has_upload_api": true,
+    "route": "official_api_own_account",
+    "human_steps": [
+      "Install a signer: a NIP-07 browser extension (e.g. nos2x, Alby) or a NIP-46 bunker (e.g. nsec.app, Amber). Connect it to the agent's app when asked."
+    ],
+    "secrets_to_hand_over": [
+      "bunker:// connection string (NIP-46)"
+    ],
+    "agent_steps": [
+      "Connect via NIP-46 and request sign_event permission for kind 1.",
+      "Publish signed events to several relays."
+    ],
+    "test_call": "Publish a kind-1 note; expect relays to answer OK.",
+    "notes": "Never ask for or store the nsec.",
+    "content_specs": "",
+    "sources": [],
+    "docs_url": "https://d-central.tech/nostr-nips-reference/"
+  },
+  {
+    "platform": "Dribbble",
+    "kind": "platform",
+    "has_upload_api": true,
+    "route": "manual",
+    "human_steps": [
+      "Post in the app or website."
+    ],
+    "secrets_to_hand_over": [],
+    "agent_steps": [
+      "Prepare the text and media for this platform."
+    ],
+    "test_call": "",
+    "notes": "",
+    "content_specs": "",
+    "sources": [],
+    "docs_url": "https://developer.dribbble.com/v2/"
+  },
+  {
+    "platform": "Imgur",
+    "kind": "platform",
+    "has_upload_api": true,
+    "route": "manual",
+    "human_steps": [
+      "Post in the app or website."
+    ],
+    "secrets_to_hand_over": [],
+    "agent_steps": [
+      "Prepare the text and media for this platform."
+    ],
+    "test_call": "",
+    "notes": "",
+    "content_specs": "",
+    "sources": [],
+    "docs_url": "https://apidocs.imgur.com/"
+  },
+  {
+    "platform": "Nextdoor",
+    "kind": "platform",
+    "has_upload_api": true,
+    "route": "manual",
+    "human_steps": [
+      "Post in the app or website."
+    ],
+    "secrets_to_hand_over": [],
+    "agent_steps": [
+      "Prepare the text and media for this platform."
+    ],
+    "test_call": "",
+    "notes": "",
+    "content_specs": "",
+    "sources": [],
+    "docs_url": "https://developer.nextdoor.com/docs/sharing-overview"
+  },
+  {
+    "platform": "Google Business Profile",
+    "kind": "platform",
+    "has_upload_api": true,
+    "route": "official_api_own_account",
+    "human_steps": [
+      "Go to console.cloud.google.com, sign in, and create a project.",
+      "Fill in Google's Business Profile API access request form (allowlist, about 14 days). Your verified business profile should be active (reportedly 60+ days).",
+      "After approval, enable the Business Profile APIs (My Business Account Management, Business Information, and the v4 API for posts).",
+      "APIs & Services → OAuth consent screen: choose External, fill in the app name, support email and developer email. Add yourself under Test users.",
+      "APIs & Services → Credentials → Create credentials → OAuth client ID. Type: Web application (redirect URI from the agent) or Desktop app.",
+      "Download the client ID and client secret."
+    ],
+    "secrets_to_hand_over": [
+      "GOOGLE_CLIENT_ID",
+      "GOOGLE_CLIENT_SECRET",
+      "refresh token",
+      "account and location IDs"
+    ],
+    "agent_steps": [
+      "OAuth with scope https://www.googleapis.com/auth/business.manage.",
+      "accounts.locations.localPosts.create for updates, offers and events."
+    ],
+    "test_call": "List accounts; expect your business account.",
+    "notes": "Quota is 0 until Google approves the access request. Buffer, Publer or Hootsuite can post meanwhile.",
+    "content_specs": "",
+    "sources": [],
+    "docs_url": "https://developers.google.com/my-business/reference/rest/v4/accounts.locations.localPosts/create"
+  },
+  {
+    "platform": "KakaoTalk",
+    "kind": "platform",
+    "has_upload_api": true,
+    "route": "manual",
+    "human_steps": [
+      "Post in the app or website."
+    ],
+    "secrets_to_hand_over": [],
+    "agent_steps": [
+      "Prepare the text and media for this platform."
+    ],
+    "test_call": "",
+    "notes": "",
+    "content_specs": "",
+    "sources": [],
+    "docs_url": "https://developers.kakao.com/docs/latest/en/kakaotalk-channel/common"
+  },
+  {
+    "platform": "LINE",
+    "kind": "platform",
+    "has_upload_api": true,
+    "route": "official_api_own_account",
+    "human_steps": [
+      "Create a LINE Official Account, then in LINE Developers Console create a Messaging API channel for it.",
+      "Messaging API tab → issue a long-lived channel access token. Pick a plan (free: 200 messages/month in Japan)."
+    ],
+    "secrets_to_hand_over": [
+      "LINE_CHANNEL_ACCESS_TOKEN"
+    ],
+    "agent_steps": [
+      "POST /v2/bot/message/broadcast {messages:[...]}. Media must be at an HTTPS URL."
+    ],
+    "test_call": "GET /v2/bot/info; expect the bot info.",
+    "notes": "LINE VOOM (feed) ended in Sept 2026; there is no API for timeline posts.",
+    "content_specs": "",
+    "sources": [],
+    "docs_url": "https://developers.line.biz/en/reference/messaging-api/"
+  },
+  {
+    "platform": "Messenger",
+    "kind": "platform",
+    "has_upload_api": true,
+    "route": "manual",
+    "human_steps": [
+      "Post in the app or website."
+    ],
+    "secrets_to_hand_over": [],
+    "agent_steps": [
+      "Prepare the text and media for this platform."
+    ],
+    "test_call": "",
+    "notes": "",
+    "content_specs": "",
+    "sources": [],
+    "docs_url": "https://developers.facebook.com/docs/messenger-platform/send-messages"
+  },
+  {
+    "platform": "Telegram",
+    "kind": "platform",
+    "has_upload_api": true,
+    "route": "official_api_own_account",
+    "human_steps": [
+      "In Telegram, message @BotFather → /newbot → choose a name → copy the bot token.",
+      "Open your channel → Administrators → Add admin → your bot, with 'Post messages'."
+    ],
+    "secrets_to_hand_over": [
+      "TELEGRAM_BOT_TOKEN",
+      "channel username (@name) or numeric chat ID"
+    ],
+    "agent_steps": [
+      "POST https://api.telegram.org/bot<TOKEN>/sendMessage {chat_id, text, parse_mode}. sendPhoto / sendVideo / sendMediaGroup for media.",
+      "Schedule on the agent's side (cron); keep under ~20 messages/min."
+    ],
+    "test_call": "sendMessage 'test'; expect ok:true.",
+    "notes": "",
+    "content_specs": "",
+    "sources": [],
+    "docs_url": "https://core.telegram.org/bots/api"
+  },
+  {
+    "platform": "Viber",
+    "kind": "platform",
+    "has_upload_api": true,
+    "route": "official_api_own_account",
+    "human_steps": [
+      "As channel super admin (Viber 17.7+): Channel info → Developer Tools → copy the token.",
+      "The agent sets a webhook once (needs an HTTPS endpoint)."
+    ],
+    "secrets_to_hand_over": [
+      "VIBER_CHANNEL_TOKEN"
+    ],
+    "agent_steps": [
+      "POST https://chatapi.viber.com/pa/set_webhook once, then POST /pa/post with X-Viber-Auth-Token {from, type, text or media URL}."
+    ],
+    "test_call": "POST /pa/get_account_info; expect the channel info.",
+    "notes": "",
+    "content_specs": "",
+    "sources": [],
+    "docs_url": "https://developers.viber.com/docs/tools/channels-post-api/"
+  },
+  {
+    "platform": "WhatsApp",
+    "kind": "platform",
+    "has_upload_api": true,
+    "route": "manual",
+    "human_steps": [
+      "Post in the app or website."
+    ],
+    "secrets_to_hand_over": [],
+    "agent_steps": [
+      "Prepare the text and media for this platform."
+    ],
+    "test_call": "",
+    "notes": "",
+    "content_specs": "",
+    "sources": [],
+    "docs_url": "https://developers.facebook.com/docs/whatsapp/pricing"
+  },
+  {
+    "platform": "WeChat",
+    "kind": "platform",
+    "has_upload_api": true,
+    "route": "manual",
+    "human_steps": [
+      "Post in the app or website."
+    ],
+    "secrets_to_hand_over": [],
+    "agent_steps": [
+      "Prepare the text and media for this platform."
+    ],
+    "test_call": "",
+    "notes": "",
+    "content_specs": "",
+    "sources": [],
+    "docs_url": "https://developers.weixin.qq.com/doc/offiaccount/en/Getting_Started/Overview.html"
+  },
+  {
+    "platform": "Bluesky",
+    "kind": "platform",
+    "has_upload_api": true,
+    "route": "official_api_own_account",
+    "human_steps": [
+      "Bluesky → Settings → Privacy and security → App passwords → Add app password → copy it."
+    ],
+    "secrets_to_hand_over": [
+      "BLUESKY_HANDLE",
+      "BLUESKY_APP_PASSWORD"
+    ],
+    "agent_steps": [
+      "POST com.atproto.server.createSession (identifier, password) → accessJwt + did.",
+      "Images: com.atproto.repo.uploadBlob, then createRecord app.bsky.feed.post with an embed. Add facets so links are clickable.",
+      "Reuse the session; createSession is limited to 30 per 5 min."
+    ],
+    "test_call": "createRecord a test post; expect a uri.",
+    "notes": "For an app other people sign into, use atproto OAuth instead of app passwords.",
+    "content_specs": "",
+    "sources": [],
+    "docs_url": "https://docs.bsky.app/docs/get-started"
+  },
+  {
+    "platform": "Gab",
+    "kind": "platform",
+    "has_upload_api": true,
+    "route": "manual",
+    "human_steps": [
+      "Post in the app or website."
+    ],
+    "secrets_to_hand_over": [],
+    "agent_steps": [
+      "Prepare the text and media for this platform."
+    ],
+    "test_call": "",
+    "notes": "",
+    "content_specs": "",
+    "sources": [],
+    "docs_url": "https://gab.com"
+  },
+  {
+    "platform": "Mastodon / Fediverse",
+    "kind": "platform",
+    "has_upload_api": true,
+    "route": "official_api_own_account",
+    "human_steps": [
+      "On your server: Preferences → Development → New application. Scopes write:statuses and write:media. Save, then copy 'Your access token'.",
+      "Pixelfed: Settings → Applications → create a personal access token."
+    ],
+    "secrets_to_hand_over": [
+      "INSTANCE_URL",
+      "ACCESS_TOKEN"
+    ],
+    "agent_steps": [
+      "POST /api/v2/media for images or video, then POST /api/v1/statuses {status, media_ids, visibility}.",
+      "Mastodon can schedule with scheduled_at (5+ minutes ahead)."
+    ],
+    "test_call": "POST a status with visibility=direct; expect an ID.",
+    "notes": "Tick 'This is an automated account' in the profile if it's a bot.",
+    "content_specs": "",
+    "sources": [],
+    "docs_url": "https://docs.joinmastodon.org/methods/statuses/"
+  },
+  {
+    "platform": "Threads",
+    "kind": "platform",
+    "has_upload_api": true,
+    "route": "official_api_own_account",
+    "human_steps": [
+      "Go to developers.facebook.com, log in, and register as a developer (phone or card verification may be asked).",
+      "My Apps → Create app. Pick the use case that matches the platform (below). App type: Business.",
+      "App settings → Basic: add a privacy policy URL (any page you control) and note the App ID and App Secret.",
+      "Keep the app in Development mode. You (the admin) can use it on your own accounts without App Review.",
+      "Use case: 'Access the Threads API'. Add permissions threads_basic and threads_content_publish.",
+      "Use-case settings: add your Threads account as a Threads tester and accept the invite in the Threads app (Settings → Account → Website permissions).",
+      "Add the agent's redirect URL under the Threads settings."
+    ],
+    "secrets_to_hand_over": [
+      "THREADS_APP_ID",
+      "THREADS_APP_SECRET",
+      "long-lived Threads token",
+      "Threads user ID"
+    ],
+    "agent_steps": [
+      "OAuth at threads.net/oauth/authorize, exchange the code, then swap for a 60-day token (th_exchange_token) and refresh it after 24h (th_refresh_token).",
+      "POST /{user-id}/threads (media_type TEXT / IMAGE / VIDEO / CAROUSEL), then POST /{user-id}/threads_publish.",
+      "Limit: 250 posts/day. The API has no scheduling, so the agent holds the post until it's due."
+    ],
+    "test_call": "Publish a text post; expect an ID.",
+    "notes": "Without review you can post to your own and testers' accounts.",
+    "content_specs": "",
+    "sources": [],
+    "docs_url": "https://developers.facebook.com/docs/threads/posts"
+  },
+  {
+    "platform": "Weibo",
+    "kind": "platform",
+    "has_upload_api": true,
+    "route": "manual",
+    "human_steps": [
+      "Post in the app or website."
+    ],
+    "secrets_to_hand_over": [],
+    "agent_steps": [
+      "Prepare the text and media for this platform."
+    ],
+    "test_call": "",
+    "notes": "",
+    "content_specs": "",
+    "sources": [],
+    "docs_url": "https://open.weibo.com/wiki/"
+  },
+  {
+    "platform": "X (Twitter)",
+    "kind": "platform",
+    "has_upload_api": true,
+    "route": "official_api_own_account",
+    "human_steps": [
+      "Go to developer.x.com (console) and sign in with the X account that will post.",
+      "Create a Project and an App inside it.",
+      "Buy prepaid API credits in the Developer Console: pay-per-use, about $0.015 per post, about $0.20 per post with a link.",
+      "App → User authentication settings: OAuth 2.0, type 'Web App' (or 'Native App' for no secret), permissions Read and write, callback URL from the agent, website URL.",
+      "Copy the OAuth 2.0 Client ID and Client Secret.",
+      "Profile → Settings → 'Automated' account label: turn it on if posts are fully automated."
+    ],
+    "secrets_to_hand_over": [
+      "X_CLIENT_ID",
+      "X_CLIENT_SECRET",
+      "refresh token"
+    ],
+    "agent_steps": [
+      "OAuth 2.0 + PKCE with scopes tweet.read tweet.write users.read media.write offline.access.",
+      "Media: /2/media/upload (initialize, append, finalize), then POST /2/tweets with media_ids.",
+      "Tokens last 2h; refresh them. No API scheduling, so the agent holds the post until it's due.",
+      "Never post identical text twice."
+    ],
+    "test_call": "POST /2/tweets with a short unique text; expect an ID (costs one post credit).",
+    "notes": "",
+    "content_specs": "",
+    "sources": [],
+    "docs_url": "https://docs.x.com/x-api/getting-started/pricing"
+  },
+  {
+    "platform": "Flickr",
+    "kind": "platform",
+    "has_upload_api": true,
+    "route": "official_api_own_account",
+    "human_steps": [
+      "Have Flickr Pro (needed to request an API key). flickr.com/services/apps/create → apply for a non-commercial key."
+    ],
+    "secrets_to_hand_over": [
+      "FLICKR_KEY",
+      "FLICKR_SECRET",
+      "OAuth 1.0a token + secret"
+    ],
+    "agent_steps": [
+      "OAuth 1.0a with perms=write (signed requests).",
+      "POST https://up.flickr.com/services/upload/."
+    ],
+    "test_call": "flickr.test.login; expect your username.",
+    "notes": "",
+    "content_specs": "",
+    "sources": [],
+    "docs_url": "https://www.flickr.com/services/api/"
+  },
+  {
+    "platform": "Pixelfed",
+    "kind": "platform",
+    "has_upload_api": true,
+    "route": "manual",
+    "human_steps": [
+      "Post in the app or website."
+    ],
+    "secrets_to_hand_over": [],
+    "agent_steps": [
+      "Prepare the text and media for this platform."
+    ],
+    "test_call": "",
+    "notes": "",
+    "content_specs": "",
+    "sources": [],
+    "docs_url": "https://docs.pixelfed.org/"
+  },
+  {
+    "platform": "Apple Podcasts",
+    "kind": "platform",
+    "has_upload_api": true,
+    "route": "manual",
+    "human_steps": [
+      "Post in the app or website."
+    ],
+    "secrets_to_hand_over": [],
+    "agent_steps": [
+      "Prepare the text and media for this platform."
+    ],
+    "test_call": "",
+    "notes": "",
+    "content_specs": "",
+    "sources": [],
+    "docs_url": "https://podcasters.apple.com/support/823-podcast-requirements"
+  },
+  {
+    "platform": "LinkedIn",
+    "kind": "platform",
+    "has_upload_api": true,
+    "route": "official_api_own_account",
+    "human_steps": [
+      "Create a LinkedIn Company Page (required to own an app, any page works), then go to linkedin.com/developers → Create app and link that page.",
+      "Products: add 'Sign In with LinkedIn using OpenID Connect' and 'Share on LinkedIn' (both self-serve).",
+      "Auth tab: add the agent's redirect URL; copy the Client ID and Client Secret."
+    ],
+    "secrets_to_hand_over": [
+      "LINKEDIN_CLIENT_ID",
+      "LINKEDIN_CLIENT_SECRET",
+      "access token (60 days)"
+    ],
+    "agent_steps": [
+      "OAuth with scopes openid profile w_member_social.",
+      "Get the person URN from /v2/userinfo.",
+      "POST /rest/posts (LinkedIn-Version header). Images and videos via the Images/Videos APIs.",
+      "Remind the user to sign in again every 60 days (no refresh for self-serve apps)."
+    ],
+    "test_call": "Create a text post; expect a 201 with the post URN.",
+    "notes": "Posting as a company page needs the Community Management API, which requires an application from a registered business.",
+    "content_specs": "",
+    "sources": [],
+    "docs_url": "https://learn.microsoft.com/en-us/linkedin/consumer/integrations/self-serve/share-on-linkedin"
+  },
+  {
+    "platform": "Facebook Pages",
+    "kind": "platform",
+    "has_upload_api": true,
+    "route": "official_api_own_account",
+    "human_steps": [
+      "Have a Facebook Page you admin.",
+      "Go to developers.facebook.com, log in, and register as a developer (phone or card verification may be asked).",
+      "My Apps → Create app. Pick the use case that matches the platform (below). App type: Business.",
+      "App settings → Basic: add a privacy policy URL (any page you control) and note the App ID and App Secret.",
+      "Keep the app in Development mode. You (the admin) can use it on your own accounts without App Review.",
+      "Use case: 'Manage everything on your Page'. Add permissions pages_manage_posts, pages_read_engagement and pages_show_list.",
+      "Use the Graph API Explorer (or the agent's login link): select your app, get a User token with those permissions, then choose your Page to get a Page token."
+    ],
+    "secrets_to_hand_over": [
+      "META_APP_ID",
+      "META_APP_SECRET",
+      "PAGE_ID",
+      "Page access token"
+    ],
+    "agent_steps": [
+      "Exchange the user token for a long-lived one, then fetch /me/accounts. A Page token from a long-lived user token doesn't expire.",
+      "POST /{page-id}/feed (message, link). For photos POST /{page-id}/photos; for video POST /{page-id}/videos.",
+      "Schedule with published=false and scheduled_publish_time (10 min to 30 days ahead)."
+    ],
+    "test_call": "Create an unpublished scheduled post 1 hour ahead, then delete it.",
+    "notes": "",
+    "content_specs": "",
+    "sources": [],
+    "docs_url": "https://developers.facebook.com/docs/pages-api/posts"
+  },
+  {
+    "platform": "Instagram",
+    "kind": "platform",
+    "has_upload_api": true,
+    "route": "official_api_own_account",
+    "human_steps": [
+      "Switch your Instagram account to Professional (Business or Creator): Instagram → Settings → Account type and tools.",
+      "Go to developers.facebook.com, log in, and register as a developer (phone or card verification may be asked).",
+      "My Apps → Create app. Pick the use case that matches the platform (below). App type: Business.",
+      "App settings → Basic: add a privacy policy URL (any page you control) and note the App ID and App Secret.",
+      "Keep the app in Development mode. You (the admin) can use it on your own accounts without App Review.",
+      "Use case: 'Manage messaging & content on Instagram' (Instagram API with Instagram Login).",
+      "Under Instagram → API setup, add your Instagram account as an Instagram tester, then accept the invite in Instagram (Settings → Website permissions → Apps and websites → Tester invites).",
+      "Generate a token for your account in the dashboard, or sign in when the agent sends the login link."
+    ],
+    "secrets_to_hand_over": [
+      "META_APP_ID",
+      "META_APP_SECRET",
+      "Instagram long-lived token (60 days)",
+      "Instagram user ID"
+    ],
+    "agent_steps": [
+      "Exchange for a long-lived token and refresh it before 60 days.",
+      "Host the media at a public HTTPS URL.",
+      "POST /{ig-user-id}/media (image_url or video_url with media_type REELS / STORIES / CAROUSEL), wait until status is FINISHED, then POST /{ig-user-id}/media_publish.",
+      "Check /content_publishing_limit (50 per 24h)."
+    ],
+    "test_call": "Publish one test image; expect a media ID.",
+    "notes": "No App Review is needed for your own account. Review plus Business Verification is needed only if other people will sign in.",
+    "content_specs": "",
+    "sources": [],
+    "docs_url": "https://developers.facebook.com/docs/instagram-platform/content-publishing"
+  },
+  {
+    "platform": "MeWe",
+    "kind": "platform",
+    "has_upload_api": true,
+    "route": "manual",
+    "human_steps": [
+      "Post in the app or website."
+    ],
+    "secrets_to_hand_over": [],
+    "agent_steps": [
+      "Prepare the text and media for this platform."
+    ],
+    "test_call": "",
+    "notes": "",
+    "content_specs": "",
+    "sources": [],
+    "docs_url": "https://docs.postiz.com/providers/mewe"
+  },
+  {
+    "platform": "Minds",
+    "kind": "platform",
+    "has_upload_api": true,
+    "route": "manual",
+    "human_steps": [
+      "Post in the app or website."
+    ],
+    "secrets_to_hand_over": [],
+    "agent_steps": [
+      "Prepare the text and media for this platform."
+    ],
+    "test_call": "",
+    "notes": "",
+    "content_specs": "",
+    "sources": [],
+    "docs_url": "https://gitlab.com/minds"
+  },
+  {
+    "platform": "OK.ru",
+    "kind": "platform",
+    "has_upload_api": true,
+    "route": "manual",
+    "human_steps": [
+      "Post in the app or website."
+    ],
+    "secrets_to_hand_over": [],
+    "agent_steps": [
+      "Prepare the text and media for this platform."
+    ],
+    "test_call": "",
+    "notes": "",
+    "content_specs": "",
+    "sources": [],
+    "docs_url": "https://apiok.ru/en/dev/sdk/js/ui.postMediatopic/"
+  },
+  {
+    "platform": "VK",
+    "kind": "platform",
+    "has_upload_api": true,
+    "route": "official_api_own_account",
+    "human_steps": [
+      "Community you admin → Manage → API usage → Access tokens → Create token with wall and photos permissions (or create a VK ID app for personal posting; business apps need passport verification)."
+    ],
+    "secrets_to_hand_over": [
+      "VK_COMMUNITY_TOKEN",
+      "group ID"
+    ],
+    "agent_steps": [
+      "wall.post with owner_id=-GROUP_ID, from_group=1, message and attachments. Photos via photos.getWallUploadServer → upload → saveWallPhoto. Schedule with publish_date."
+    ],
+    "test_call": "wall.post a test message to the community; expect a post_id.",
+    "notes": "",
+    "content_specs": "",
+    "sources": [],
+    "docs_url": "https://dev.vk.ru/en/method/wall.post"
+  },
+  {
+    "platform": "Bilibili",
+    "kind": "platform",
+    "has_upload_api": true,
+    "route": "manual",
+    "human_steps": [
+      "Post in the app or website."
+    ],
+    "secrets_to_hand_over": [],
+    "agent_steps": [
+      "Prepare the text and media for this platform."
+    ],
+    "test_call": "",
+    "notes": "",
+    "content_specs": "",
+    "sources": [],
+    "docs_url": "https://openhome.bilibili.com/doc"
+  },
+  {
+    "platform": "Dailymotion",
+    "kind": "platform",
+    "has_upload_api": true,
+    "route": "official_api_own_account",
+    "human_steps": [
+      "Dailymotion Studio → Organization → API keys → create a public API key (redirect URL from the agent)."
+    ],
+    "secrets_to_hand_over": [
+      "DAILYMOTION_API_KEY",
+      "DAILYMOTION_API_SECRET",
+      "refresh token"
+    ],
+    "agent_steps": [
+      "OAuth with scope manage_videos.",
+      "GET /file/upload → upload the file → POST /me/videos {url, title, published=true} (publish_date to schedule)."
+    ],
+    "test_call": "GET /me; expect your channel.",
+    "notes": "",
+    "content_specs": "",
+    "sources": [],
+    "docs_url": "https://developers.dailymotion.com/guides/upload/"
+  },
+  {
+    "platform": "Douyin",
+    "kind": "platform",
+    "has_upload_api": true,
+    "route": "manual",
+    "human_steps": [
+      "Post in the app or website."
+    ],
+    "secrets_to_hand_over": [],
+    "agent_steps": [
+      "Prepare the text and media for this platform."
+    ],
+    "test_call": "",
+    "notes": "",
+    "content_specs": "",
+    "sources": [],
+    "docs_url": "https://developer.open-douyin.com/"
+  },
+  {
+    "platform": "Kuaishou / Kwai",
+    "kind": "platform",
+    "has_upload_api": true,
+    "route": "manual",
+    "human_steps": [
+      "Post in the app or website."
+    ],
+    "secrets_to_hand_over": [],
+    "agent_steps": [
+      "Prepare the text and media for this platform."
+    ],
+    "test_call": "",
+    "notes": "",
+    "content_specs": "",
+    "sources": [],
+    "docs_url": "https://open.kuaishou.com"
+  },
+  {
+    "platform": "Odysee",
+    "kind": "platform",
+    "has_upload_api": true,
+    "route": "manual",
+    "human_steps": [
+      "Post in the app or website."
+    ],
+    "secrets_to_hand_over": [],
+    "agent_steps": [
+      "Prepare the text and media for this platform."
+    ],
+    "test_call": "",
+    "notes": "",
+    "content_specs": "",
+    "sources": [],
+    "docs_url": "https://lbry.tech/api/sdk"
+  },
+  {
+    "platform": "Snapchat",
+    "kind": "platform",
+    "has_upload_api": true,
+    "route": "manual",
+    "human_steps": [
+      "Use Creative Kit (Share to Snapchat) or post in the app. The Public Profile posting API is allowlist-only: ask Snap through a partner contact."
+    ],
+    "secrets_to_hand_over": [],
+    "agent_steps": [],
+    "test_call": "",
+    "notes": "Later, Ayrshare or Metricool can schedule Snapchat for you.",
+    "content_specs": "",
+    "sources": [],
+    "docs_url": "https://developers.snap.com/marketing-api/Public-Profile-API/Introduction"
+  },
+  {
+    "platform": "TikTok",
+    "kind": "platform",
+    "has_upload_api": true,
+    "route": "official_api_own_account",
+    "human_steps": [
+      "Go to developers.tiktok.com, log in and create a developer account.",
+      "Manage apps → Connect an app. Fill in the name, icon, category, description, terms URL and privacy policy URL.",
+      "Add products Login Kit and Content Posting API. Under Content Posting, turn on Direct Post if you want to post straight to your profile.",
+      "Add the agent's redirect URI (HTTPS) and verify your domain or URL prefix if you'll use PULL_FROM_URL uploads.",
+      "Add your TikTok account as a target/test user. Set your TikTok account to private while unaudited: unaudited apps can only post SELF_ONLY.",
+      "Submit the app for review (demo video of the flow), and later the Content Posting audit to post publicly."
+    ],
+    "secrets_to_hand_over": [
+      "TIKTOK_CLIENT_KEY",
+      "TIKTOK_CLIENT_SECRET",
+      "refresh token (365 days)"
+    ],
+    "agent_steps": [
+      "OAuth with scopes user.info.basic, video.publish (or video.upload for drafts).",
+      "query_creator_info first; then POST /v2/post/publish/video/init/ with FILE_UPLOAD or PULL_FROM_URL and a privacy_level from the allowed list; upload the chunks; poll the status.",
+      "Access tokens last 24h; refresh them."
+    ],
+    "test_call": "Init a draft upload (video.upload) of a short clip; expect a publish_id.",
+    "notes": "Until the audit passes, posts are private and at most 5 users/day. For public posts now, use Buffer/Later/Publer/Metricool.",
+    "content_specs": "",
+    "sources": [],
+    "docs_url": "https://developers.tiktok.com/doc/content-posting-api-get-started"
+  },
+  {
+    "platform": "Vimeo",
+    "kind": "platform",
+    "has_upload_api": true,
+    "route": "official_api_own_account",
+    "human_steps": [
+      "developer.vimeo.com → Create app.",
+      "On a free plan: request Upload Access on the app page (human review, up to 5 business days). On paid plans it's automatic.",
+      "Generate an access token on the app page with scopes upload, edit, public, private."
+    ],
+    "secrets_to_hand_over": [
+      "VIMEO_ACCESS_TOKEN"
+    ],
+    "agent_steps": [
+      "POST /me/videos with upload.approach=pull and a link to the file (or tus for local files)."
+    ],
+    "test_call": "GET /me; expect your account.",
+    "notes": "",
+    "content_specs": "",
+    "sources": [],
+    "docs_url": "https://developer.vimeo.com/api/upload/videos"
+  },
+  {
+    "platform": "YouTube",
+    "kind": "platform",
+    "has_upload_api": true,
+    "route": "official_api_own_account",
+    "human_steps": [
+      "Go to console.cloud.google.com, sign in, and create a project.",
+      "APIs & Services → Library → enable 'YouTube Data API v3'.",
+      "APIs & Services → OAuth consent screen: choose External, fill in the app name, support email and developer email. Add yourself under Test users.",
+      "APIs & Services → Credentials → Create credentials → OAuth client ID. Type: Web application (redirect URI from the agent) or Desktop app.",
+      "Download the client ID and client secret.",
+      "When the agent sends a sign-in link, sign in with the Google account that owns the channel and approve 'Manage your YouTube videos'.",
+      "Optional, to make uploads public: request the YouTube API compliance audit (form linked from the YouTube API Services docs). Until it passes, API uploads are locked private.",
+      "Optional: publish the consent screen and complete Google verification, so sign-ins stop expiring every 7 days."
+    ],
+    "secrets_to_hand_over": [
+      "GOOGLE_CLIENT_ID",
+      "GOOGLE_CLIENT_SECRET",
+      "the refresh token (the agent obtains it at sign-in)"
+    ],
+    "agent_steps": [
+      "Run the OAuth flow with scope https://www.googleapis.com/auth/youtube.upload, access_type=offline, prompt=consent.",
+      "Store the refresh token.",
+      "Upload with videos.insert (resumable). Set status.privacyStatus, and status.publishAt to schedule.",
+      "Refresh the access token every hour."
+    ],
+    "test_call": "videos.insert of a short test clip as private; expect a video ID.",
+    "notes": "In Testing mode the refresh token dies after 7 days, so re-sign in weekly or publish the app. Until the audit passes, use Buffer/Later/Publer/Metricool for public uploads.",
+    "content_specs": "",
+    "sources": [],
+    "docs_url": "https://developers.google.com/youtube/v3/docs/videos/insert"
+  },
+  {
+    "platform": "PeerTube",
+    "kind": "platform",
+    "has_upload_api": true,
+    "route": "official_api_own_account",
+    "human_steps": [
+      "Create an account on a PeerTube server (preferably one used only for automation)."
+    ],
+    "secrets_to_hand_over": [
+      "INSTANCE_URL",
+      "USERNAME",
+      "PASSWORD"
+    ],
+    "agent_steps": [
+      "GET /api/v1/oauth-clients/local → POST /api/v1/users/token (grant_type=password).",
+      "POST /api/v1/videos/upload-resumable. Schedule with scheduleUpdate."
+    ],
+    "test_call": "GET /api/v1/users/me; expect your account.",
+    "notes": "Password-only login: use a dedicated account and store the password as a secret.",
+    "content_specs": "",
+    "sources": [],
+    "docs_url": "https://docs.joinpeertube.org/api-rest-reference.html"
+  },
+  {
+    "platform": "Pinterest",
+    "kind": "platform",
+    "has_upload_api": true,
+    "route": "official_api_own_account",
+    "human_steps": [
+      "Convert to a Pinterest business account (free).",
+      "developers.pinterest.com → My apps → Connect app; fill in the details and redirect URI.",
+      "The app starts in Trial access: Pins created then are sandbox-only. Request Standard access (submit a short video of the OAuth flow plus a Pin being created)."
+    ],
+    "secrets_to_hand_over": [
+      "PINTEREST_APP_ID",
+      "PINTEREST_APP_SECRET",
+      "refresh token"
+    ],
+    "agent_steps": [
+      "OAuth with scopes boards:read pins:write (boards:write to create boards).",
+      "POST /v5/pins with board_id and media_source.",
+      "Access tokens last 30 days; refresh within 60 days."
+    ],
+    "test_call": "GET /v5/boards; expect your boards.",
+    "notes": "Use Buffer/Later/Hootsuite until Standard access is approved.",
+    "content_specs": "",
+    "sources": [],
+    "docs_url": "https://developers.pinterest.com/docs/api/v5/pins-create/"
+  },
+  {
+    "platform": "Clubhouse",
+    "kind": "platform",
+    "has_upload_api": false,
+    "route": "manual",
+    "human_steps": [
+      "Post in the app or website."
+    ],
+    "secrets_to_hand_over": [],
+    "agent_steps": [
+      "Prepare the text and media for this platform."
+    ],
+    "test_call": "",
+    "notes": "",
+    "content_specs": "",
+    "sources": [],
+    "docs_url": "https://www.clubhouse.com"
+  },
+  {
+    "platform": "Medium",
+    "kind": "platform",
+    "has_upload_api": false,
+    "route": "manual",
+    "human_steps": [
+      "Post in the app or website."
+    ],
+    "secrets_to_hand_over": [],
+    "agent_steps": [
+      "Prepare the text and media for this platform."
+    ],
+    "test_call": "",
+    "notes": "",
+    "content_specs": "",
+    "sources": [],
+    "docs_url": "https://github.com/Medium/medium-api-docs"
+  },
+  {
+    "platform": "Naver Blog",
+    "kind": "platform",
+    "has_upload_api": false,
+    "route": "manual",
+    "human_steps": [
+      "Post in the app or website."
+    ],
+    "secrets_to_hand_over": [],
+    "agent_steps": [
+      "Prepare the text and media for this platform."
+    ],
+    "test_call": "",
+    "notes": "",
+    "content_specs": "",
+    "sources": [],
+    "docs_url": "https://developers.naver.com/"
+  },
+  {
+    "platform": "Patreon",
+    "kind": "platform",
+    "has_upload_api": false,
+    "route": "manual",
+    "human_steps": [
+      "Post in the app or website."
+    ],
+    "secrets_to_hand_over": [],
+    "agent_steps": [
+      "Prepare the text and media for this platform."
+    ],
+    "test_call": "",
+    "notes": "",
+    "content_specs": "",
+    "sources": [],
+    "docs_url": "https://docs.patreon.com/"
+  },
+  {
+    "platform": "Lemon8",
+    "kind": "platform",
+    "has_upload_api": false,
+    "route": "manual",
+    "human_steps": [
+      "Post in the app or website."
+    ],
+    "secrets_to_hand_over": [],
+    "agent_steps": [
+      "Prepare the text and media for this platform."
+    ],
+    "test_call": "",
+    "notes": "",
+    "content_specs": "",
+    "sources": [],
+    "docs_url": "https://www.lemon8-app.com"
+  },
+  {
+    "platform": "Xiaohongshu (RedNote)",
+    "kind": "platform",
+    "has_upload_api": false,
+    "route": "manual",
+    "human_steps": [
+      "Post in the app or website."
+    ],
+    "secrets_to_hand_over": [],
+    "agent_steps": [
+      "Prepare the text and media for this platform."
+    ],
+    "test_call": "",
+    "notes": "",
+    "content_specs": "",
+    "sources": [],
+    "docs_url": "https://open.xiaohongshu.com/"
+  },
+  {
+    "platform": "Kick",
+    "kind": "platform",
+    "has_upload_api": false,
+    "route": "manual",
+    "human_steps": [
+      "Post in the app or website."
+    ],
+    "secrets_to_hand_over": [],
+    "agent_steps": [
+      "Prepare the text and media for this platform."
+    ],
+    "test_call": "",
+    "notes": "",
+    "content_specs": "",
+    "sources": [],
+    "docs_url": "https://docs.kick.com"
+  },
+  {
+    "platform": "Twitch",
+    "kind": "platform",
+    "has_upload_api": false,
+    "route": "manual",
+    "human_steps": [
+      "Post in the app or website."
+    ],
+    "secrets_to_hand_over": [],
+    "agent_steps": [
+      "Prepare the text and media for this platform."
+    ],
+    "test_call": "",
+    "notes": "",
+    "content_specs": "",
+    "sources": [],
+    "docs_url": "https://dev.twitch.tv/docs/api/reference"
+  },
+  {
+    "platform": "Signal",
+    "kind": "platform",
+    "has_upload_api": false,
+    "route": "manual",
+    "human_steps": [
+      "Post in the app or website."
+    ],
+    "secrets_to_hand_over": [],
+    "agent_steps": [
+      "Prepare the text and media for this platform."
+    ],
+    "test_call": "",
+    "notes": "",
+    "content_specs": "",
+    "sources": [],
+    "docs_url": "https://github.com/AsamK/signal-cli"
+  },
+  {
+    "platform": "Gettr",
+    "kind": "platform",
+    "has_upload_api": false,
+    "route": "manual",
+    "human_steps": [
+      "Post in the app or website."
+    ],
+    "secrets_to_hand_over": [],
+    "agent_steps": [
+      "Prepare the text and media for this platform."
+    ],
+    "test_call": "",
+    "notes": "",
+    "content_specs": "",
+    "sources": [],
+    "docs_url": "https://gettr.com"
+  },
+  {
+    "platform": "Truth Social",
+    "kind": "platform",
+    "has_upload_api": false,
+    "route": "manual",
+    "human_steps": [
+      "Post in the app or website."
+    ],
+    "secrets_to_hand_over": [],
+    "agent_steps": [
+      "Prepare the text and media for this platform."
+    ],
+    "test_call": "",
+    "notes": "",
+    "content_specs": "",
+    "sources": [],
+    "docs_url": "https://www.globenewswire.com/news-release/2025/09/09/3146910/0/en/Truth-Social-Enhances-Platform.html"
+  },
+  {
+    "platform": "Substack",
+    "kind": "platform",
+    "has_upload_api": false,
+    "route": "manual",
+    "human_steps": [
+      "Post in the app or website."
+    ],
+    "secrets_to_hand_over": [],
+    "agent_steps": [
+      "Prepare the text and media for this platform."
+    ],
+    "test_call": "",
+    "notes": "",
+    "content_specs": "",
+    "sources": [],
+    "docs_url": "https://support.substack.com/hc/en-us/articles/360037870412-How-do-I-schedule-a-post-for-a-future-date"
+  },
+  {
+    "platform": "BeReal",
+    "kind": "platform",
+    "has_upload_api": false,
+    "route": "manual",
+    "human_steps": [
+      "Post in the app or website."
+    ],
+    "secrets_to_hand_over": [],
+    "agent_steps": [
+      "Prepare the text and media for this platform."
+    ],
+    "test_call": "",
+    "notes": "",
+    "content_specs": "",
+    "sources": [],
+    "docs_url": "https://bereal.com"
+  },
+  {
+    "platform": "Spotify for Creators",
+    "kind": "platform",
+    "has_upload_api": false,
+    "route": "manual",
+    "human_steps": [
+      "Post in the app or website."
+    ],
+    "secrets_to_hand_over": [],
+    "agent_steps": [
+      "Prepare the text and media for this platform."
+    ],
+    "test_call": "",
+    "notes": "",
+    "content_specs": "",
+    "sources": [],
+    "docs_url": "https://support.spotify.com/us/creators/article/publishing-audio-episodes/"
+  },
+  {
+    "platform": "Behance",
+    "kind": "platform",
+    "has_upload_api": false,
+    "route": "manual",
+    "human_steps": [
+      "Post in the app or website."
+    ],
+    "secrets_to_hand_over": [],
+    "agent_steps": [
+      "Prepare the text and media for this platform."
+    ],
+    "test_call": "",
+    "notes": "",
+    "content_specs": "",
+    "sources": [],
+    "docs_url": "https://www.behance.net/dev"
+  },
+  {
+    "platform": "Quora",
+    "kind": "platform",
+    "has_upload_api": false,
+    "route": "manual",
+    "human_steps": [
+      "Post in the app or website."
+    ],
+    "secrets_to_hand_over": [],
+    "agent_steps": [
+      "Prepare the text and media for this platform."
+    ],
+    "test_call": "",
+    "notes": "",
+    "content_specs": "",
+    "sources": [],
+    "docs_url": "https://help.quora.com/hc/en-us/articles/360000470706-Platform-Policies"
+  },
+  {
+    "platform": "Likee",
+    "kind": "platform",
+    "has_upload_api": false,
+    "route": "manual",
+    "human_steps": [
+      "Post in the app or website."
+    ],
+    "secrets_to_hand_over": [],
+    "agent_steps": [
+      "Prepare the text and media for this platform."
+    ],
+    "test_call": "",
+    "notes": "",
+    "content_specs": "",
+    "sources": [],
+    "docs_url": "https://likee.video"
+  },
+  {
+    "platform": "Rumble",
+    "kind": "platform",
+    "has_upload_api": false,
+    "route": "manual",
+    "human_steps": [
+      "Post in the app or website."
+    ],
+    "secrets_to_hand_over": [],
+    "agent_steps": [
+      "Prepare the text and media for this platform."
+    ],
+    "test_call": "",
+    "notes": "",
+    "content_specs": "",
+    "sources": [],
+    "docs_url": "https://rumblefaq.groovehq.com/help/how-to-use-rumble-s-live-stream-api"
+  },
+  {
+    "platform": "Triller",
+    "kind": "platform",
+    "has_upload_api": false,
+    "route": "manual",
+    "human_steps": [
+      "Post in the app or website."
+    ],
+    "secrets_to_hand_over": [],
+    "agent_steps": [
+      "Prepare the text and media for this platform."
+    ],
+    "test_call": "",
+    "notes": "",
+    "content_specs": "",
+    "sources": [],
+    "docs_url": "https://en.wikipedia.org/wiki/Triller_(app)"
+  }
+]
