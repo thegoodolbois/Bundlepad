@@ -1,0 +1,418 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Posting Automation Guide</title>
+<meta name="description" content="Every social platform and every way to automate posting: APIs, user sign-in, schedulers, Siri Shortcuts, with step-by-step setup for the human and the agent.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..125,500..800&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* A reference directory: summary strip, filters, a results table that turns
+   into cards on phones, and a detail view per platform with every route and
+   the full human/agent setup. Same tokens as the Bundlepad dashboard. */
+:root {
+  --paper: #f2f4f7; --surface: #ffffff; --ink: #141a26; --muted: #5b6577; --line: #d9dee7;
+  --accent: #2450b8; --accent-soft: #e3eafa; --good: #16794a; --good-soft: #def3e7;
+  --warn: #9a6400; --warn-soft: #fbf0d9; --bad: #b42318; --bad-soft: #fde4e1;
+  --font-display: "Archivo", "Arial Narrow", system-ui, sans-serif;
+  --font-body: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --step--1: 0.8125rem; --step-0: 0.9375rem; --step-1: 1.125rem; --step-2: 1.5rem; --step-3: 2.25rem;
+  --radius: 10px;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --paper: #0f131b; --surface: #171c27; --ink: #e8ecf3; --muted: #97a1b3; --line: #2a3242;
+    --accent: #7ea2ff; --accent-soft: #1d2a4a; --good: #4cc488; --good-soft: #14301f;
+    --warn: #e0b04a; --warn-soft: #33270f; --bad: #ff8a7a; --bad-soft: #3a1714;
+  }
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --paper: #0f131b; --surface: #171c27; --ink: #e8ecf3; --muted: #97a1b3; --line: #2a3242;
+  --accent: #7ea2ff; --accent-soft: #1d2a4a; --good: #4cc488; --good-soft: #14301f;
+  --warn: #e0b04a; --warn-soft: #33270f; --bad: #ff8a7a; --bad-soft: #3a1714;
+}
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html, body { max-width: 100%; overflow-x: hidden; }
+body { margin: 0; background: var(--paper); color: var(--ink); font: var(--step-0)/1.55 var(--font-body); padding: 0 16px; }
+.wrap { max-width: 1180px; margin: 0 auto; padding-block: 20px 64px; display: grid; grid-template-columns: minmax(0, 1fr); gap: 20px; }
+.wrap > * { min-width: 0; }
+td { overflow-wrap: anywhere; }
+h1, h2, h3 { font-family: var(--font-display); font-stretch: 85%; margin: 0; line-height: 1.15; text-wrap: balance; }
+a { color: var(--accent); }
+button, input, select { font: inherit; color: inherit; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+code, .mono { font-family: var(--font-mono); font-size: var(--step--1); overflow-wrap: anywhere; }
+.muted { color: var(--muted); }
+.label { font-size: 0.6875rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
+
+.topbar { display: flex; flex-wrap: wrap; gap: 12px 20px; align-items: flex-end; justify-content: space-between; }
+.topbar h1 { font-size: var(--step-3); font-weight: 800; font-stretch: 105%; letter-spacing: -0.01em; }
+.topbar p { margin: 6px 0 0; color: var(--muted); max-width: 62ch; }
+.links { display: flex; flex-wrap: wrap; gap: 8px; }
+.btn { display: inline-flex; align-items: center; gap: 6px; border: 1px solid var(--line); background: var(--surface); padding: 8px 14px; border-radius: 8px; cursor: pointer; font-weight: 500; text-decoration: none; color: var(--ink); }
+.btn:hover { border-color: var(--accent); }
+.btn.primary { background: var(--accent); border-color: var(--accent); color: var(--surface); }
+
+.summary { display: grid; grid-template-columns: repeat(5, 1fr); gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; }
+.summary > div { background: var(--surface); padding: 14px 16px; display: grid; gap: 2px; }
+.big { font-family: var(--font-display); font-size: var(--step-2); font-weight: 800; font-variant-numeric: tabular-nums; }
+
+.tabs { display: flex; gap: 4px; border-bottom: 1px solid var(--line); flex-wrap: wrap; }
+.tab { border: 0; background: none; padding: 10px 14px; cursor: pointer; font-weight: 600; color: var(--muted); border-bottom: 2px solid transparent; margin-bottom: -1px; }
+.tab[aria-selected="true"] { color: var(--ink); border-bottom-color: var(--accent); }
+
+.filters { display: grid; grid-template-columns: 2fr repeat(4, 1fr); gap: 10px; align-items: end; }
+.filters label { display: grid; gap: 4px; min-width: 0; }
+.filters input, .filters select { width: 100%; border: 1px solid var(--line); background: var(--surface); border-radius: 8px; padding: 9px 11px; min-width: 0; }
+.count { color: var(--muted); font-size: var(--step--1); }
+
+.panel { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); }
+table { width: 100%; border-collapse: collapse; font-size: var(--step--1); }
+th { text-align: left; font-weight: 600; color: var(--muted); padding: 10px 12px; border-bottom: 1px solid var(--line); white-space: nowrap; }
+td { padding: 10px 12px; border-bottom: 1px solid var(--line); vertical-align: top; }
+tbody tr { cursor: pointer; }
+tbody tr:hover { background: var(--accent-soft); }
+tbody tr:last-child td { border-bottom: 0; }
+.pname { font-weight: 600; font-size: var(--step-0); }
+.pill { display: inline-block; padding: 1px 8px; border-radius: 999px; font-size: 0.75rem; font-weight: 600; white-space: nowrap; background: var(--paper); color: var(--muted); border: 1px solid var(--line); }
+.pill.good { background: var(--good-soft); color: var(--good); border-color: transparent; }
+.pill.warn { background: var(--warn-soft); color: var(--warn); border-color: transparent; }
+.pill.bad { background: var(--bad-soft); color: var(--bad); border-color: transparent; }
+.pill.info { background: var(--accent-soft); color: var(--accent); border-color: transparent; }
+.clamp { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+
+/* Detail view */
+.detail { display: grid; gap: 18px; padding: 20px; }
+.detail-head { display: flex; flex-wrap: wrap; gap: 10px 16px; align-items: baseline; justify-content: space-between; }
+.detail-head h2 { font-size: var(--step-2); font-weight: 800; }
+.facts { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: 8px; overflow: hidden; }
+.facts > div { background: var(--surface); padding: 10px 12px; display: grid; gap: 2px; min-width: 0; }
+.facts .v { overflow-wrap: anywhere; }
+.section h3 { font-size: var(--step-1); font-weight: 700; margin-bottom: 8px; }
+.routes { margin: 0; padding-left: 22px; display: grid; gap: 8px; }
+.routes b { font-family: var(--font-display); font-stretch: 90%; }
+ol.steps, ul.steps { margin: 0; padding-left: 22px; display: grid; gap: 8px; }
+ol.steps li, ul.steps li { overflow-wrap: anywhere; }
+.callout { background: var(--accent-soft); border-radius: 8px; padding: 12px 14px; overflow-wrap: anywhere; }
+.secrets li code { font-weight: 600; }
+.tablewrap { overflow-x: auto; }
+.trouble td { font-size: var(--step--1); }
+.back { justify-self: start; }
+.note { font-size: var(--step--1); color: var(--muted); }
+.agentbox { padding: 20px; display: grid; gap: 14px; }
+.agentbox pre { background: var(--paper); border: 1px solid var(--line); border-radius: 8px; padding: 12px; overflow-x: auto; margin: 0; font-family: var(--font-mono); font-size: var(--step--1); }
+footer { color: var(--muted); font-size: var(--step--1); display: flex; flex-wrap: wrap; gap: 8px 16px; justify-content: space-between; }
+
+@media (max-width: 860px) {
+  .summary { grid-template-columns: repeat(2, 1fr); }
+  .summary > div:last-child { grid-column: span 2; }
+  .filters { grid-template-columns: 1fr 1fr; }
+  .filters label:first-child { grid-column: span 2; }
+  .facts { grid-template-columns: 1fr; }
+  /* Table becomes cards. */
+  table.results thead { display: none; }
+  table.results, table.results tbody, table.results tr, table.results td { display: block; width: 100%; }
+  table.results tr { border-bottom: 1px solid var(--line); padding: 12px 14px; }
+  table.results td { border: 0; padding: 2px 0; }
+  table.results td[data-k]::before { content: attr(data-k) ": "; color: var(--muted); font-weight: 600; }
+  .topbar h1 { font-size: var(--step-2); }
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="topbar">
+    <div>
+      <span class="label">Bundlepad · research</span>
+      <h1>Posting automation guide</h1>
+      <p>Every social and content platform, whether it has an API, whether that's free, and every way to automate posting. Each one comes with step-by-step setup for you and for your AI agent.</p>
+    </div>
+    <nav class="links" aria-label="Links">
+      <a class="btn" href="../">Bundlepad</a>
+      <a class="btn" href="https://github.com/thegoodolbois/Bundlepad/tree/main/marketing">Source on GitHub</a>
+      <button class="btn" id="theme-btn" type="button" aria-label="Switch light or dark theme">Theme</button>
+    </nav>
+  </header>
+
+  <section class="summary" aria-label="Summary">
+    <div><span class="label">Platforms</span><span class="big" id="s-total">—</span></div>
+    <div><span class="label">With a posting API</span><span class="big" id="s-api">—</span></div>
+    <div><span class="label">Free API</span><span class="big" id="s-free">—</span></div>
+    <div><span class="label">Easy from Siri</span><span class="big" id="s-siri">—</span></div>
+    <div><span class="label">Hubs (post to many)</span><span class="big" id="s-hubs">—</span></div>
+  </section>
+
+  <div class="tabs" role="tablist">
+    <button class="tab" role="tab" id="tab-platforms" aria-selected="true" data-view="platforms">Platforms</button>
+    <button class="tab" role="tab" id="tab-hubs" aria-selected="false" data-view="hubs">Hubs &amp; tools</button>
+    <button class="tab" role="tab" id="tab-agents" aria-selected="false" data-view="agents">For AI agents</button>
+  </div>
+
+  <main id="view"></main>
+
+  <footer>
+    <span>Researched 2026-10-07 from official docs where reachable, otherwise search summaries of official pages. Items marked "(unverified)" aren't confirmed. Check the docs link before relying on a price or access rule.</span>
+    <span id="foot-count"></span>
+  </footer>
+</div>
+
+<script>
+'use strict';
+const $ = (s, el = document) => el.querySelector(s);
+const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+// Turns http(s) URLs in already-escaped text into links.
+const linkify = (html) => html.replace(/https?:\/\/[^\s<>"')\]]+/g, (u) => {
+  const clean = u.replace(/[.,;:]+$/, '');
+  return `<a href="${clean}" target="_blank" rel="noopener">${clean}</a>` + u.slice(clean.length);
+});
+const txt = (v) => linkify(esc(fmt(v)));
+function fmt(v) {
+  if (v == null) return '';
+  if (typeof v === 'string') return v;
+  if (Array.isArray(v)) return v.map(fmt).join('; ');
+  if (typeof v === 'object') return Object.entries(v).map(([k, x]) => `${k}: ${typeof x === 'object' ? JSON.stringify(x) : x}`).join(' · ');
+  return String(v);
+}
+const ROUTE_NAMES = {
+  official_api_own_account: 'Official API (your own account)',
+  user_sign_in_post_on_behalf: 'User signs in, app posts for them',
+  scheduler_or_automation_tool: 'Scheduler / automation tool',
+  siri_shortcut: 'Siri Shortcut',
+  native_scheduler: 'Built-in scheduler',
+  manual: 'Manual',
+};
+
+let platforms = [], setups = [], setupBy = {}, hubs = [];
+const state = { view: 'platforms', q: '', cat: '', api: '', cost: '', siri: '' };
+
+const isFree = (p) => /^free/i.test(p.api_free);
+const isPaid = (p) => /paid/i.test(p.api_free) && !/^free/i.test(p.api_free);
+const siriEasy = (p) => /^easy/i.test(p.shortcuts_ease || '');
+const canSignIn = (p) => /^yes/i.test(p.post_on_users_behalf || '');
+
+function costPill(p) {
+  if (!p.has_upload_api) return '<span class="pill">No API</span>';
+  if (isFree(p) && !/paid|pro/i.test(p.api_free)) return '<span class="pill good">Free</span>';
+  if (isFree(p)) return '<span class="pill info">Free tier</span>';
+  if (isPaid(p)) return '<span class="pill warn">Paid</span>';
+  return `<span class="pill">${esc(p.api_free || '—')}</span>`;
+}
+const apiPill = (p) => p.has_upload_api ? '<span class="pill good">Yes</span>' : (/^partial/i.test(p.official_api) ? '<span class="pill warn">Partial</span>' : '<span class="pill bad">No</span>');
+const siriPill = (p) => siriEasy(p) ? '<span class="pill good">Easy</span>' : /^medium/i.test(p.shortcuts_ease) ? '<span class="pill info">Medium</span>' : /^hard/i.test(p.shortcuts_ease) ? '<span class="pill warn">Via hub</span>' : '<span class="pill">—</span>';
+
+function filtered() {
+  const q = state.q.trim().toLowerCase();
+  return platforms.filter((p) => {
+    if (state.cat && p.category !== state.cat) return false;
+    if (state.api === 'yes' && !p.has_upload_api) return false;
+    if (state.api === 'no' && p.has_upload_api) return false;
+    if (state.cost === 'free' && !(p.has_upload_api && isFree(p))) return false;
+    if (state.cost === 'paid' && !(p.has_upload_api && isPaid(p))) return false;
+    if (state.siri === 'easy' && !siriEasy(p)) return false;
+    if (state.siri === 'signin' && !canSignIn(p)) return false;
+    if (!q) return true;
+    return [p.platform, p.category, p.content_types, p.api_can_upload, p.schedulers, p.official_api].join(' ').toLowerCase().includes(q);
+  });
+}
+
+function renderPlatforms() {
+  const cats = [...new Set(platforms.map((p) => p.category))].sort();
+  $('#view').innerHTML = `
+    <section class="filters" aria-label="Filters">
+      <label><span class="label">Search</span><input id="f-q" type="search" placeholder="Platform, content type, tool…" value="${esc(state.q)}"></label>
+      <label><span class="label">Category</span><select id="f-cat"><option value="">All</option>${cats.map((c) => `<option ${c === state.cat ? 'selected' : ''}>${esc(c)}</option>`).join('')}</select></label>
+      <label><span class="label">Posting API</span><select id="f-api"><option value="">Any</option><option value="yes" ${state.api === 'yes' ? 'selected' : ''}>Has API</option><option value="no" ${state.api === 'no' ? 'selected' : ''}>No API</option></select></label>
+      <label><span class="label">API cost</span><select id="f-cost"><option value="">Any</option><option value="free" ${state.cost === 'free' ? 'selected' : ''}>Free</option><option value="paid" ${state.cost === 'paid' ? 'selected' : ''}>Paid</option></select></label>
+      <label><span class="label">Show only</span><select id="f-siri"><option value="">Everything</option><option value="easy" ${state.siri === 'easy' ? 'selected' : ''}>Easy from Siri</option><option value="signin" ${state.siri === 'signin' ? 'selected' : ''}>Users can sign in</option></select></label>
+    </section>
+    <p class="count" id="count" role="status"></p>
+    <div class="panel"><table class="results">
+      <thead><tr><th>Platform</th><th>Posting API</th><th>Cost</th><th>What the API can post</th><th>Users sign in</th><th>Siri</th></tr></thead>
+      <tbody id="rows"></tbody>
+    </table></div>`;
+  const bind = (id, key) => $(id).addEventListener('input', (e) => { state[key] = e.target.value; renderRows(); });
+  bind('#f-q', 'q'); bind('#f-cat', 'cat'); bind('#f-api', 'api'); bind('#f-cost', 'cost'); bind('#f-siri', 'siri');
+  $('#rows').addEventListener('click', (e) => { const tr = e.target.closest('tr[data-p]'); if (tr) openDetail(tr.dataset.p); });
+  $('#rows').addEventListener('keydown', (e) => { const tr = e.target.closest('tr[data-p]'); if (tr && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); openDetail(tr.dataset.p); } });
+  renderRows();
+}
+
+function renderRows() {
+  const list = filtered();
+  $('#count').textContent = `${list.length} of ${platforms.length} platforms. Select one for every route and its full setup.`;
+  $('#rows').innerHTML = list.map((p) => `
+    <tr data-p="${esc(p.platform)}" tabindex="0">
+      <td><div class="pname">${esc(p.platform)}</div><div class="muted">${esc(p.category)}</div></td>
+      <td data-k="API">${apiPill(p)}</td>
+      <td data-k="Cost">${costPill(p)}</td>
+      <td data-k="Can post"><span class="clamp">${esc(p.api_can_upload)}</span></td>
+      <td data-k="Sign in"><span class="clamp">${esc(p.post_on_users_behalf)}</span></td>
+      <td data-k="Siri">${siriPill(p)}</td>
+    </tr>`).join('') || '<tr><td colspan="6" class="muted">No platforms match these filters.</td></tr>';
+}
+
+function list(items, ordered = true) {
+  if (!items || !items.length) return '';
+  const tag = ordered ? 'ol' : 'ul';
+  return `<${tag} class="steps">${items.map((x) => `<li>${txt(x)}</li>`).join('')}</${tag}>`;
+}
+
+function setupHtml(s) {
+  if (!s) return '<p class="muted">No setup recorded.</p>';
+  const secrets = (s.secrets_to_hand_over || []).map((v) => typeof v === 'object'
+    ? `<li><code>${esc(v.name)}</code>: ${txt(v.where_to_find)}${v.sensitivity ? ` <span class="muted">(${esc(v.sensitivity)})</span>` : ''}</li>`
+    : `<li><code>${esc(v)}</code></li>`).join('');
+  const trouble = (s.troubleshooting || []).map((t) => typeof t === 'object'
+    ? `<tr><td>${txt(t.symptom)}</td><td>${txt(t.cause)}</td><td>${txt(t.fix)}</td></tr>`
+    : `<tr><td colspan="3">${txt(t)}</td></tr>`).join('');
+  return `
+    ${s.prerequisites?.length ? `<div class="section"><h3>Before you start</h3>${list(s.prerequisites, false)}</div>` : ''}
+    ${s.human_steps?.length ? `<div class="section"><h3>You do (the human)</h3>${list(s.human_steps)}</div>` : ''}
+    ${secrets ? `<div class="section"><h3>Hand these to your agent (keep them secret)</h3><ul class="steps secrets">${secrets}</ul></div>` : ''}
+    ${s.agent_steps?.length ? `<div class="section"><h3>Your agent does</h3>${list(s.agent_steps)}</div>` : ''}
+    ${s.content_specs ? `<div class="section"><h3>Content specs</h3><div class="callout">${txt(s.content_specs)}</div></div>` : ''}
+    ${s.test_call ? `<div class="section"><h3>Test it</h3><div class="callout">${txt(s.test_call)}</div></div>` : ''}
+    ${trouble ? `<div class="section"><h3>Troubleshooting</h3><div class="tablewrap"><table class="trouble"><thead><tr><th>Symptom</th><th>Cause</th><th>Fix</th></tr></thead><tbody>${trouble}</tbody></table></div></div>` : ''}
+    ${s.notes ? `<div class="section"><h3>Notes</h3><p>${txt(s.notes)}</p></div>` : ''}
+    ${s.alternative_route ? `<div class="section"><h3>Alternative route</h3><p>${txt(s.alternative_route)}</p></div>` : ''}
+    ${s.sources?.length ? `<details class="section"><summary class="label">Sources (${s.sources.length})</summary>${list(s.sources, false)}</details>` : ''}`;
+}
+
+function openDetail(name, push = true) {
+  const p = platforms.find((x) => x.platform === name);
+  if (!p) return;
+  if (push) history.pushState(null, '', '#p=' + encodeURIComponent(name));
+  const s = setupBy[name];
+  const fact = (k, v) => `<div><span class="label">${k}</span><span class="v">${txt(v || '—')}</span></div>`;
+  const routes = (p.automation_options || []).map((o) => `<li><b>${esc(ROUTE_NAMES[o.route] || o.route)}</b>: ${txt(o.summary)}</li>`).join('');
+  $('#view').innerHTML = `
+    <article class="panel detail">
+      <button class="btn back" type="button" id="back">← All platforms</button>
+      <div class="detail-head">
+        <div><span class="label">${esc(p.category)}</span><h2>${esc(p.platform)}</h2></div>
+        <div class="links">${apiPill(p)} ${costPill(p)} <a class="btn" href="${esc(p.docs_url)}" target="_blank" rel="noopener">Official docs</a></div>
+      </div>
+      <div class="facts">
+        ${fact('What you can upload on the platform', p.content_types)}
+        ${fact('Official API', p.official_api)}
+        ${fact('What the API can post', p.api_can_upload)}
+        ${fact('API cost', [p.api_free, p.api_cost_detail !== '—' ? p.api_cost_detail : ''].filter(Boolean).join(': '))}
+        ${fact('Access and approval', p.approval)}
+        ${fact('Limits', p.limits)}
+        ${fact('Built-in scheduling', p.native_scheduling)}
+        ${fact('API scheduling', p.api_scheduling)}
+        ${fact('Schedulers that support it', p.schedulers)}
+        ${fact('Siri Shortcut', p.siri_shortcuts)}
+        ${fact('How users sign in', p.user_login)}
+        ${fact('Can an app post for them', p.post_on_users_behalf)}
+        ${fact('Permissions (scopes)', p.login_scopes)}
+        ${fact('Review before other people can use it', p.review_to_open_to_other_users)}
+        ${fact('Token lifetime', p.token_lifetime)}
+        ${fact('Reliability', p.verification)}
+      </div>
+      <div class="section"><h3>Every way to automate it (best first)</h3><ol class="routes">${routes}</ol></div>
+      <div class="section"><h3>Step-by-step setup</h3><p class="note">Route: <code>${esc(s?.route || '')}</code></p></div>
+      ${setupHtml(s)}
+    </article>`;
+  $('#back').addEventListener('click', () => { history.pushState(null, '', location.pathname); show('platforms'); });
+  window.scrollTo({ top: 0 });
+}
+
+function renderHubs() {
+  $('#view').innerHTML = `
+    <p class="count">Hubs connect your accounts once and post to many platforms through one API key, which is the fastest start. No-code tools (n8n, Zapier, Make, IFTTT) can turn one webhook, for example from a Siri Shortcut, into posts everywhere.</p>
+    ${hubs.map((h) => `
+      <details class="panel detail" id="hub-${esc(h.platform).replace(/\W+/g, '-')}">
+        <summary><div class="detail-head"><h2>${esc(h.platform)}</h2><span class="muted">${txt(h.price)}</span></div></summary>
+        ${h.supported_platforms?.length ? `<div class="section"><h3>Supports</h3><p>${esc(h.supported_platforms.join(', '))}</p></div>` : ''}
+        ${setupHtml(h)}
+      </details>`).join('')}`;
+}
+
+function renderAgents() {
+  const base = 'https://raw.githubusercontent.com/thegoodolbois/Bundlepad/main/marketing/';
+  $('#view').innerHTML = `
+    <section class="panel agentbox">
+      <h2>Give this to your AI agent</h2>
+      <p>Paste this into your agent so it can help you set up automated posting:</p>
+      <pre id="prompt">Help me automate posting my content. Use this guide:
+- Instructions: ${base}AGENT-GUIDE.md
+- Every platform and every automation route: ${base}data/platforms.json
+- Step-by-step setup (what I do, what you do): ${base}data/setup.json
+Start by asking which platforms I want, what content I post, and how often.</pre>
+      <div class="links"><button class="btn primary" id="copy" type="button">Copy</button><span class="muted" id="copied" role="status"></span></div>
+      <h2>Files</h2>
+      <ul class="steps">
+        <li><a href="${base}AGENT-GUIDE.md">AGENT-GUIDE.md</a>: what to ask the user, how to pick a route, rules</li>
+        <li><a href="data/platforms.json">data/platforms.json</a>: one record per platform, with <code>automation_options</code> best first</li>
+        <li><a href="data/setup.json">data/setup.json</a>: human steps, secrets, agent steps, test call and troubleshooting for every platform and hub</li>
+        <li><a href="data/platforms.csv">data/platforms.csv</a>: the same data for spreadsheets</li>
+        <li><a href="https://github.com/thegoodolbois/Bundlepad/blob/main/marketing/SHORTCUTS.md">SHORTCUTS.md</a>: Siri Shortcut recipes · <a href="https://github.com/thegoodolbois/Bundlepad/blob/main/marketing/LOGIN.md">LOGIN.md</a>: signing in and posting for users</li>
+      </ul>
+    </section>`;
+  $('#copy').addEventListener('click', async () => {
+    try { await navigator.clipboard.writeText($('#prompt').textContent); $('#copied').textContent = 'Copied.'; }
+    catch { $('#copied').textContent = 'Copy failed. Select the text and copy it by hand.'; }
+  });
+}
+
+function show(view) {
+  state.view = view;
+  document.querySelectorAll('.tab').forEach((t) => t.setAttribute('aria-selected', String(t.dataset.view === view)));
+  if (view === 'platforms') renderPlatforms();
+  else if (view === 'hubs') renderHubs();
+  else renderAgents();
+}
+
+function route() {
+  const m = location.hash.match(/^#p=(.+)$/);
+  if (m) { document.querySelectorAll('.tab').forEach((t) => t.setAttribute('aria-selected', String(t.dataset.view === 'platforms'))); openDetail(decodeURIComponent(m[1]), false); }
+  else if (location.hash === '#hubs') show('hubs');
+  else if (location.hash === '#agents') show('agents');
+  else show('platforms');
+}
+
+document.querySelector('.tabs').addEventListener('click', (e) => {
+  const t = e.target.closest('.tab'); if (!t) return;
+  history.pushState(null, '', t.dataset.view === 'platforms' ? location.pathname : '#' + t.dataset.view);
+  show(t.dataset.view);
+});
+window.addEventListener('popstate', route);
+
+// Theme toggle, remembered per browser when storage is available.
+function applyTheme(t) { if (t) document.documentElement.dataset.theme = t; }
+try { applyTheme(localStorage.getItem('theme')); } catch { /* storage unavailable */ }
+$('#theme-btn').addEventListener('click', () => {
+  const dark = document.documentElement.dataset.theme ? document.documentElement.dataset.theme === 'dark' : matchMedia('(prefers-color-scheme: dark)').matches;
+  const next = dark ? 'light' : 'dark';
+  applyTheme(next);
+  try { localStorage.setItem('theme', next); } catch { /* storage unavailable */ }
+});
+
+(async () => {
+  try {
+    const [pj, sj] = await Promise.all([fetch('data/platforms.json').then((r) => r.json()), fetch('data/setup.json').then((r) => r.json())]);
+    platforms = pj.platforms.slice().sort((a, b) => (b.has_upload_api - a.has_upload_api) || a.platform.localeCompare(b.platform));
+    setups = sj;
+    setupBy = Object.fromEntries(sj.filter((s) => s.kind === 'platform').map((s) => [s.platform, s]));
+    hubs = sj.filter((s) => s.kind === 'hub');
+    $('#s-total').textContent = platforms.length;
+    $('#s-api').textContent = platforms.filter((p) => p.has_upload_api).length;
+    $('#s-free').textContent = platforms.filter((p) => p.has_upload_api && isFree(p)).length;
+    $('#s-siri').textContent = platforms.filter(siriEasy).length;
+    $('#s-hubs').textContent = hubs.length;
+    $('#foot-count').textContent = `${platforms.length} platforms · ${hubs.length} hubs`;
+    route();
+  } catch (err) {
+    $('#view').innerHTML = `<p class="panel detail">Couldn't load the data (${esc(err.message)}). Open this page through a web server or GitHub Pages, not as a local file.</p>`;
+  }
+})();
+</script>
+</body>
+</html>
