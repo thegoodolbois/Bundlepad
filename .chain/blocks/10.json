@@ -1,0 +1,157 @@
+{
+  "header": {
+    "version": 1,
+    "height": 10,
+    "prevHash": "0000e7cb79e04706a00f69a859a434b315e1a844eb36eb86a51fc0828b746f77",
+    "timestamp": 1791382592054,
+    "difficulty": 16,
+    "nonce": 83339,
+    "eventsRoot": "d686800335f829040cca6316d695d2ea978afe7c0eb90179d92bd1320e8d20bd",
+    "stateRoot": "5a3f8d847d0f86d1d4e803e7b9d58b275ee9e7514d406c5d83b208ab5ce5171d"
+  },
+  "hash": "0000b4029d8ba41febc1c80d8268fcfb9d0863b38006cee91a4204a3aaa65aef",
+  "events": [
+    {
+      "id": "5a7a891919b2ddc60780d940def36b8c369d02b9df89f1f10acae052e922627b",
+      "type": "update",
+      "subject": "git.commit",
+      "source": "local-cli",
+      "body": {
+        "sha": "d932c92b250af2e98fd979c8daad1d3c67cdf89c",
+        "parents": [
+          "7abde30121cda41d82d81ea27ec3e31912ac2b1c"
+        ],
+        "author": {
+          "name": "thegoodolbois",
+          "email": "thegoodolbois@gmail.com",
+          "date": "2026-10-05T23:31:15+00:00"
+        },
+        "committer": {
+          "name": "thegoodolbois",
+          "email": "thegoodolbois@gmail.com",
+          "date": "2026-10-05T23:31:15+00:00"
+        },
+        "message": "Record commit 7abde30 on the integrity chain\n\nCo-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"
+      },
+      "ts": 1791382591564,
+      "block": 10
+    },
+    {
+      "id": "3f26fa2effdbf166d51ebbfe6b074354a1ac09bf736424f0dd928fc6f7a0e87f",
+      "type": "file",
+      "subject": "snapshot.created",
+      "source": "local-cli",
+      "body": {
+        "commit": "d932c92b250af2e98fd979c8daad1d3c67cdf89c",
+        "manifest": "e793fcf5475030496a4ac0cb0e84c8fc2dae5b5b69fde98614f29fcaf227bb15",
+        "files": 20
+      },
+      "ts": 1791382591633,
+      "block": 10
+    },
+    {
+      "id": "8b4ea4d22fc826c286325ce095e38eda234f7af956ed05f5be77270100621d55",
+      "type": "update",
+      "subject": "git.commit",
+      "source": "local-cli",
+      "body": {
+        "sha": "f0ab162fa5a3f0b846a49785bd03063893743bd2",
+        "parents": [
+          "d932c92b250af2e98fd979c8daad1d3c67cdf89c"
+        ],
+        "author": {
+          "name": "thegoodolbois",
+          "email": "thegoodolbois@gmail.com",
+          "date": "2026-10-05T23:31:55+00:00"
+        },
+        "committer": {
+          "name": "thegoodolbois",
+          "email": "thegoodolbois@gmail.com",
+          "date": "2026-10-05T23:31:55+00:00"
+        },
+        "message": "Load the integrity chain from .chain/blocks on the live site\n\nCo-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"
+      },
+      "ts": 1791382591637,
+      "block": 10
+    },
+    {
+      "id": "f641573ad9dc2fb7cbdd7915342b916694b418ecbbce8b4c3f2ed2ae71e0ea72",
+      "type": "file",
+      "subject": "snapshot.created",
+      "source": "local-cli",
+      "body": {
+        "commit": "f0ab162fa5a3f0b846a49785bd03063893743bd2",
+        "manifest": "52141abd8f6c209e35f3fc38ecda8c9dfd225c8672ef1a5fc031562bcd461dbc",
+        "files": 20
+      },
+      "ts": 1791382591769,
+      "block": 10
+    },
+    {
+      "id": "d32f78b7dd1f3767de676d2613c175fa7dcfa62930cc134e133696120b00105a",
+      "type": "update",
+      "subject": "git.commit",
+      "source": "local-cli",
+      "body": {
+        "sha": "3d425d04264b90e64f5879a54f71fb7f78fbeb09",
+        "parents": [
+          "f0ab162fa5a3f0b846a49785bd03063893743bd2"
+        ],
+        "author": {
+          "name": "Claude",
+          "email": "noreply@anthropic.com",
+          "date": "2026-10-07T14:16:31+00:00"
+        },
+        "committer": {
+          "name": "Claude",
+          "email": "noreply@anthropic.com",
+          "date": "2026-10-07T14:16:31+00:00"
+        },
+        "message": "Build the Plan 3 launch backend and wire the dashboard to it\n\n- src/launch: manifests frozen and hashed on the integrity chain, Google\n  ID token verification, one Google account per wallet (salted sub hashes),\n  ed25519-signed commits, cancels and weighted votes, 1:1 split by SOL\n- server: /api/launch/* routes, CORS limited to the Pages origin, --host\n- CLI: \"launch create|publish|close|show\" and \"pages\"\n- index.html: commit/cancel/vote go to the backend; doctype and charset\n- README describes the project; memory.json and plans record Plan 3\n  approval, and Plan 4 (on-chain group buy) awaits approval\n\nCo-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>\nClaude-Session: https://claude.ai/code/session_019dLaQpC8ustRzQLisewKPK"
+      },
+      "ts": 1791382591773,
+      "block": 10
+    },
+    {
+      "id": "2cfd02cb4a67e708073e339da6bc9c1887ac94ca01d4ccbdd7d019921898abda",
+      "type": "file",
+      "subject": "snapshot.created",
+      "source": "local-cli",
+      "body": {
+        "commit": "3d425d04264b90e64f5879a54f71fb7f78fbeb09",
+        "manifest": "ba35afb64dd3dcbd38eccc7c20d577f8619952969eb71aa14e3c4f5fe7d55c0e",
+        "files": 29
+      },
+      "ts": 1791382592047,
+      "block": 10
+    },
+    {
+      "id": "279df17fa833c284ade527d89017cfac329ef6c396712fe6e60b92ee0f9f07c8",
+      "type": "update",
+      "subject": "ref.update",
+      "source": "local-cli",
+      "body": {
+        "ref": "local/heads/claude/sleepy-brown-x6slgf",
+        "from": null,
+        "to": "3d425d04264b90e64f5879a54f71fb7f78fbeb09",
+        "forced": false
+      },
+      "ts": 1791382592052,
+      "block": 10
+    },
+    {
+      "id": "2aae9a8115d0f6965e417ff9bf1db6706bd83272cda53587042ca71c3e58f786",
+      "type": "update",
+      "subject": "ref.update",
+      "source": "local-cli",
+      "body": {
+        "ref": "local/heads/main",
+        "from": "7abde30121cda41d82d81ea27ec3e31912ac2b1c",
+        "to": "f0ab162fa5a3f0b846a49785bd03063893743bd2",
+        "forced": false
+      },
+      "ts": 1791382592052,
+      "block": 10
+    }
+  ]
+}

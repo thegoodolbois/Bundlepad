@@ -1,0 +1,12 @@
+{
+  "launch": null,
+  "investors": [],
+  "proposals": [],
+  "buyback": {
+    "wallet": null,
+    "feesSol": 0,
+    "boughtTokens": 0,
+    "burnedTokens": 0,
+    "launches": 0
+  }
+}
