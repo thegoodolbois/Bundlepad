@@ -1,0 +1,105 @@
+{
+  "header": {
+    "version": 1,
+    "height": 17,
+    "prevHash": "00002c948e102d1386692cb30f7da8008fd659f8c91c81b0fabdb4d1ace971a8",
+    "timestamp": 1791395124184,
+    "difficulty": 16,
+    "nonce": 61106,
+    "eventsRoot": "416632cd72a055b16b4587564504b2afca00d6648423472956a4b07c02326f6a",
+    "stateRoot": "06857b6e891ca1051d40cdcbc2197a1e474828ccf8d5dc56c23d0613d2c90b48"
+  },
+  "hash": "000072eccaa448bff2f3d21ad6b18b7e13f5e468972a2bee54c6df236f5f5ec3",
+  "events": [
+    {
+      "id": "6316abc534ec0fb784eccdf1f85abe91dbc438714ef2ff15ac9e06f08cbf2091",
+      "type": "update",
+      "subject": "git.commit",
+      "source": "local-cli",
+      "body": {
+        "sha": "dfc733ea08853c4839fb7a7a70a048bd681252b6",
+        "parents": [
+          "51f93bd27ca5c72aa1a24dc92b1f9138bba84c63"
+        ],
+        "author": {
+          "name": "Claude",
+          "email": "noreply@anthropic.com",
+          "date": "2026-10-07T17:32:40+00:00"
+        },
+        "committer": {
+          "name": "Claude",
+          "email": "noreply@anthropic.com",
+          "date": "2026-10-07T17:32:40+00:00"
+        },
+        "message": "Record the marketing research commit on the integrity chain\n\nCo-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>\nClaude-Session: https://claude.ai/code/session_019dLaQpC8ustRzQLisewKPK"
+      },
+      "ts": 1791395123059,
+      "block": 17
+    },
+    {
+      "id": "eb4b1cc9248db873e8fad0df534c302c3a0254ded8005992026a8af056aae919",
+      "type": "file",
+      "subject": "snapshot.created",
+      "source": "local-cli",
+      "body": {
+        "commit": "dfc733ea08853c4839fb7a7a70a048bd681252b6",
+        "manifest": "7fa93b5126a2fc489d1837e834c98f56ed4d5d521904f640002dea85156b7980",
+        "files": 70
+      },
+      "ts": 1791395123432,
+      "block": 17
+    },
+    {
+      "id": "23386218f9253b813a9f6701ae311407165e0f2685afd76cf62fe26494dcec46",
+      "type": "update",
+      "subject": "git.commit",
+      "source": "local-cli",
+      "body": {
+        "sha": "c34c6e7cbdb43b978737b4101e96be3781600502",
+        "parents": [
+          "dfc733ea08853c4839fb7a7a70a048bd681252b6"
+        ],
+        "author": {
+          "name": "Claude",
+          "email": "noreply@anthropic.com",
+          "date": "2026-10-07T17:45:22+00:00"
+        },
+        "committer": {
+          "name": "Claude",
+          "email": "noreply@anthropic.com",
+          "date": "2026-10-07T17:45:22+00:00"
+        },
+        "message": "Rebuild marketing/ as an agent-ready posting automation reference\n\nRefocused on what was asked: every platform's upload capabilities, whether\nit has an API, whether the API is free, and every way to automate posting.\nRemoved the ad and crypto-promotion material (CRYPTO-CHANNELS.md,\nCOMPLIANCE.md).\n\n- 71 platforms (was 29): adds video (Vimeo, Dailymotion, PeerTube…),\n  blogs and creative (WordPress, Blogger, Ghost, Flickr, SoundCloud…),\n  regional (VK, Weibo, WeChat, Douyin, LINE, Kakao, Viber…) and others\n- data/platforms.json: per-platform automation_options, best first\n  (official API, user sign-in, scheduler, Siri Shortcut, native, manual)\n- LOGIN.md: posting on a user's behalf after they sign in; Google sign-in\n  only covers Google services; scopes, reviews, token lifetimes\n- AGENT-GUIDE.md: what an agent asks the user, how it picks a route, setup\n  patterns and rules\n\nCo-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>\nClaude-Session: https://claude.ai/code/session_019dLaQpC8ustRzQLisewKPK"
+      },
+      "ts": 1791395123437,
+      "block": 17
+    },
+    {
+      "id": "1059b70c181b08ad2def7f071b5e95859245343018d6be40d8fa3dfc3f53a90f",
+      "type": "file",
+      "subject": "snapshot.created",
+      "source": "local-cli",
+      "body": {
+        "commit": "c34c6e7cbdb43b978737b4101e96be3781600502",
+        "manifest": "383a70bbd153bc2472c00d979161a0f3698d7c1fa720c99eab9bde7f361576b5",
+        "files": 70
+      },
+      "ts": 1791395124182,
+      "block": 17
+    },
+    {
+      "id": "bc6949453064c2c303b8bb04d29754d3d7d2242904fa3f8ed8fb16a7ee76e4c6",
+      "type": "update",
+      "subject": "ref.update",
+      "source": "local-cli",
+      "body": {
+        "ref": "local/heads/claude/sleepy-brown-x6slgf",
+        "from": "51f93bd27ca5c72aa1a24dc92b1f9138bba84c63",
+        "to": "c34c6e7cbdb43b978737b4101e96be3781600502",
+        "forced": false
+      },
+      "ts": 1791395124183,
+      "block": 17
+    }
+  ]
+}
