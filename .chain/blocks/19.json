@@ -1,0 +1,105 @@
+{
+  "header": {
+    "version": 1,
+    "height": 19,
+    "prevHash": "000022ed1202fbfe7d8a6c9bb909d367295f9d8a5995363d9633c7f1a8f15911",
+    "timestamp": 1791407507450,
+    "difficulty": 16,
+    "nonce": 44291,
+    "eventsRoot": "2a3a5d77d6eeae7456673982c9bbec333fe120435a61f9a221372958cb15b4aa",
+    "stateRoot": "6958f7af538f7b25faa56440d23d466c5ff766ffc53da2a3ead1ab64b96c3a03"
+  },
+  "hash": "0000b1aaaf827e6d0e03798ba9a8e017f6550c919e4d27149b6e3c9d1bcda566",
+  "events": [
+    {
+      "id": "215def35417eb9af06f4037be100677ca1d7e9f6a3872e8a8a717bb5785b3e0e",
+      "type": "update",
+      "subject": "git.commit",
+      "source": "local-cli",
+      "body": {
+        "sha": "66deb04fe641953074cb10572e80efc2500c2475",
+        "parents": [
+          "e9f818e7d6d5ec7b9b9452fc6bdc26e5c91982f7"
+        ],
+        "author": {
+          "name": "Claude",
+          "email": "noreply@anthropic.com",
+          "date": "2026-10-07T18:45:56+00:00"
+        },
+        "committer": {
+          "name": "Claude",
+          "email": "noreply@anthropic.com",
+          "date": "2026-10-07T18:45:56+00:00"
+        },
+        "message": "Record the detailed setup commit on the integrity chain\n\nCo-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>\nClaude-Session: https://claude.ai/code/session_019dLaQpC8ustRzQLisewKPK"
+      },
+      "ts": 1791407506635,
+      "block": 19
+    },
+    {
+      "id": "3a0b372f138123a4552b8cd0b4c89fdbd731644bfa513a6b5eb89091fdd3db41",
+      "type": "file",
+      "subject": "snapshot.created",
+      "source": "local-cli",
+      "body": {
+        "commit": "66deb04fe641953074cb10572e80efc2500c2475",
+        "manifest": "eec9bee02a9c96b31421e80224e037fb8975d7777b55f99922b4a311236a7ce8",
+        "files": 72
+      },
+      "ts": 1791407507035,
+      "block": 19
+    },
+    {
+      "id": "80a2b33f3733470849e07d104968a71c7a2e2ca9507b89507cb6d70300e88ca7",
+      "type": "update",
+      "subject": "git.commit",
+      "source": "local-cli",
+      "body": {
+        "sha": "ac82cff1e57c4a00c37a1863ca1b5f96d9fab9f8",
+        "parents": [
+          "66deb04fe641953074cb10572e80efc2500c2475"
+        ],
+        "author": {
+          "name": "Claude",
+          "email": "noreply@anthropic.com",
+          "date": "2026-10-07T21:11:46+00:00"
+        },
+        "committer": {
+          "name": "Claude",
+          "email": "noreply@anthropic.com",
+          "date": "2026-10-07T21:11:46+00:00"
+        },
+        "message": "Add a shareable web page for the posting automation guide\n\nmarketing/index.html (served by GitHub Pages at /marketing/): search and\nfilter all 71 platforms (posting API, cost, Siri, users can sign in),\na detail view per platform with every automation route and its full\nhuman/agent setup, troubleshooting and sources, a hubs tab, and a\n\"For AI agents\" tab with a copyable prompt and the raw data links.\nDeep links (#p=Platform) make single platforms shareable. Linked from\nthe dashboard footer.\n\nCo-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>\nClaude-Session: https://claude.ai/code/session_019dLaQpC8ustRzQLisewKPK"
+      },
+      "ts": 1791407507040,
+      "block": 19
+    },
+    {
+      "id": "714d074669a9b1dedf3080d22f5d7a0d6c65d6efe22a088640d39c291957985f",
+      "type": "file",
+      "subject": "snapshot.created",
+      "source": "local-cli",
+      "body": {
+        "commit": "ac82cff1e57c4a00c37a1863ca1b5f96d9fab9f8",
+        "manifest": "606e6c77ae7fb1705e9c2841b51295afc97fb8ea13da355ec248f026f9f78a3a",
+        "files": 73
+      },
+      "ts": 1791407507448,
+      "block": 19
+    },
+    {
+      "id": "3b3d7e60f88df00716e289d3529bd65c275d4b32aebcba46bb7fe58b8aad3fcc",
+      "type": "update",
+      "subject": "ref.update",
+      "source": "local-cli",
+      "body": {
+        "ref": "local/heads/claude/sleepy-brown-x6slgf",
+        "from": "e9f818e7d6d5ec7b9b9452fc6bdc26e5c91982f7",
+        "to": "ac82cff1e57c4a00c37a1863ca1b5f96d9fab9f8",
+        "forced": false
+      },
+      "ts": 1791407507449,
+      "block": 19
+    }
+  ]
+}
