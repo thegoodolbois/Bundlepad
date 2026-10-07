@@ -32,7 +32,7 @@ investor's SOL goes through the program before the audit and the legal check.
 | `onchain/` | Group-buy Solana program, its tests, the launcher and buyback |
 | `deploy/` | systemd unit, Caddy (HTTPS) config, and the publish-to-GitHub script |
 | `docs/GO-LIVE.md` | Step-by-step go-live guide |
-| `marketing/` | Social platforms, posting automation (APIs, schedulers, Siri Shortcuts), crypto channels, promotion rules |
+| `marketing/` | Every social platform and every way to automate posting (APIs, user sign-in, schedulers, Siri Shortcuts); agent-ready JSON |
 | `.chain/` | The integrity chain (blocks, objects, event log) |
 | `plan/`, `memory.json` | Plans and their approval state |
 

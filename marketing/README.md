@@ -1,40 +1,65 @@
-# Bundlepad marketing
+# Social posting automation: every platform, every option
 
-The advertising side of Bundlepad: every platform worth posting to, how to
-automate posting on each, and the rules for promoting a token launch.
-Researched 2026-10-07 by six parallel research agents.
+A reference for **automating content posting** across 71 social and
+content platforms. It's written so an AI agent can use it to help a user set
+up their automation. Researched 2026-10-07.
 
+## For agents: start here
+1. **[AGENT-GUIDE.md](AGENT-GUIDE.md):** what to ask the user, how to pick a
+   route per platform, setup patterns, and rules.
+2. **[data/platforms.json](data/platforms.json):** one record per platform.
+   `automation_options` lists **every route to automate posting, best
+   first**. The routes are:
+   - `official_api_own_account`
+   - `user_sign_in_post_on_behalf`
+   - `scheduler_or_automation_tool`
+   - `siri_shortcut`
+   - `native_scheduler`
+   - `manual`
+
+   Raw file for programs:
+   `https://raw.githubusercontent.com/thegoodolbois/Bundlepad/claude/sleepy-brown-x6slgf/marketing/data/platforms.json`
+
+## Files
 | File | What it is |
 |---|---|
-| [PLATFORMS.md](PLATFORMS.md) | **Start here.** Summary table of 29 platforms, then a plain explanation for each |
-| [data/platforms.csv](data/platforms.csv) / [.json](data/platforms.json) | The full dataset, 17 fields per platform, for sorting and filtering in a spreadsheet |
-| [SHORTCUTS.md](SHORTCUTS.md) | Siri / Apple Shortcuts: ready recipes for Telegram, Discord, Bluesky, Mastodon, Threads, WhatsApp, Farcaster, Binance Square, and a "Hey Siri, announce launch" shortcut |
-| [METHODS.md](METHODS.md) | Schedulers (Buffer, Hootsuite…), posting APIs (Ayrshare, Postiz…), no-code tools (n8n, Zapier…), AI-agent pipelines, and posts driven by Bundlepad events |
-| [CRYPTO-CHANNELS.md](CRYPTO-CHANNELS.md) | DEX Screener, CoinGecko and CoinMarketCap, Birdeye, Jupiter, pump.fun, Binance Square, crypto ad networks, with costs |
-| [COMPLIANCE.md](COMPLIANCE.md) | Platform automation rules, paid-ad bans, FTC, UK FCA and EU MiCA, and safe wording |
-| [SOURCES.md](SOURCES.md) | Where every claim came from |
+| [PLATFORMS.md](PLATFORMS.md) | Overview table, then every platform with its numbered automation routes |
+| [LOGIN.md](LOGIN.md) | Can a user sign in (Google or the platform's own login) and let an app post for them? Scopes, review, token lifetimes |
+| [SHORTCUTS.md](SHORTCUTS.md) | Siri / Apple Shortcuts recipes (Telegram, Discord, Bluesky, Mastodon, Threads, WhatsApp, Farcaster, Binance Square), timed automations, Android |
+| [METHODS.md](METHODS.md) | Schedulers (Buffer, Hootsuite…), unified posting APIs (Postiz, Ayrshare…), no-code tools (n8n, Zapier, Make, IFTTT), AI-agent pipelines |
+| [data/platforms.csv](data/platforms.csv) | Same data as the JSON, for spreadsheets |
+| [SOURCES.md](SOURCES.md) | Where the facts came from |
 
-## The short version
+## Fields per platform (JSON/CSV)
+- **What it supports:** `content_types` (what the platform supports at all),
+  `official_api`, `api_can_upload`, `has_upload_api`
+- **Cost and access:** `api_free` / `api_cost_detail`, `approval`, `limits`
+- **Scheduling:** `native_scheduling`, `api_scheduling`, `schedulers`
+- **Signing in to post for a user:** `user_login`, `post_on_users_behalf`,
+  `login_scopes`, `review_to_open_to_other_users`, `token_lifetime`,
+  `needs_server_secret`
+- **Siri:** `siri_shortcuts`, `shortcuts_ease`
+- **Reference:** `verification`, `docs_url`
 
-1. **Automate for free now:** Telegram (bot), Discord (webhook), Bluesky and
-   Mastodon. Each is one HTTPS call, so Siri can do it.
-2. **One hub for everything else:** self-host **Postiz** (free) or use
-   **Buffer** (cheap, with an API). Add **n8n** so one webhook posts
-   everywhere, and post automatically when Bundlepad's chain shows a new
-   launch event.
-3. **X costs money per API post** (about $0.20 with a link). Label the
-   account "Automated" and never repeat a post.
-4. **Video:** YouTube and TikTok uploads stay private until your app passes
-   their audit. Use a scheduler meanwhile.
-5. **Paid ads for a token launch are banned** on Meta, Google, Reddit,
-   Pinterest, TikTok and Snapchat. Use Brave Ads, crypto ad networks and
-   DEX Screener's paid token info, after the legal check.
-6. **No browser bots or self-bots**, on any platform.
+## Headline facts
+- **52 of 71** platforms have an API that can post or upload. The other 19
+  are manual-only (listed in AGENT-GUIDE.md §6).
+- **Easiest to automate (one HTTPS call with a static token):** Telegram,
+  Discord, Bluesky, Mastodon, Pixelfed, Lemmy, VK, Viber, LINE, Vimeo,
+  self-hosted WordPress.
+- **Free hub:** self-hosted **Postiz** reaches 30+ platforms with one API.
+  **Buffer** is the cheapest hosted option with an API on every plan.
+- **Paid API:** X, about $0.015 per post or $0.20 with a link. Most other
+  posting APIs are free; some need a paid account on that platform (Flickr
+  Pro, SoundCloud Artist Pro, Ghost(Pro) above Starter).
+- **"Sign in with Google"** covers YouTube, Blogger and Business Profile only.
+  Every other platform needs its own sign-in.
+- **Review gates:** YouTube and TikTok keep API uploads private until your app
+  passes their audits. Use an audited scheduler meanwhile.
 
-## How reliable this is
-
-Most official doc sites were blocked from the research sandbox. Facts were
-taken from search summaries of the official pages where possible. Each row's
-`verification` field says how solid it is, and anything unconfirmed says
-"unverified". Prices and ad policies change often, so open the linked page
-before acting.
+## Reliability
+Most official doc sites couldn't be opened directly from the research
+sandbox. Facts come from official docs where possible, otherwise from search
+summaries of official pages, then third-party write-ups. Each record's
+`verification` field says which. "Unverified" means not confirmed. Prices
+and access rules change, so check `docs_url` before acting.

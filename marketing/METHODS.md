@@ -1,10 +1,7 @@
 # Ways to automate posting
 
 Prices are as seen 2026-10-07 in search summaries, and many come from
-third-party pricing write-ups. Check the vendor's page before paying. None of
-these vendors publishes a crypto-content rule that could be found (not
-confirmed either way), so read their terms before you post token promotions
-through them.
+third-party pricing write-ups. Check the vendor's page before paying.
 
 ## 1. Multi-platform schedulers (for people)
 
@@ -41,9 +38,10 @@ One key, one HTTP call, many networks.
 | **Postiz** | 30+ incl. **Telegram, Discord, Farcaster, Nostr, Mastodon** | **free self-hosted** (AGPL-3.0); cloud from ~$29/mo | **Yes** |
 | Mixpost | Lite: FB Pages, X, Mastodon; Pro adds Threads, TikTok, YouTube, Bluesky, Discord, Farcaster | Lite free; Pro $299 one-off | **Yes** |
 
-**Pick for Bundlepad: self-hosted Postiz.** It runs on the same server as the
-backend (see `docs/GO-LIVE.md`). It's free, and it's the only one that covers
-the crypto-native networks too: Farcaster, Nostr, Telegram and Discord.
+**Pick for one person automating their own content: self-hosted Postiz.**
+It's free, covers 30+ platforms (including Telegram, Discord, Farcaster,
+Nostr and Mastodon), and one API key reaches all of them. Buffer is the
+cheapest hosted choice with an API.
 
 X's own API charges still apply underneath any of these: about $0.015 per
 post, and about $0.20 per post with a link.
@@ -60,28 +58,18 @@ post, and about $0.20 per post with a link.
 
 ## 4. Your own cron job or AI agent
 
-The cheapest pipeline that can run the whole thing:
-1. **Draft.** An LLM step writes a post. Examples: launch is open, X SOL
-   committed, launch in 1 hour, tokens settled. Facts come from the Bundlepad
-   API (`/api/launch/dashboard`).
-2. **Approve.** A human gets a Telegram or Discord message with Approve or
-   Edit buttons. n8n has a "wait for approval" step. Keep this step for
-   anything about price, returns or token sales.
-3. **Publish.** Postiz or a unified API sends the post, or direct API calls do
-   for Telegram, Discord, Mastodon and Bluesky.
-4. **Schedule.** Cron, an n8n schedule trigger, or GitHub Actions on a schedule.
+A cheap pipeline that runs everything:
+1. **Source.** New content appears: a blog post (RSS), a video upload, a
+   file in a folder, a row in a spreadsheet.
+2. **Draft.** An LLM step writes a version for each platform: thread for X,
+   caption for Instagram, title and description for YouTube. Keep within
+   each platform's limits (see `data/platforms.json`).
+3. **Approve.** Optional. The user gets a Telegram or Discord message with
+   Approve or Edit buttons. n8n has a "wait for approval" step.
+4. **Publish.** Through a hub (Postiz, Buffer, Ayrshare) or direct API calls
+   for the simple platforms (Telegram, Discord, Mastodon, Bluesky).
+5. **Schedule.** Cron, an n8n schedule trigger, or GitHub Actions on a
+   schedule.
 
 Buffer, Postiz, Outstand and Typefully expose **MCP servers**, so an AI agent
 such as Claude can draft and queue posts through them directly.
-
-### Event-driven posts from Bundlepad
-
-The backend already writes every launch event to the integrity chain:
-`launch.manifest`, `launch.commit`, `launch.commitments`, `launch.tx` and
-`buyback.burn`. An n8n workflow can poll
-`GET /api/chain/events?limit=30` and post when a new event appears:
-- **"Commitments are open"** on `launch.manifest`
-- **"Launch landed"** on `launch.tx` with kind `buy`, with the explorer link
-- **"Burned N $BUNDLEPAD"** on `buyback.burn`, with the transaction link
-
-Each one is a real, checkable on-chain fact, which keeps posts accurate.

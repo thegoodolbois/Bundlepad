@@ -46,7 +46,7 @@ result as the post text.
 2. Get Contents of URL:
    - URL: `<webhook URL>?wait=true`
    - Method: POST. Body (JSON): `content` = *Provided Input*, `username` =
-     `Bundlepad`
+     `<your name>`
 3. Optional: add an `embeds` array of objects, each with `title`, `url` and
    `description`.
 
@@ -87,8 +87,7 @@ Notes:
 ### WhatsApp (prefill a message)
 - **Open URLs:** `https://wa.me/?text=<URL-encoded text>`. You choose the chat
   and tap send.
-- WhatsApp Channels have no API, and the Business Policy bans currency and ICO
-  promotion. Use this only for personal sharing.
+- WhatsApp Channels have no API, so Channel posts are manual.
 
 ### Farcaster (via Neynar)
 - Get Contents of URL: `https://api.neynar.com/v2/farcaster/cast`, POST
@@ -113,18 +112,18 @@ Notes:
 - Your own **n8n** (self-hosted, free) or **Zapier** webhook: the Shortcut
   POSTs `{ "text": ... }` to the webhook URL, and the workflow handles OAuth
   and posts everywhere. This is the most flexible "Hey Siri, announce the
-  launch" setup.
+  everywhere" setup.
 
-### Example: "Hey Siri, announce launch"
+### Example: "Hey Siri, post everywhere"
 1. **Ask for Input** (Text): "What should the post say?"
-2. **Text:** compose *Provided Input* + ` ` + `https://<you>.github.io/<repo>/`
+2. **Text:** compose *Provided Input* + ` ` + `<link to your content>`
 3. **Get Contents of URL:** Telegram `sendMessage` (recipe above)
 4. **Get Contents of URL:** Discord webhook (recipe above)
 5. **Get Contents of URL:** Mastodon `/api/v1/statuses`
 6. **Get Contents of URL:** your n8n webhook, which handles X, LinkedIn and others
 7. **Show Notification:** "Posted"
 
-Name it "Announce launch". Siri runs all steps in order.
+Name it "Post everywhere". Siri runs all steps in order.
 
 ## Android equivalent
 - **Tasker:** HTTP Request actions (POST, JSON, headers) plus time-based
