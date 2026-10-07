@@ -8,7 +8,7 @@ it's free, whether users can sign in and let an app post for them, and
 - **Machine-readable data:** [`data/platforms.json`](data/platforms.json)
   (each platform has an `automation_options` list) and
   [`data/platforms.csv`](data/platforms.csv).
-- **For agents:** start with [AGENT-GUIDE.md](AGENT-GUIDE.md). Step-by-step setup (human vs agent) for every platform is in [SETUP.md](SETUP.md).
+- **For agents:** start with [AGENT-GUIDE.md](AGENT-GUIDE.md). Step-by-step setup (human vs agent) for every platform is in [SETUP.md](SETUP.md). Step-by-step setup (human vs agent) for every platform is in [SETUP.md](SETUP.md).
 
 **Reliability.** Official docs were used where reachable, otherwise search
 summaries of the official pages. Anything marked "unverified" isn't

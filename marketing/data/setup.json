@@ -29,9 +29,9 @@
     "alternative_route": "Manual submit at deviantart.com/submit (has native scheduling unverified); self-hosted Isekai Core (unofficial).",
     "content_specs": "",
     "sources": [
+      "https://warped3.substack.com/p/deviantart-bulk-uploader",
       "https://www.deviantart.com/developers/",
       "https://www.deviantart.com/developers/authentication",
-      "https://warped3.substack.com/p/deviantart-bulk-uploader",
       "https://www.nuget.org/packages/DeviantArtFs"
     ],
     "docs_url": "https://www.deviantart.com/developers/"
@@ -65,10 +65,10 @@
     "alternative_route": "Native scheduling in the SoundCloud upload UI (Artist Pro) — manual.",
     "content_specs": "",
     "sources": [
-      "https://github.com/soundcloud/api",
       "https://developers.soundcloud.com/docs/api",
       "https://developers.soundcloud.com/docs/api/register-app",
-      "https://developers.soundcloud.com/docs/llm-context"
+      "https://developers.soundcloud.com/docs/llm-context",
+      "https://github.com/soundcloud/api"
     ],
     "docs_url": "https://developers.soundcloud.com/docs/api"
   },
@@ -103,8 +103,8 @@
     "alternative_route": "PeakD or Ecency scheduler (manual, via Keychain/HiveSigner).",
     "content_specs": "",
     "sources": [
-      "https://github.com/openhive-network/hive/blob/develop/libraries/protocol/include/hive/protocol/config.hpp",
-      "https://developers.hive.io/"
+      "https://developers.hive.io/",
+      "https://github.com/openhive-network/hive/blob/develop/libraries/protocol/include/hive/protocol/config.hpp"
     ],
     "docs_url": "https://developers.hive.io/"
   },
@@ -145,8 +145,8 @@
     "sources": [
       "https://developers.google.com/blogger/docs/3.0/reference/posts/publish",
       "https://developers.google.com/blogger/docs/3.0/using",
-      "https://support.google.com/cloud/answer/15549945",
-      "https://rollout.com/integration-guides/blogger/api-essentials"
+      "https://rollout.com/integration-guides/blogger/api-essentials",
+      "https://support.google.com/cloud/answer/15549945"
     ],
     "docs_url": "https://developers.google.com/blogger/docs/3.0/reference/posts/publish"
   },
@@ -183,8 +183,8 @@
     "content_specs": "",
     "sources": [
       "https://github.com/tumblr/docs/blob/master/api.md",
-      "https://www.tumblr.com/docs/en/api/v2",
-      "https://www.ayrshare.com/compare/publer-api-alternative/"
+      "https://www.ayrshare.com/compare/publer-api-alternative/",
+      "https://www.tumblr.com/docs/en/api/v2"
     ],
     "docs_url": "https://www.tumblr.com/docs/en/api/v2"
   },
@@ -228,11 +228,11 @@
     "alternative_route": "No-code: Zapier/Make/n8n WordPress modules (same app password), or Publer/Jetpack Social for scheduling; or email-to-post via Jetpack Post by Email.",
     "content_specs": "",
     "sources": [
-      "https://supergood.ai/api-report-card/wordpress-com",
-      "https://webcf.waybackmachine.org/web/20210410183701/https://wp.me/P2gHKz-c",
-      "https://make.wordpress.org/core/2020/11/05/application-passwords-integration-guide/",
+      "https://developer.wordpress.com/docs/api/",
       "https://developer.wordpress.org/advanced-administration/security/application-passwords/",
-      "https://developer.wordpress.com/docs/api/"
+      "https://make.wordpress.org/core/2020/11/05/application-passwords-integration-guide/",
+      "https://supergood.ai/api-report-card/wordpress-com",
+      "https://webcf.waybackmachine.org/web/20210410183701/https://wp.me/P2gHKz-c"
     ],
     "docs_url": "https://developer.wordpress.com/docs/api/"
   },
@@ -270,8 +270,8 @@
     "sources": [
       "https://docs.ghost.org/admin-api",
       "https://docs.ghost.org/api/admin",
-      "https://typeflo.io/blog/ghost-pricing-plans",
-      "https://ghost.org/integrations/custom-integrations/"
+      "https://ghost.org/integrations/custom-integrations/",
+      "https://typeflo.io/blog/ghost-pricing-plans"
     ],
     "docs_url": "https://docs.ghost.org/admin-api"
   },
@@ -341,11 +341,11 @@
     "alternative_route": "Official Data API with a 'script' app once Reddit approves the request (steps 3–4 above).",
     "content_specs": "",
     "sources": [
-      "https://support.reddithelp.com/hc/en-us/articles/16160319875092-Reddit-Data-API-Wiki",
-      "https://r.datuan.dev/r/redditdev/comments/1oug31u/introducing_the_responsible_builder_policy_new/noh6fun",
-      "https://www.redditapis.com/blogs/reddit-data-api-2026",
+      "https://help.postpone.app/platforms/reddit/scheduling-reddit-posts",
       "https://postiz.com/blog/reddit-scheduling-tools-compared",
-      "https://help.postpone.app/platforms/reddit/scheduling-reddit-posts"
+      "https://r.datuan.dev/r/redditdev/comments/1oug31u/introducing_the_responsible_builder_policy_new/noh6fun",
+      "https://support.reddithelp.com/hc/en-us/articles/16160319875092-Reddit-Data-API-Wiki",
+      "https://www.redditapis.com/blogs/reddit-data-api-2026"
     ],
     "docs_url": "https://support.reddithelp.com/hc/en-us/articles/16160319875092-Reddit-Data-API-Wiki"
   },
@@ -381,8 +381,8 @@
     "alternative_route": "Schedulers: Lemmy Schedule (schedule.lemmings.world), Poster.ly, Postiz.",
     "content_specs": "",
     "sources": [
-      "https://github.com/LemmyNet/lemmy/blob/release/v0.19/crates/api_common/src/post.rs",
       "https://github.com/LemmyNet/lemmy/blob/main/Cargo.toml",
+      "https://github.com/LemmyNet/lemmy/blob/release/v0.19/crates/api_common/src/post.rs",
       "https://join-lemmy.org/api/main"
     ],
     "docs_url": "https://join-lemmy.org/api/main"
@@ -413,8 +413,8 @@
     "alternative_route": "Post manually in the Binance app → Square → '+' compose.",
     "content_specs": "",
     "sources": [
-      "https://raw.githubusercontent.com/binance/binance-skills-hub/main/skills/binance/square-post/SKILL.md",
       "https://github.com/binance/binance-skills-hub",
+      "https://raw.githubusercontent.com/binance/binance-skills-hub/main/skills/binance/square-post/SKILL.md",
       "https://skills.sh/binance/binance-skills-hub/square-post"
     ],
     "docs_url": "https://github.com/binance/binance-skills-hub (skills/binance/square-post)"
@@ -450,8 +450,8 @@
     "alternative_route": "Postiz (Farcaster provider via Neynar); or post manually in the Farcaster app.",
     "content_specs": "",
     "sources": [
-      "https://github.com/neynarxyz/farcaster-examples/tree/main/managed-signers",
-      "https://docs.neynar.com/docs/integrate-managed-signers"
+      "https://docs.neynar.com/docs/integrate-managed-signers",
+      "https://github.com/neynarxyz/farcaster-examples/tree/main/managed-signers"
     ],
     "docs_url": "https://docs.neynar.com/docs/integrate-managed-signers"
   },
@@ -485,8 +485,8 @@
     "alternative_route": "Post manually in a Lens app (Hey, Orb); no confirmed third-party scheduler.",
     "content_specs": "",
     "sources": [
-      "https://github.com/lens-protocol/lens-sdk/tree/next/packages",
       "https://github.com/lens-protocol/lens-sdk/blob/next/packages/env/src/index.ts",
+      "https://github.com/lens-protocol/lens-sdk/tree/next/packages",
       "https://lens.xyz/docs/protocol"
     ],
     "docs_url": "https://lens.xyz/docs/protocol"
@@ -524,10 +524,10 @@
     "alternative_route": "Manual posting via a client with a NIP-46/NIP-07 signer; schedulers (e.g. Postiz) only if they support remote signers.",
     "content_specs": "",
     "sources": [
+      "https://github.com/nostr-protocol/nips",
       "https://github.com/nostr-protocol/nips/blob/master/46.md",
       "https://github.com/nostr-protocol/nips/blob/master/96.md",
-      "https://github.com/nostr-protocol/nips/blob/master/B7.md",
-      "https://github.com/nostr-protocol/nips"
+      "https://github.com/nostr-protocol/nips/blob/master/B7.md"
     ],
     "docs_url": "https://github.com/nostr-protocol/nips"
   },
@@ -558,10 +558,10 @@
     "alternative_route": "TimeToPost (third-party scheduler claiming Dribbble support) or manual upload at dribbble.com/uploads/new.",
     "content_specs": "",
     "sources": [
-      "https://developer.dribbble.com/v2/shots/",
       "https://developer.dribbble.com/v2/oauth/",
-      "https://timetopost.co/blog/schedule-dribbble-shots/",
-      "https://help.dribbble.com/en/articles/11062601-creating-dribbble-shots"
+      "https://developer.dribbble.com/v2/shots/",
+      "https://help.dribbble.com/en/articles/11062601-creating-dribbble-shots",
+      "https://timetopost.co/blog/schedule-dribbble-shots/"
     ],
     "docs_url": "https://developer.dribbble.com/v2/"
   },
@@ -653,10 +653,10 @@
     "alternative_route": "Manual: set schedule in Creator Dashboard > Settings > Channel > Schedule.",
     "content_specs": "Uploads: MP4/MOV/AVI/FLV, H.264 + AAC, up to 1080p 60fps, ~10 Mbps; 5 simultaneous uploads, 100 per 24h; Affiliate/Partner only.",
     "sources": [
+      "https://blog.eklipse.gg/beginner-guide-2/how-to-upload-videos-on-twitch.html",
       "https://dev.twitch.tv/docs/api/schedule/",
       "https://dev.twitch.tv/docs/authentication/scopes/",
-      "https://discuss.dev.twitch.tv/t/does-the-helix-new-api-have-video-upload/15517",
-      "https://blog.eklipse.gg/beginner-guide-2/how-to-upload-videos-on-twitch.html"
+      "https://discuss.dev.twitch.tv/t/does-the-helix-new-api-have-video-upload/15517"
     ],
     "docs_url": "https://dev.twitch.tv/docs/api/reference"
   },
@@ -685,12 +685,12 @@
     "alternative_route": "Nextdoor Share Plugin / share link (no approval needed; user confirms each post).",
     "content_specs": "",
     "sources": [
+      "https://about.nextdoor.com/press-releases/partnerships/nextdoor-launches-developer-site-to-connect-partners-with-the-power-of-local",
+      "https://business.nextdoor.com/en-us/getting-started/business-post",
       "https://developer.nextdoor.com/docs/sharing-overview",
       "https://developer.nextdoor.com/reference/applying-for-access",
       "https://developer.nextdoor.com/reference/create-post",
-      "https://developer.nextdoor.com/reference/displaying-authentication",
-      "https://business.nextdoor.com/en-us/getting-started/business-post",
-      "https://about.nextdoor.com/press-releases/partnerships/nextdoor-launches-developer-site-to-connect-partners-with-the-power-of-local"
+      "https://developer.nextdoor.com/reference/displaying-authentication"
     ],
     "docs_url": "https://developer.nextdoor.com/docs/sharing-overview"
   },
@@ -731,11 +731,11 @@
     "alternative_route": "Use the native GBP scheduler, or an approved scheduler (Buffer, Publer, Hootsuite, SocialPilot) via its API while waiting for approval.",
     "content_specs": "",
     "sources": [
+      "https://bundle.social/google-business-profile-posts-api",
       "https://developers.google.com/my-business/content/latest-updates",
-      "https://developers.google.com/my-business/reference/rest/v4/accounts.locations.localPosts/create",
       "https://developers.google.com/my-business/content/prereqs",
-      "https://socialbu.com/blog/schedule-posts-on-google-business-profile",
-      "https://bundle.social/google-business-profile-posts-api"
+      "https://developers.google.com/my-business/reference/rest/v4/accounts.locations.localPosts/create",
+      "https://socialbu.com/blog/schedule-posts-on-google-business-profile"
     ],
     "docs_url": "https://developers.google.com/my-business/reference/rest/v4/accounts.locations.localPosts/create"
   },
@@ -792,8 +792,8 @@
     "alternative_route": "OA Manager web UI scheduled broadcasts; respond.io or similar CRM tools.",
     "content_specs": "",
     "sources": [
-      "https://developers.line.biz/en/reference/messaging-api/",
-      "https://developers.line.biz/en/docs/messaging-api/"
+      "https://developers.line.biz/en/docs/messaging-api/",
+      "https://developers.line.biz/en/reference/messaging-api/"
     ],
     "docs_url": "https://developers.line.biz/en/reference/messaging-api/"
   },
@@ -834,9 +834,9 @@
     "content_specs": "",
     "sources": [
       "https://core.telegram.org/bots/api",
+      "https://core.telegram.org/bots/api-changelog",
       "https://core.telegram.org/bots/faq",
-      "https://core.telegram.org/bots/telegram-login",
-      "https://core.telegram.org/bots/api-changelog"
+      "https://core.telegram.org/bots/telegram-login"
     ],
     "docs_url": "https://core.telegram.org/bots/api"
   },
@@ -900,10 +900,10 @@
     "alternative_route": "Cloud API for opted-in 1:1 messaging (paid templates); Hootsuite/inbox tools only for replies.",
     "content_specs": "",
     "sources": [
-      "https://developers.facebook.com/docs/whatsapp/pricing",
+      "https://chatmaxima.com/blog/whatsapp-scheduled-messages-feature-2026/",
       "https://developers.facebook.com/docs/whatsapp/cloud-api/get-started",
-      "https://whapi.cloud/blog/whatsapp-channel-api-automation",
-      "https://chatmaxima.com/blog/whatsapp-scheduled-messages-feature-2026/"
+      "https://developers.facebook.com/docs/whatsapp/pricing",
+      "https://whapi.cloud/blog/whatsapp-channel-api-automation"
     ],
     "docs_url": "https://developers.facebook.com/docs/whatsapp/pricing"
   },
@@ -938,11 +938,11 @@
     "alternative_route": "Manual: agent prepares HTML/images, human pastes into the mp.weixin.qq.com editor and uses 定时群发 scheduling.",
     "content_specs": "",
     "sources": [
+      "https://clawhub.ai/gaolfun/wechat-publisher",
       "https://developers.weixin.qq.com/doc/offiaccount/en/Getting_Started/Explanation_of_official_account_interface_privileges.html",
-      "https://developers.weixin.qq.com/doc/subscription/en/guide/product/publish.html",
       "https://developers.weixin.qq.com/doc/subscription/en/guide/dev/api/limit.html",
-      "https://www.tmtpost.com/74365.html",
-      "https://clawhub.ai/gaolfun/wechat-publisher"
+      "https://developers.weixin.qq.com/doc/subscription/en/guide/product/publish.html",
+      "https://www.tmtpost.com/74365.html"
     ],
     "docs_url": "https://developers.weixin.qq.com/doc/offiaccount/en/Getting_Started/Overview.html"
   },
@@ -981,9 +981,9 @@
     "alternative_route": "Schedulers: Buffer, Hootsuite, Typefully, Postiz (connect with an app password or OAuth).",
     "content_specs": "",
     "sources": [
-      "https://github.com/bluesky-social/bsky-docs/blob/main/docs/advanced-guides/rate-limits.md",
+      "https://docs.bsky.app/docs/get-started",
       "https://github.com/bluesky-social/bsky-docs/blob/main/docs/advanced-guides/posts.md",
-      "https://docs.bsky.app/docs/get-started"
+      "https://github.com/bluesky-social/bsky-docs/blob/main/docs/advanced-guides/rate-limits.md"
     ],
     "docs_url": "https://docs.bsky.app/docs/get-started"
   },
@@ -1020,9 +1020,9 @@
     "content_specs": "",
     "sources": [
       "https://github.com/mastodon/documentation/blob/main/content/en/api/rate-limits.md",
-      "https://github.com/mastodon/documentation/blob/main/content/en/methods/statuses.md",
       "https://github.com/mastodon/documentation/blob/main/content/en/methods/media.md",
-      "https://github.com/mastodon/documentation/blob/main/content/en/methods/oauth.md"
+      "https://github.com/mastodon/documentation/blob/main/content/en/methods/oauth.md",
+      "https://github.com/mastodon/documentation/blob/main/content/en/methods/statuses.md"
     ],
     "docs_url": "https://docs.joinmastodon.org/methods/statuses/"
   },
@@ -1059,10 +1059,10 @@
     "alternative_route": "Native in-app scheduler, or Buffer/Publer/Sprout/Ayrshare.",
     "content_specs": "",
     "sources": [
-      "https://developers.facebook.com/docs/threads/overview",
-      "https://developers.facebook.com/documentation/threads/create-posts/polls",
       "https://developers.facebook.com/docs/threads/get-started/long-lived-tokens/",
-      "https://developers.facebook.com/docs/threads/posts/"
+      "https://developers.facebook.com/docs/threads/overview",
+      "https://developers.facebook.com/docs/threads/posts/",
+      "https://developers.facebook.com/documentation/threads/create-posts/polls"
     ],
     "docs_url": "https://developers.facebook.com/docs/threads/posts"
   },
@@ -1098,9 +1098,9 @@
     "content_specs": "",
     "sources": [
       "https://kn007.net/topics/new-weibo-sync-interface-for-wordpress-post-new-article-with-pictures/",
+      "https://open.weibo.com/wiki/2/statuses/share",
       "https://v2ex.com/t/379387",
-      "https://www.cnblogs.com/Lasko/p/3887905.html",
-      "https://open.weibo.com/wiki/2/statuses/share"
+      "https://www.cnblogs.com/Lasko/p/3887905.html"
     ],
     "docs_url": "https://open.weibo.com/wiki/"
   },
@@ -1139,12 +1139,12 @@
     "alternative_route": "Typefully, Buffer or Hootsuite: connect X in the tool (no developer account or credits on your side) and let the agent use the tool's API (Buffer/Typefully APIs) or the tool UI; note some tools charge an extra X add-on.",
     "content_specs": "",
     "sources": [
-      "https://docs.x.com/x-api/getting-started/pricing",
       "https://docs.x.com/fundamentals/authentication/oauth-2-0/authorization-code",
+      "https://docs.x.com/x-api/getting-started/pricing",
       "https://help.x.com/en/using-x/automated-account-labels",
       "https://roboin.io/article/en/2026/02/08/x-transitions-api-to-pay-per-use-model-ending-free-plan/",
-      "https://www.socialcrawl.dev/blog/x-twitter-api-2026",
-      "https://support.vistasocial.com/hc/en-us/articles/46160002160923-X-Twitter-Integration-Changes-March-1-2026"
+      "https://support.vistasocial.com/hc/en-us/articles/46160002160923-X-Twitter-Integration-Changes-March-1-2026",
+      "https://www.socialcrawl.dev/blog/x-twitter-api-2026"
     ],
     "docs_url": "https://docs.x.com/x-api/getting-started/pricing"
   },
@@ -1177,9 +1177,9 @@
     "alternative_route": "Flickr Uploadr / web uploader manually; no scheduler tools found.",
     "content_specs": "",
     "sources": [
-      "https://www.flickrhelp.com/hc/en-us/articles/4404070036884-Flickr-API",
+      "https://www.flickr.com/services/api/upload.api.html",
       "https://www.flickr.com/services/developer/api/",
-      "https://www.flickr.com/services/api/upload.api.html"
+      "https://www.flickrhelp.com/hc/en-us/articles/4404070036884-Flickr-API"
     ],
     "docs_url": "https://www.flickr.com/services/api/"
   },
@@ -1212,10 +1212,10 @@
     "alternative_route": "Fedica or Postpone (scheduler) connected via Pixelfed OAuth; otherwise post manually in the Pixelfed app.",
     "content_specs": "",
     "sources": [
-      "https://github.com/pixelfed/pixelfed/blob/dev/app/Http/Controllers/Api/ApiV1Controller.php",
-      "https://github.com/pixelfed/pixelfed/blob/dev/config/pixelfed.php",
       "https://docs.pixelfed.org/",
-      "https://fedica.com/blog/pixelfed-scheduling-free/"
+      "https://fedica.com/blog/pixelfed-scheduling-free/",
+      "https://github.com/pixelfed/pixelfed/blob/dev/app/Http/Controllers/Api/ApiV1Controller.php",
+      "https://github.com/pixelfed/pixelfed/blob/dev/config/pixelfed.php"
     ],
     "docs_url": "https://docs.pixelfed.org/"
   },
@@ -1251,11 +1251,11 @@
     "alternative_route": "Self-hosted RSS: agent uploads audio to own HTTPS storage and appends an <item> to the feed XML (pubDate = publish time); Apple polls the feed.",
     "content_specs": "",
     "sources": [
-      "https://podcasters.apple.com/support/submit-a-show",
-      "https://podcasters.apple.com/support/823-podcast-requirements",
+      "https://github.com/buzzsprout/buzzsprout-api",
       "https://podcasters.apple.com/3513-news-introducing-delegated-delivery",
       "https://podcasters.apple.com/4770-news-delegated-delivery-2023",
-      "https://github.com/buzzsprout/buzzsprout-api"
+      "https://podcasters.apple.com/support/823-podcast-requirements",
+      "https://podcasters.apple.com/support/submit-a-show"
     ],
     "docs_url": "https://podcasters.apple.com/support/823-podcast-requirements"
   },
@@ -1294,8 +1294,8 @@
     "content_specs": "",
     "sources": [
       "https://learn.microsoft.com/en-us/linkedin/consumer/integrations/self-serve/share-on-linkedin",
-      "https://learn.microsoft.com/en-us/linkedin/shared/authentication/programmatic-refresh-tokens",
       "https://learn.microsoft.com/en-us/linkedin/marketing/community-management/shares/posts-api",
+      "https://learn.microsoft.com/en-us/linkedin/shared/authentication/programmatic-refresh-tokens",
       "https://opentweet.io/answers/does-linkedin-api-support-scheduling"
     ],
     "docs_url": "https://learn.microsoft.com/en-us/linkedin/consumer/integrations/self-serve/share-on-linkedin"
@@ -1332,9 +1332,9 @@
     "alternative_route": "Meta Business Suite native scheduler, or Buffer/Hootsuite/Publer.",
     "content_specs": "",
     "sources": [
+      "https://developers.facebook.com/docs/facebook-login/guides/access-tokens/get-long-lived",
       "https://developers.facebook.com/docs/pages-api/posts",
-      "https://developers.facebook.com/docs/video-api/guides/reels-publishing",
-      "https://developers.facebook.com/docs/facebook-login/guides/access-tokens/get-long-lived"
+      "https://developers.facebook.com/docs/video-api/guides/reels-publishing"
     ],
     "docs_url": "https://developers.facebook.com/docs/pages-api/posts"
   },
@@ -1449,12 +1449,12 @@
     "alternative_route": "SMMplanner or postmypost (connect OK account, schedule posts) - no developer approval needed.",
     "content_specs": "",
     "sources": [
-      "https://apiok.ru/en/ext/oauth/permissions",
-      "https://qna.habr.com/q/272299",
-      "https://qna.habr.com/q/1249142",
-      "https://qna.habr.com/q/439437",
       "https://aiookru.readthedocs.io/en/latest/rest_api.html",
-      "https://apiok.ru/en/dev/sdk/js/ui.postMediatopic/"
+      "https://apiok.ru/en/dev/sdk/js/ui.postMediatopic/",
+      "https://apiok.ru/en/ext/oauth/permissions",
+      "https://qna.habr.com/q/1249142",
+      "https://qna.habr.com/q/272299",
+      "https://qna.habr.com/q/439437"
     ],
     "docs_url": "https://apiok.ru/en/dev/sdk/js/ui.postMediatopic/"
   },
@@ -1491,9 +1491,9 @@
     "content_specs": "",
     "sources": [
       "https://dev.vk.ru/en/wall.post",
+      "https://habr.com/ru/news/t/717032",
       "https://qna.habr.com/q/227393",
       "https://qna.habr.com/q/459125",
-      "https://habr.com/ru/news/t/717032",
       "https://www.mintlify.com/negezor/vk-io/core/api"
     ],
     "docs_url": "https://dev.vk.ru/en/method/wall.post"
@@ -1529,8 +1529,8 @@
     "alternative_route": "Manual upload in the creator center (member.bilibili.com/platform/upload) with built-in timed publish (定时发布).",
     "content_specs": "",
     "sources": [
-      "https://bilibili.apifox.cn/api-23908635",
       "https://bilibili.apifox.cn/api-23706538",
+      "https://bilibili.apifox.cn/api-23908635",
       "https://bilibili.apifox.cn/doc-7492454",
       "https://openhome.bilibili.com/doc",
       "https://pypi.org/project/biliup-rs"
@@ -1569,9 +1569,9 @@
     "alternative_route": "Manual upload in Dailymotion Studio; Partner (private API key + client_credentials) route if the user is an organization partner.",
     "content_specs": "",
     "sources": [
-      "https://developers.dailymotion.com/guides/upload/",
-      "https://developers.dailymotion.com/guides/create-public-api-key",
       "https://developers.dailymotion.com/guides/create-private-api-key",
+      "https://developers.dailymotion.com/guides/create-public-api-key",
+      "https://developers.dailymotion.com/guides/upload/",
       "https://developers.dailymotion.com/reference/api-video"
     ],
     "docs_url": "https://developers.dailymotion.com/guides/upload/"
@@ -1608,9 +1608,9 @@
     "alternative_route": "Manual upload via Douyin creator center (creator.douyin.com) with timed publish.",
     "content_specs": "",
     "sources": [
-      "https://developer.open-douyin.com/docs/resource/zh-CN/dop/develop/openapi/account-permission/refresh-access-token",
-      "https://developer.open-douyin.com/docs/resource/zh-CN/dop/develop/openapi/account-permission/get-access-code",
       "https://clawhub.ai/15027302155/douyin-push-video",
+      "https://developer.open-douyin.com/docs/resource/zh-CN/dop/develop/openapi/account-permission/get-access-code",
+      "https://developer.open-douyin.com/docs/resource/zh-CN/dop/develop/openapi/account-permission/refresh-access-token",
       "https://www.digitaling.com/articles/203517.html"
     ],
     "docs_url": "https://developer.open-douyin.com/"
@@ -1644,8 +1644,8 @@
     "content_specs": "",
     "sources": [
       "https://apifox.com/apidoc/docs-site/462993/doc-391266",
-      "https://packagist.org/packages/liukangkun/kuaishou",
-      "https://open.kuaishou.com"
+      "https://open.kuaishou.com",
+      "https://packagist.org/packages/liukangkun/kuaishou"
     ],
     "docs_url": "https://open.kuaishou.com"
   },
@@ -1678,9 +1678,9 @@
     "alternative_route": "Manual upload at odysee.com/$/upload; or Odysee's YouTube Sync for channels that also post to YouTube.",
     "content_specs": "",
     "sources": [
-      "https://lbry.tech/api/sdk",
       "https://lbry.com/faq/how-to-publish",
       "https://lbry.io/faq/publish-quickstart",
+      "https://lbry.tech/api/sdk",
       "https://software.codidact.com/posts/296348"
     ],
     "docs_url": "https://lbry.tech/api/sdk"
@@ -1711,10 +1711,10 @@
     "alternative_route": "Manual posting in the app, or Creative Kit share-to-Snapchat; official Public Profile API if Snap allowlists your app.",
     "content_specs": "",
     "sources": [
-      "https://developers.snap.com/marketing-api/Public-Profile-API/Introduction",
       "https://developers.snap.com/marketing-api/Public-Profile-API/GetStarted",
-      "https://www.shortsync.app/resources/snapchat-spotlight-scheduling-guide-2026",
-      "https://oneupapp.io/snapchat-features"
+      "https://developers.snap.com/marketing-api/Public-Profile-API/Introduction",
+      "https://oneupapp.io/snapchat-features",
+      "https://www.shortsync.app/resources/snapchat-spotlight-scheduling-guide-2026"
     ],
     "docs_url": "https://developers.snap.com/marketing-api/Public-Profile-API/Introduction"
   },
@@ -1757,8 +1757,8 @@
     "content_specs": "",
     "sources": [
       "https://developers.tiktok.com/doc/content-posting-api-get-started",
-      "https://developers.tiktok.com/doc/content-sharing-guidelines",
       "https://developers.tiktok.com/doc/content-posting-api-reference-direct-post",
+      "https://developers.tiktok.com/doc/content-sharing-guidelines",
       "https://developers.tiktok.com/doc/oauth-user-access-token-management"
     ],
     "docs_url": "https://developers.tiktok.com/doc/content-posting-api-get-started"
@@ -1793,10 +1793,10 @@
     "alternative_route": "Zapier 'Vimeo → Upload Video' action (no developer app needed), or manual upload in the Vimeo web app.",
     "content_specs": "",
     "sources": [
-      "https://help.vimeo.com/hc/en-us/articles/12427803706001-Upload-access",
-      "https://help.vimeo.com/hc/en-us/articles/12427783954065-Rate-limits",
+      "https://developer.vimeo.com/api/upload/videos",
       "https://help.vimeo.com/hc/en-us/articles/12427117715985-Schedule-a-video-s-release-and-expiration-dates-on-Vimeo-OTT",
-      "https://developer.vimeo.com/api/upload/videos"
+      "https://help.vimeo.com/hc/en-us/articles/12427783954065-Rate-limits",
+      "https://help.vimeo.com/hc/en-us/articles/12427803706001-Upload-access"
     ],
     "docs_url": "https://developer.vimeo.com/api/upload/videos"
   },
@@ -1837,10 +1837,10 @@
     "alternative_route": "Until the audit passes, connect the channel to an audited scheduler (Buffer, Later, Publer, Metricool, Hootsuite) and have the agent use that tool's API (e.g. Buffer/Publer API) or upload via YouTube Studio's own scheduler. Or upload private via API and flip to public/scheduled manually in Studio.",
     "content_specs": "",
     "sources": [
-      "https://developers.google.com/youtube/v3/docs/videos/insert",
-      "https://developers.google.com/youtube/v3/revision_history",
       "https://developers.google.com/youtube/v3/determine_quota_cost",
+      "https://developers.google.com/youtube/v3/docs/videos/insert",
       "https://developers.google.com/youtube/v3/guides/quota_and_compliance_audits",
+      "https://developers.google.com/youtube/v3/revision_history",
       "https://support.google.com/cloud/answer/15549945"
     ],
     "docs_url": "https://developers.google.com/youtube/v3/docs/videos/insert"
@@ -1877,8 +1877,8 @@
     "alternative_route": "n8n HTTP Request nodes with the same calls; or upload manually in the web UI with 'Schedule publication' under privacy.",
     "content_specs": "",
     "sources": [
-      "https://github.com/Chocobozzz/PeerTube/blob/develop/support/doc/api/openapi.yaml",
-      "https://docs.joinpeertube.org/api-rest-reference.html"
+      "https://docs.joinpeertube.org/api-rest-reference.html",
+      "https://github.com/Chocobozzz/PeerTube/blob/develop/support/doc/api/openapi.yaml"
     ],
     "docs_url": "https://docs.joinpeertube.org/api-rest-reference.html"
   },
@@ -1915,10 +1915,10 @@
     "alternative_route": "Buffer, Later, Tailwind or Hootsuite (audited Pinterest partners) publish publicly right away; or the built-in scheduler (30 days, 10 Pins max).",
     "content_specs": "",
     "sources": [
+      "https://community.pinterest.biz/t/stuck-in-trial-mode-pins-not-showing-publicly/44410",
+      "https://developers.pinterest.com/docs/api/v5/pins-create/",
       "https://developers.pinterest.com/docs/key-concepts/access-tiers/",
       "https://developers.pinterest.com/docs/reference/rate-limits/",
-      "https://developers.pinterest.com/docs/api/v5/pins-create/",
-      "https://community.pinterest.biz/t/stuck-in-trial-mode-pins-not-showing-publicly/44410",
       "https://www.tailwindapp.com/blog/can-you-schedule-pinterest-posts-natively"
     ],
     "docs_url": "https://developers.pinterest.com/docs/api/v5/pins-create/"
@@ -1944,8 +1944,8 @@
     "alternative_route": "Record the talk elsewhere and publish as a podcast (see Spotify for Creators / podcast host RSS) if asynchronous distribution is the goal.",
     "content_specs": "Live audio only, spoken in-app; event title short (keep under ~60 chars); description a few sentences; voice messages recorded in-app.",
     "sources": [
-      "https://thinkinsights.net/strategy/clubhouse-after-boom",
       "https://en.wikipedia.org/wiki/Clubhouse_(app)",
+      "https://thinkinsights.net/strategy/clubhouse-after-boom",
       "https://www.clubhouse.com"
     ],
     "docs_url": "https://www.clubhouse.com"
@@ -2001,9 +2001,9 @@
     "alternative_route": "Manual immediate publish in the Naver Blog mobile app.",
     "content_specs": "Title + rich body (SmartEditor ONE blocks); images JPG/PNG/GIF; video uploads supported; tags (keep ~10-30); one category per post.",
     "sources": [
-      "https://www.inflearn.com/community/questions/1513877",
       "https://developers.naver.com/",
-      "https://www.dailian.co.kr/news/view/1439654/"
+      "https://www.dailian.co.kr/news/view/1439654/",
+      "https://www.inflearn.com/community/questions/1513877"
     ],
     "docs_url": "https://developers.naver.com/"
   },
@@ -2029,10 +2029,10 @@
     "alternative_route": "Manual immediate publish from the Patreon mobile app.",
     "content_specs": "Title required; text, images, video, audio, polls, links; audio sync from RSS (audio only); tier-gated or public visibility.",
     "sources": [
-      "https://support.patreon.com/hc/en-us/articles/360031956632",
+      "https://docs.patreon.com/",
       "https://support.patreon.com/hc/en-us/articles/34699048104333",
-      "https://support.patreon.com/hc/en-us/articles/40246824144269",
-      "https://docs.patreon.com/"
+      "https://support.patreon.com/hc/en-us/articles/360031956632",
+      "https://support.patreon.com/hc/en-us/articles/40246824144269"
     ],
     "docs_url": "https://docs.patreon.com/"
   },
@@ -2085,8 +2085,8 @@
     "alternative_route": "Post manually from the Xiaohongshu mobile app.",
     "content_specs": "Image notes up to 18 images (3:4 recommended); video notes; title <=20 chars; body <=1000 chars (verify in-app).",
     "sources": [
-      "https://creator.xiaohongshu.com/",
       "https://ai-bot.cn/sites/77134.html",
+      "https://creator.xiaohongshu.com/",
       "https://developer.aliyun.com/article/1651527"
     ],
     "docs_url": "https://open.xiaohongshu.com/"
@@ -2117,8 +2117,8 @@
     "alternative_route": "Facebook Pages API for content; Meta Business Suite inbox automations for auto-replies.",
     "content_specs": "",
     "sources": [
-      "https://developers.facebook.com/documentation/business-messaging/messenger-platform/changelog",
       "https://developers.facebook.com/docs/messenger-platform/send-messages",
+      "https://developers.facebook.com/documentation/business-messaging/messenger-platform/changelog",
       "https://www.socialmediatoday.com/news/metas-recurring-marketing-messages-api-will-end-this-week/811668/"
     ],
     "docs_url": "https://developers.facebook.com/docs/messenger-platform/send-messages"
@@ -2144,8 +2144,8 @@
     "alternative_route": "Manual send at planned times on any device.",
     "content_specs": "Text messages; attachments (images, video, files; ~100 MB file limit); Stories vertical 9:16 (verify limits in-app).",
     "sources": [
-      "https://support.signal.org/hc/articles/5365881590682-Schedule-a-Message-on-Signal-Android",
-      "https://github.com/AsamK/signal-cli"
+      "https://github.com/AsamK/signal-cli",
+      "https://support.signal.org/hc/articles/5365881590682-Schedule-a-Message-on-Signal-Android"
     ],
     "docs_url": "https://support.signal.org/hc/articles/5365881590682-Schedule-a-Message-on-Signal-Android (signal-cli is unofficial)"
   },
@@ -2171,8 +2171,8 @@
     "alternative_route": "If the user accepts the risk themselves, an unofficial Mastodon-style client may work — not recommended. Otherwise none.",
     "content_specs": "",
     "sources": [
-      "https://www.postpeer.dev/use-cases/social-media-schedulers",
-      "https://blog.oneupapp.io/?p=56"
+      "https://blog.oneupapp.io/?p=56",
+      "https://www.postpeer.dev/use-cases/social-media-schedulers"
     ],
     "docs_url": "https://gab.com"
   },
@@ -2196,8 +2196,8 @@
     "alternative_route": "Prefer platforms with official APIs for the same audience.",
     "content_specs": "Short text posts (historically ~777 chars), images, video (verify in-app).",
     "sources": [
-      "https://www.motherjones.com/?p=1045859",
-      "https://gettr.com"
+      "https://gettr.com",
+      "https://www.motherjones.com/?p=1045859"
     ],
     "docs_url": "https://gettr.com"
   },
@@ -2222,9 +2222,9 @@
     "alternative_route": "None sanctioned. Unofficial Mastodon-style client = risk only.",
     "content_specs": "",
     "sources": [
-      "https://www.globenewswire.com/news-release/2025/09/09/3146910/0/en/Truth-Social-Enhances-Platform.html",
       "https://engadget.com/2217943/there-s-now-an-api-for-mainlining-trump-s-truth-social-posts",
-      "https://www.gigazine.net/gsc_news/en/20260717-truth-social-api/"
+      "https://www.gigazine.net/gsc_news/en/20260717-truth-social-api/",
+      "https://www.globenewswire.com/news-release/2025/09/09/3146910/0/en/Truth-Social-Enhances-Platform.html"
     ],
     "docs_url": "https://www.globenewswire.com/news-release/2025/09/09/3146910/0/en/Truth-Social-Enhances-Platform.html"
   },
@@ -2250,10 +2250,10 @@
     "alternative_route": "Buffer's Substack Notes integration for Notes (verify it is official-partner based).",
     "content_specs": "Title + subtitle; rich text, images, embeds, audio/video posts; social preview image ~1200x630 (recommended); keep emails concise.",
     "sources": [
-      "https://support.substack.com/hc/en-us/articles/360037830351-How-do-I-import-my-posts-from-another-platform-such-as-Mailchimp-WordPress-Medium-or-Ghost-",
-      "https://support.substack.com/hc/en-us/articles/360037870412-How-do-I-schedule-a-post-for-a-future-date",
+      "https://apis.io/providers/substack/",
       "https://buffer.com/resources/schedule-substack-notes/",
-      "https://apis.io/providers/substack/"
+      "https://support.substack.com/hc/en-us/articles/360037830351-How-do-I-import-my-posts-from-another-platform-such-as-Mailchimp-WordPress-Medium-or-Ghost-",
+      "https://support.substack.com/hc/en-us/articles/360037870412-How-do-I-schedule-a-post-for-a-future-date"
     ],
     "docs_url": "https://support.substack.com/hc/en-us/articles/360037870412-How-do-I-schedule-a-post-for-a-future-date"
   },
@@ -2276,8 +2276,8 @@
     "alternative_route": "None.",
     "content_specs": "Dual-camera photo captured in-app; short caption; late posts labeled.",
     "sources": [
-      "https://esafety.gov.au/key-topics/esafety-guide/bereal",
-      "https://bereal.com"
+      "https://bereal.com",
+      "https://esafety.gov.au/key-topics/esafety-guide/bereal"
     ],
     "docs_url": "https://bereal.com"
   },
@@ -2303,10 +2303,10 @@
     "alternative_route": "Podcast host with Spotify video integration (e.g. Libsyn) + RSS.",
     "content_specs": "Audio: MP3, WAV, MP4, MOV; Video: MOV, MPG, MP4; single video+audio track; max 12h; no file-size limit.",
     "sources": [
+      "https://barrettmedia.com/?p=270703",
       "https://support.spotify.com/creators/article/12584546836507",
       "https://support.spotify.com/creators/article/publishing-videos",
-      "https://support.spotify.com/us/podcasters/article/evolving-creation-tools/",
-      "https://barrettmedia.com/?p=270703"
+      "https://support.spotify.com/us/podcasters/article/evolving-creation-tools/"
     ],
     "docs_url": "https://support.spotify.com/us/creators/article/publishing-audio-episodes/"
   },
@@ -2331,8 +2331,8 @@
     "alternative_route": "Behance Pro scheduler route if subscribed (native_scheduler).",
     "content_specs": "Project images ~1400px width (up to 3200px), cover 808x632, up to 10 tags; video embeds/uploads (verify current file-size limits).",
     "sources": [
-      "https://help.behance.net/hc/en-us/articles/23707509178011-Guide-Advanced-Project-Settings",
-      "https://experienceleaguecommunities.adobe.com/t5/adobe-developer-questions/how-can-i-obtain-an-api-key-or-access-to-behance-s-api-for/td-p/622761"
+      "https://experienceleaguecommunities.adobe.com/t5/adobe-developer-questions/how-can-i-obtain-an-api-key-or-access-to-behance-s-api-for/td-p/622761",
+      "https://help.behance.net/hc/en-us/articles/23707509178011-Guide-Advanced-Project-Settings"
     ],
     "docs_url": "https://www.behance.net/dev"
   },
@@ -2382,9 +2382,9 @@
     "alternative_route": "Unofficial Python client (password login) — risk only, not recommended.",
     "content_specs": "",
     "sources": [
-      "https://pypi.org/project/minds",
+      "https://gitlab.com/minds/engine/merge_requests/146",
       "https://minds-api.readthedocs.io/en/latest/api.html",
-      "https://gitlab.com/minds/engine/merge_requests/146"
+      "https://pypi.org/project/minds"
     ],
     "docs_url": "https://gitlab.com/minds"
   },
@@ -2407,8 +2407,8 @@
     "alternative_route": "None.",
     "content_specs": "Vertical 9:16 short video, ~60s; caption with hashtags.",
     "sources": [
-      "https://www.bluestacks.com/campaign/video.like/pt-br/",
-      "https://likee.video"
+      "https://likee.video",
+      "https://www.bluestacks.com/campaign/video.like/pt-br/"
     ],
     "docs_url": "https://likee.video"
   },
@@ -2433,10 +2433,10 @@
     "alternative_route": "Rumble Studio for scheduled livestreams.",
     "content_specs": "MP4 H.264/AAC recommended; reported max file 6-15 GB and ~8h (unverified); subtitles vtt/sbv/srt/stl/sub.",
     "sources": [
-      "https://rumble.support/help/how-to-upload-a-video",
       "https://rumble.support/en/help/how-to-schedule-a-livestream",
       "https://rumble.support/help/auto-syndication",
-      "https://rumble.support/help/closed-captioning-subtitles-accepted-formats"
+      "https://rumble.support/help/closed-captioning-subtitles-accepted-formats",
+      "https://rumble.support/help/how-to-upload-a-video"
     ],
     "docs_url": "https://rumblefaq.groovehq.com/help/how-to-use-rumble-s-live-stream-api"
   },
@@ -2499,12 +2499,12 @@
     ],
     "price": "Free (3 channels); Essentials $6/channel/mo ($5 annual); Team $12/channel/mo ($10 annual); volume discounts above 10 channels",
     "sources": [
-      "https://developers.buffer.com/guides/getting-started.html",
-      "https://developers.buffer.com/guides/your-first-post.md",
-      "https://developers.buffer.com/guides/posts-and-scheduling.md",
+      "https://buffer.com/resources/best-mcp-servers/",
       "https://developers.buffer.com/examples/get-channels.md",
       "https://developers.buffer.com/guides/api-limits.md",
-      "https://buffer.com/resources/best-mcp-servers/",
+      "https://developers.buffer.com/guides/getting-started.html",
+      "https://developers.buffer.com/guides/posts-and-scheduling.md",
+      "https://developers.buffer.com/guides/your-first-post.md",
       "https://napoleoncat.com/blog/buffer-pricing/",
       "https://zernio.com/blog/buffer-api"
     ]
@@ -2557,12 +2557,12 @@
     ],
     "price": "Self-hosted: free (AGPL, pay for server). Cloud: from $29/month (5 channels), higher tiers available; MCP included",
     "sources": [
-      "https://docs.postiz.com/public-api/introduction",
-      "https://www.mintlify.com/gitroomhq/postiz-app/api/overview",
-      "https://www.mintlify.com/gitroomhq/postiz-app/api/rate-limits",
-      "https://www.mintlify.com/gitroomhq/postiz-app/api/authentication",
       "https://adaptlypost.com/blog/best-social-media-mcp-servers",
-      "https://github.com/gitroomhq/postiz-n8n"
+      "https://docs.postiz.com/public-api/introduction",
+      "https://github.com/gitroomhq/postiz-n8n",
+      "https://www.mintlify.com/gitroomhq/postiz-app/api/authentication",
+      "https://www.mintlify.com/gitroomhq/postiz-app/api/overview",
+      "https://www.mintlify.com/gitroomhq/postiz-app/api/rate-limits"
     ]
   },
   {
@@ -2603,11 +2603,11 @@
     ],
     "price": "No free plan (trial only). Premium $149/mo ($129/mo annual) for 1 profile; Launch $299/mo (10 profiles); Business $599/mo ($499 annual); Enterprise custom",
     "sources": [
-      "https://www.ayrshare.com/pricing.md",
+      "https://app.ayrshare.com/docs/quickstart",
       "https://www.ayrshare.com/compare/upload-post-api-alternative/",
-      "https://www.ayrshare.com/docs/additional/mcp-server",
       "https://www.ayrshare.com/docs/additional/mcp-action-server.md",
-      "https://app.ayrshare.com/docs/quickstart"
+      "https://www.ayrshare.com/docs/additional/mcp-server",
+      "https://www.ayrshare.com/pricing.md"
     ]
   },
   {
@@ -2641,12 +2641,12 @@
     ],
     "price": "Community Edition self-hosted free (unlimited executions); Cloud Starter ~€20/mo (2,500 executions), Pro ~€50/mo (10,000), Business self-hosted €667/mo, Enterprise quote (annual billing)",
     "sources": [
-      "https://www.jetadmin.io/blog/n8n-pricing/",
-      "https://toolradar.com/blog/n8n-pricing-2026",
       "https://docs.n8n.io/advanced-ai/accessing-n8n-mcp-server",
       "https://docs.n8n.io/connect/connect-to-n8n-mcp-server",
       "https://github.com/gitroomhq/postiz-n8n",
-      "https://postfa.st/blog/n8n-social-media-automation"
+      "https://postfa.st/blog/n8n-social-media-automation",
+      "https://toolradar.com/blog/n8n-pricing-2026",
+      "https://www.jetadmin.io/blog/n8n-pricing/"
     ]
   },
   {
@@ -2679,9 +2679,9 @@
     "price": "Free $0 (100 tasks/mo, 2-step Zaps, no Webhooks); Professional from $19.99/mo (750 tasks); Team from $69/mo (2,000 tasks); Enterprise custom (annual prices). MCP included, 2 tasks per call",
     "sources": [
       "https://automationatlas.io/answers/how-to-set-up-zapier-webhooks/",
-      "https://latenode.com/blog/zapier-free-plan",
-      "https://eesel.ai/blog/zapier-subscription",
       "https://docs.zapier.com/mcp/usage.md",
+      "https://eesel.ai/blog/zapier-subscription",
+      "https://latenode.com/blog/zapier-free-plan",
       "https://latenode.com/blog/zapier-mcp-pricing"
     ]
   },
@@ -2715,10 +2715,10 @@
     ],
     "price": "Free $0 (1,000 credits/mo, 15-min interval); Core ~$12/mo; Pro ~$21/mo; Teams ~$38/mo (annual billing); Enterprise custom",
     "sources": [
-      "https://zapier.com/blog/make-com-pricing/",
-      "https://use-apify.com/blog/make-com-pricing-2026",
+      "https://academy-content.make.com/courses/mcp/03-make-mcp-server",
       "https://help.make.com/make-mcp-server.md",
-      "https://academy-content.make.com/courses/mcp/03-make-mcp-server"
+      "https://use-apify.com/blog/make-com-pricing-2026",
+      "https://zapier.com/blog/make-com-pricing/"
     ]
   },
   {
@@ -2750,9 +2750,9 @@
     "price": "Free (limited Applets, hourly checks, no Webhooks); Pro ~$2.99-3.99/mo annual (Webhooks, multi-action); Pro+ ~$149.99/yr",
     "sources": [
       "https://ifttt.com/connect/if_notifications/maker_webhooks",
-      "https://thegtmdirectory.com/tools/ifttt/md",
       "https://siderite.dev/blog/facebook-are-asses-and-ifttt-messed-up.html/",
-      "https://techcrunch.com/?p=655996"
+      "https://techcrunch.com/?p=655996",
+      "https://thegtmdirectory.com/tools/ifttt/md"
     ]
   },
   {
@@ -2786,8 +2786,8 @@
     "price": "Starter $18.75/mo, Growth $37.50/mo, Scale $82.50/mo (annual billing)",
     "sources": [
       "https://postfa.st/later-alternatives",
-      "https://www.socialync.io/mcp-server/later",
-      "https://www.post-bridge.com/best-social-media-scheduling-api"
+      "https://www.post-bridge.com/best-social-media-scheduling-api",
+      "https://www.socialync.io/mcp-server/later"
     ]
   },
   {
@@ -2875,11 +2875,11 @@
     ],
     "price": "Free plan (MCP included, no X/LinkedIn); Starter/Advanced paid; Advanced from ~€53/mo annual (15 brands) — API only on Advanced/Custom; X +$5/mo per account",
     "sources": [
-      "https://help.metricool.com/plans-add-ons-and-api-access-explained-xux1u",
       "https://help.metricool.com/how-to-connect-metricools-mcp-eqp9h",
+      "https://help.metricool.com/plans-add-ons-and-api-access-explained-xux1u",
       "https://help.metricool.com/wli-scheduling-endpoints-example-on-a-custom-backend-proxy-frko7",
-      "https://www.blotato.com/blog/metricool-pricing",
-      "https://socialk.it/en/vs/metricool"
+      "https://socialk.it/en/vs/metricool",
+      "https://www.blotato.com/blog/metricool-pricing"
     ]
   }
 ]
