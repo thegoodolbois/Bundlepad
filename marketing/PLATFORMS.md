@@ -8,7 +8,7 @@ it's free, whether users can sign in and let an app post for them, and
 - **Machine-readable data:** [`data/platforms.json`](data/platforms.json)
   (each platform has an `automation_options` list) and
   [`data/platforms.csv`](data/platforms.csv).
-- **For agents:** start with [AGENT-GUIDE.md](AGENT-GUIDE.md). Step-by-step setup (human vs agent) for every platform is in [SETUP.md](SETUP.md). Step-by-step setup (human vs agent) for every platform is in [SETUP.md](SETUP.md).
+- **For agents:** start with [AGENT-GUIDE.md](AGENT-GUIDE.md). Step-by-step setup (human vs agent) for every platform is in [SETUP.md](SETUP.md). Step-by-step setup (human vs agent) for every platform is in [SETUP.md](SETUP.md). Step-by-step setup (human vs agent) for every platform is in [SETUP.md](SETUP.md).
 
 **Reliability.** Official docs were used where reachable, otherwise search
 summaries of the official pages. Anything marked "unverified" isn't
@@ -58,7 +58,7 @@ acting.
 | [Instagram](#instagram) | Social network | Yes | Free | Images (JPEG), videos, Reels, Stories, carousels (≤10 items) | Yes — Business/Creator accounts only | Medium |
 | [MeWe](#mewe) | Social network | Yes | Free (unverified) | Posts to your own timeline and to groups you belong to, with photo attachments (as exposed via Postiz) | Yes — timeline and groups | Hard |
 | [OK.ru](#okru) | Social network | Yes | Free | Media topics with text, photos, links, polls | Yes - mediatopic.post to the user's own feed or groups they admin, once OK support grants the permissions | Hard |
-| [VK](#vk) | Social network | Yes | Free (reported 10k calls/month until business verification, unverified) | Wall posts, photos, video, docs | Yes — wall posts, photos, video | Easy |
+| [VK](#vk) | Social network | Yes | Free (reported 10k calls/month until business verification, unverified) | Wall posts, photos, video, docs | Yes — wall posts, photos, video | Medium |
 | [Bilibili](#bilibili) | Video | Yes | Free (unverified) | Video submission | Yes - video submission (arcopen/fn/archive: init -> upload -> complete -> add-by-utoken) for authorizing users, if the app has the submission capability | Hard |
 | [Dailymotion](#dailymotion) | Video | Yes | Free | Video (upload URL → upload → publish), live events | Yes — the user's channel | Medium |
 | [Douyin](#douyin) | Video | Yes | Free | Video publish (video.create), may be limited to approved apps | Yes - video publish to the authorizing user's account with video.create scope (app must hold the capability) | Hard |
@@ -634,12 +634,12 @@ _Reliability: Official pages via search (Oct 2026 review)_
 *Social network* · Can upload: Text, photos, video, clips, stories, live, audio, articles, polls · Docs: https://dev.vk.ru/en/method/wall.post
 
 1. **Official API (your own account)**: Post to your own account with the official API (VK API): Wall posts, photos, video, docs.  
-   _access: VK ID app or community token; cost: Free (reported 10k calls/month until business verification, unverified); scheduling: Yes — publish_date; limits: User token: 3 requests/s; community token: 20 requests/s; reported cap of ~50 wall posts per day per community; quantity limits on same-type methods are undisclosed (captcha/temporary block when exceeded)._
+   _access: VK ID app (OAuth 2.1 + PKCE) with wall, photos, video access; business apps need verification; cost: Free (reported 10k calls/month until business verification, unverified); scheduling: Yes — publish_date; limits: User token: 3 requests/s; community token: 20 requests/s; reported cap of ~50 wall posts per day per community; quantity limits on same-type methods are undisclosed (captcha/temporary block when exceeded)._
 2. **User signs in, app posts for them**: The user signs in with VK ID (OAuth 2.1 + PKCE) and grants permission; the app then posts for them. Yes — wall posts, photos, video.  
-   _scopes: wall photos video; review to open to other users: VK ID app: developer verification (individual: passport + face check on camera; business: VK Business ID with company details verified via bank or documents); token lifetime: ~1h + refresh; needs server secret: Yes_
+   _scopes: wall photos video; review to open to other users: VK ID app: developer verification (individual: passport + face check on camera; business: VK Business ID with company details verified via bank or documents); token lifetime: ~60 min access + ~180-day refresh; needs server secret: Yes_
 3. **Scheduler / automation tool**: Connect the account once in a tool that already has platform approval and schedule there: SMMplanner, Postiz, Make.
-4. **Siri Shortcut**: Community token in one call  
-   _ease: Easy_
+4. **Siri Shortcut**: API call with a VK ID user token (community tokens cannot call wall.post); the token needs refreshing  
+   _ease: Medium_
 5. **Built-in scheduler**: Schedule inside the platform itself: Yes (deferred posts).
 6. **Manual**: Post by hand in the app or website (always available).
 
@@ -789,7 +789,7 @@ _Reliability: Verified against official docs (Oct 2026 review)_
 1. **Official API (your own account)**: Post to your own account with the official API (API v5): Image and video Pins.  
    _access: App request approval → Trial access (Pins sandbox-only, visible only to creator) → Standard access via upgrade request with a video of the OAuth flow + a Pin being created (required even for single-user apps; Postman/terminal recordings accepted); cost: Free; scheduling: No (no publish-at parameter for organic Pins in v5; agent holds Pins until due); limits: Trial: 1,000 requests/day per app universal cap plus per-category caps (pin creation in write category ~300/day); Standard: per-minute per-user limits_
 2. **User signs in, app posts for them**: The user signs in with Pinterest OAuth 2.0 and grants permission; the app then posts for them. Yes — the user's boards.  
-   _scopes: pins:write, boards:read; review to open to other users: Standard access review (Trial pins are sandbox-only); token lifetime: Access token 30 days; refresh token 365 days (continuous refresh available); needs server secret: Yes_
+   _scopes: pins:write, boards:read; review to open to other users: Standard access review (Trial pins are sandbox-only); token lifetime: 30-day access token; 60-day continuous refresh token, renewable indefinitely; needs server secret: Yes_
 3. **Scheduler / automation tool**: Connect the account once in a tool that already has platform approval and schedule there: Ayrshare, Later, Buffer, Hootsuite.
 4. **Siri Shortcut**: Not practical directly (OAuth needed — use a scheduler). Have the Shortcut call a scheduler's API or your own n8n/Zapier webhook instead.  
    _ease: Hard_

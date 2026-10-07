@@ -2233,27 +2233,27 @@
       "api_can_upload": "Wall posts, photos, video, docs",
       "api_free": "Free (reported 10k calls/month until business verification, unverified)",
       "api_cost_detail": "—",
-      "approval": "VK ID app or community token",
+      "approval": "VK ID app (OAuth 2.1 + PKCE) with wall, photos, video access; business apps need verification",
       "limits": "User token: 3 requests/s; community token: 20 requests/s; reported cap of ~50 wall posts per day per community; quantity limits on same-type methods are undisclosed (captcha/temporary block when exceeded).",
       "native_scheduling": "Yes (deferred posts)",
       "api_scheduling": "Yes — publish_date",
       "schedulers": "SMMplanner, Postiz, Make",
-      "siri_shortcuts": "Community token in one call",
-      "shortcuts_ease": "Easy",
+      "siri_shortcuts": "API call with a VK ID user token (community tokens cannot call wall.post); the token needs refreshing",
+      "shortcuts_ease": "Medium",
       "verification": "Official pages via search (Oct 2026 review)",
       "docs_url": "https://dev.vk.ru/en/method/wall.post",
       "user_login": "VK ID (OAuth 2.1 + PKCE)",
       "post_on_users_behalf": "Yes — wall posts, photos, video",
       "login_scopes": "wall photos video",
       "review_to_open_to_other_users": "VK ID app: developer verification (individual: passport + face check on camera; business: VK Business ID with company details verified via bank or documents)",
-      "token_lifetime": "~1h + refresh",
+      "token_lifetime": "~60 min access + ~180-day refresh",
       "needs_server_secret": "Yes",
       "has_upload_api": true,
       "automation_options": [
         {
           "route": "official_api_own_account",
           "summary": "Post to your own account with the official API (VK API): Wall posts, photos, video, docs.",
-          "access": "VK ID app or community token",
+          "access": "VK ID app (OAuth 2.1 + PKCE) with wall, photos, video access; business apps need verification",
           "cost": "Free (reported 10k calls/month until business verification, unverified)",
           "scheduling": "Yes — publish_date",
           "limits": "User token: 3 requests/s; community token: 20 requests/s; reported cap of ~50 wall posts per day per community; quantity limits on same-type methods are undisclosed (captcha/temporary block when exceeded)."
@@ -2263,7 +2263,7 @@
           "summary": "The user signs in with VK ID (OAuth 2.1 + PKCE) and grants permission; the app then posts for them. Yes — wall posts, photos, video.",
           "scopes": "wall photos video",
           "review_to_open_to_other_users": "VK ID app: developer verification (individual: passport + face check on camera; business: VK Business ID with company details verified via bank or documents)",
-          "token_lifetime": "~1h + refresh",
+          "token_lifetime": "~60 min access + ~180-day refresh",
           "needs_server_secret": "Yes"
         },
         {
@@ -2273,8 +2273,8 @@
         },
         {
           "route": "siri_shortcut",
-          "summary": "Community token in one call",
-          "ease": "Easy",
+          "summary": "API call with a VK ID user token (community tokens cannot call wall.post); the token needs refreshing",
+          "ease": "Medium",
           "see": "SHORTCUTS.md"
         },
         {
@@ -2888,7 +2888,7 @@
       "post_on_users_behalf": "Yes — the user's boards",
       "login_scopes": "pins:write, boards:read",
       "review_to_open_to_other_users": "Standard access review (Trial pins are sandbox-only)",
-      "token_lifetime": "Access token 30 days; refresh token 365 days (continuous refresh available)",
+      "token_lifetime": "30-day access token; 60-day continuous refresh token, renewable indefinitely",
       "needs_server_secret": "Yes",
       "has_upload_api": true,
       "automation_options": [
@@ -2905,7 +2905,7 @@
           "summary": "The user signs in with Pinterest OAuth 2.0 and grants permission; the app then posts for them. Yes — the user's boards.",
           "scopes": "pins:write, boards:read",
           "review_to_open_to_other_users": "Standard access review (Trial pins are sandbox-only)",
-          "token_lifetime": "Access token 30 days; refresh token 365 days (continuous refresh available)",
+          "token_lifetime": "30-day access token; 60-day continuous refresh token, renewable indefinitely",
           "needs_server_secret": "Yes"
         },
         {
