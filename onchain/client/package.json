@@ -1,0 +1,15 @@
+{
+  "name": "bundlepad-onchain-client",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Launcher for the Bundlepad group-buy program: init, ALT, Jito bundle, settle, refunds",
+  "type": "commonjs",
+  "bin": { "bundlepad-launcher": "launcher.js" },
+  "scripts": { "test": "node --test" },
+  "engines": { "node": ">=20" },
+  "dependencies": {
+    "@pump-fun/pump-sdk": "2.0.0",
+    "@solana/web3.js": "1.99.0",
+    "bn.js": "5.2.2"
+  }
+}

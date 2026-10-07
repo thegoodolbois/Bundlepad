@@ -1,0 +1,19 @@
+[package]
+name = "bundlepad-onchain-tests"
+version = "0.1.0"
+edition = "2021"
+publish = false
+description = "LiteSVM tests: group-buy program against the mock pump.fun program"
+
+[dependencies]
+
+[dev-dependencies]
+bundlepad-group-buy = { path = "../group-buy", features = ["no-entrypoint"] }
+litesvm = "0.7"
+solana-program = "2"
+solana-keypair = "2.2"
+solana-signer = "2.2"
+solana-transaction = "2.2"
+solana-account = "2.2"
+solana-message = "2.2"
+solana-transaction-error = "2.2"

@@ -200,3 +200,44 @@ test('HTTP API requires a verified Google token for bind and commit', async () =
   const [, tpl] = await call('GET', '/api/chain/template');
   assert.strictEqual(tpl.height, store.height() + 1);
 });
+
+test('closed launch → on-chain plan → recorded txs → launched; buyback records', () => {
+  const onchain = require('../src/launch/onchain');
+  const { store, launches, setNow } = setup();
+  const creator = newWallet();
+  const alice = newWallet();
+  launches.create(manifest(creator.address));
+  launches.publish('bp-001');
+  bind(launches, alice, 'g-alice');
+  commit(launches, alice, 'g-alice', 1.5);
+  const program = newWallet().address;
+  const mint = newWallet().address;
+  const buyback = newWallet().address;
+  assert.throws(() => launches.planOnchain('bp-001', { programId: program, mint, buyback }), /must be closed/);
+  setNow(Date.parse('2026-11-02T00:00:01Z'));
+  launches.close('bp-001');
+
+  const plan = launches.planOnchain('bp-001', { programId: program, mint, buyback });
+  assert.strictEqual(plan.launch, onchain.launchAddress(program, creator.address, 'bp-001'));
+  assert.deepStrictEqual(plan.commitments, [{ wallet: alice.address, lamports: '1500000000', escrow: onchain.escrowAddress(program, plan.launch, alice.address) }]);
+  assert.strictEqual(plan.feeBps, 1000);
+  assert.strictEqual(plan.refundAfter - plan.launchAt, 3600);
+  assert.strictEqual(chain.tip(store).events.at(-1).subject, 'launch.onchain');
+  assert.strictEqual(launches.dashboard().onchain, null, 'dashboard shows on-chain details only after init lands');
+
+  launches.recordTx('bp-001', 'init', 'sig-init');
+  assert.throws(() => launches.planOnchain('bp-001', { programId: program, mint, buyback }), /already initialized/);
+  assert.strictEqual(launches.dashboard().onchain.launch, plan.launch);
+  launches.recordTx('bp-001', 'buy', 'sig-buy');
+  assert.strictEqual(launches.state('bp-001').status, 'launched');
+  assert.strictEqual(launches.dashboard().launch.status, 'launched');
+  assert.strictEqual(launches.dashboard().buyback.launches, 1);
+
+  launches.recordBuyback({ kind: 'swap', signature: 's1', sol: 0.15, tokens: 1000 });
+  launches.recordBuyback({ kind: 'burn', signature: 's2', tokens: 1000 });
+  assert.throws(() => launches.recordBuyback({ kind: 'burn', signature: 's2', tokens: 1000 }), /already recorded/);
+  const bb = launches.dashboard().buyback;
+  assert.deepStrictEqual([bb.feesSol, bb.boughtTokens, bb.burnedTokens], [0.15, 1000, 1000]);
+  assert.ok(!('history' in bb));
+  assert.deepStrictEqual(chain.verifyChain(store), []);
+});

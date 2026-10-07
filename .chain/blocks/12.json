@@ -1,0 +1,29 @@
+{
+  "header": {
+    "version": 1,
+    "height": 12,
+    "prevHash": "00009e8bc851cf8c945b20c243d44f5ece1811bd18c41a51bf47e463d6f9f6c9",
+    "timestamp": 1791384564756,
+    "difficulty": 16,
+    "nonce": 4677,
+    "eventsRoot": "00bc1485364b3f922909d1de79e85eb9eaab7251fad03da06bcaf9547d41b66a",
+    "stateRoot": "5a3f8d847d0f86d1d4e803e7b9d58b275ee9e7514d406c5d83b208ab5ce5171d"
+  },
+  "hash": "00005fcb8740e0ef2e5c3275bdd019de1ba758e9bcc9778ecfa87b686ed11ed1",
+  "events": [
+    {
+      "id": "a6a6853d63a025f99f57ce7c7dd399886cc2265a1714942329dc1063928daa27",
+      "type": "update",
+      "subject": "memory.transition",
+      "source": "memory",
+      "body": {
+        "ts": "2026-10-07T14:49:24.755Z",
+        "plan": 4,
+        "stage": "awaiting_owner",
+        "note": "Plan 4 implemented: group-buy program (7 LiteSVM tests), launcher, dashboard deposits; local-validator smoke tests pass. Go-live steps in follow_up_4.md"
+      },
+      "ts": 1791384564756,
+      "block": 12
+    }
+  ]
+}

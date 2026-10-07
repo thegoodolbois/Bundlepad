@@ -1,0 +1,20 @@
+[package]
+name = "mock-pump"
+version = "0.1.0"
+edition = "2021"
+rust-version = "1.84"
+description = "Test double for pump.fun's buy_exact_quote_in_v2 (constant-product curve, 1.25% fee)"
+license = "MIT"
+publish = false
+
+[lib]
+crate-type = ["cdylib", "lib"]
+
+[features]
+no-entrypoint = []
+
+[dependencies]
+solana-program = "2"
+
+[lints.rust]
+unexpected_cfgs = { level = "warn", check-cfg = ['cfg(target_os, values("solana"))', 'cfg(feature, values("custom-heap", "custom-panic"))'] }

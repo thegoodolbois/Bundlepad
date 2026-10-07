@@ -122,6 +122,7 @@ button, input { font: inherit; color: inherit; }
 .panel-head { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; flex-wrap: wrap; }
 
 /* Position calculator */
+[hidden] { display: none !important; }
 .field { display: grid; gap: 6px; }
 .field-row { display: flex; gap: 8px; }
 .field input { flex: 1; min-width: 0; border: 1px solid var(--line); background: var(--paper); border-radius: 8px; padding: 10px 12px; font-family: var(--font-mono); font-size: var(--step-1); }
@@ -245,6 +246,15 @@ footer { font-size: var(--step--1); color: var(--muted); display: grid; gap: 4px
           <dt class="total">Estimated tokens</dt><dd class="total" id="pos-tokens">--</dd>
         </dl>
         <p class="status-line" id="commit-status" role="status"></p>
+        <div class="field" id="escrow-box" hidden>
+          <span class="label">On-chain deposit</span>
+          <p class="note" id="escrow-text"></p>
+          <div class="field-row">
+            <button class="btn primary" id="deposit-btn" type="button" disabled>Deposit</button>
+            <button class="btn" id="withdraw-btn" type="button" disabled>Withdraw</button>
+          </div>
+          <p class="status-line" id="escrow-status" role="status"></p>
+        </div>
         <p class="note">Your SOL stays in your wallet until launch. At launch, your wallet signs the group-buy transaction and your tokens arrive straight in your wallet. You can cancel before launch.</p>
       </section>
 
@@ -336,6 +346,7 @@ footer { font-size: var(--step--1); color: var(--muted); display: grid; gap: 4px
 // figure is zero and every list is empty.
 const EMPTY = {
   launch: null,
+  onchain: null,
   investors: [],
   proposals: [],
   buyback: { wallet: null, feesSol: 0, boughtTokens: 0, burnedTokens: 0, launches: 0 },
@@ -347,7 +358,9 @@ let CHAIN = [{"header":{"version":1,"height":0,"prevHash":"000000000000000000000
 
 // Config for the live deployment. Fee is the agreed 10% (follow_up_2.md).
 // apiUrl is the Bundlepad backend ("chain serve"); empty means read-only from dataUrl.
-const CONFIG = { dataUrl: 'data/dashboard.json', apiUrl: '', googleClientId: '', platformFeeBps: 1000 };
+// rpcUrl is a Solana RPC endpoint for deposits and withdrawals.
+const CONFIG = { dataUrl: 'data/dashboard.json', apiUrl: '', rpcUrl: '', googleClientId: '', platformFeeBps: 1000 };
+const WEB3_URL = 'https://cdn.jsdelivr.net/npm/@solana/web3.js@1.99.0/lib/index.iife.min.js';
 
 // pump.fun-style constant-product bonding curve (virtual reserves).
 const CURVE = { virtualSol: 30, virtualTokens: 1_073_000_000, graduationSol: 85, supply: 1_000_000_000 };
@@ -461,6 +474,7 @@ function render() {
   $('split-foot').innerHTML = `<td>Total</td><td>${fmt(split.totalSol)} SOL</td><td>${split.rows.length ? '100' : '0'}%</td><td>${fmtInt(split.totalTokens)}</td><td>${fmt(split.rows.reduce((s, r) => s + r.weight, 0), 3)}</td>`;
 
   renderCurve(split.buySol);
+  renderEscrow();
   renderProposals();
   renderBuyback();
 }
@@ -472,7 +486,8 @@ function renderCountdown() {
     $('sum-close-date').textContent = 'Not scheduled';
     return;
   }
-  const ms = Math.max(0, closes - Date.now());
+  const done = ['closed', 'launched'].includes(data.launch.status);
+  const ms = done ? 0 : Math.max(0, closes - Date.now());
   const h = Math.floor(ms / 3.6e6);
   $('sum-close').textContent = ms === 0 ? 'Closed' : h >= 24 ? `${Math.floor(h / 24)}d ${h % 24}h` : `${h}h ${Math.floor((ms % 3.6e6) / 6e4)}m`;
   $('sum-close-date').textContent = closes.toISOString().slice(0, 16).replace('T', ' ') + ' UTC';
@@ -603,6 +618,7 @@ async function connectWallet() {
     const res = await provider.connect();
     wallet = { address: (res?.publicKey ?? provider.publicKey).toString(), provider };
     bound = false;
+    refreshEscrow();
     $('wallet-btn').textContent = short(wallet.address);
     render();
   } catch {
@@ -687,6 +703,96 @@ async function vote(id, choice) {
   setStatus(`vote-status-${id}`, `Voted ${proposal.options[choice]} with weight ${fmt(mine.weight, 3)}.`);
 }
 
+// --- On-chain deposits (onchain/group-buy) --------------------------------
+// Each investor's SOL goes into their own escrow account, which only the
+// group-buy program can move, and which they can withdraw from until the buy.
+
+let escrowFunded = null; // null = unknown, true/false once read from the RPC
+
+function myCommitment() {
+  return wallet && data.onchain?.commitments.find((c) => c.wallet === wallet.address);
+}
+
+function renderEscrow() {
+  const c = myCommitment();
+  const box = $('escrow-box');
+  box.hidden = !c;
+  if (!c) return;
+  const sol = Number(c.lamports) / 1e9;
+  const launched = data.launch?.status === 'launched';
+  const before = new Date(data.onchain.launchAt * 1000).toISOString().slice(0, 16).replace('T', ' ') + ' UTC';
+  $('escrow-text').textContent = launched
+    ? 'The group buy has happened. Your tokens and any unspent SOL are sent to your wallet when the launch is settled.'
+    : escrowFunded
+      ? `${fmt(sol, 3)} SOL is in your escrow. You can withdraw it until the group buy at ${before}.`
+      : `Deposit your ${fmt(sol, 3)} SOL commitment before ${before}. It goes into an escrow only you and the group buy can use, and you can withdraw it until the buy.`;
+  $('deposit-btn').disabled = launched || escrowFunded !== false;
+  $('withdraw-btn').disabled = launched || escrowFunded !== true;
+}
+
+function loadScript(src) {
+  return new Promise((resolve, reject) => {
+    const s = document.createElement('script');
+    s.src = src;
+    s.onload = resolve;
+    s.onerror = () => reject(new Error('Could not load the Solana library.'));
+    document.head.appendChild(s);
+  });
+}
+
+async function web3() {
+  if (!window.solanaWeb3) await loadScript(WEB3_URL);
+  return window.solanaWeb3;
+}
+
+function escrowAddress(w3) {
+  const o = data.onchain;
+  return w3.PublicKey.findProgramAddressSync(
+    [new TextEncoder().encode('escrow'), new w3.PublicKey(o.launch).toBytes(), new w3.PublicKey(wallet.address).toBytes()],
+    new w3.PublicKey(o.programId),
+  )[0];
+}
+
+async function refreshEscrow() {
+  if (!myCommitment() || !CONFIG.rpcUrl) { escrowFunded = null; renderEscrow(); return; }
+  try {
+    const w3 = await web3();
+    const info = await new w3.Connection(CONFIG.rpcUrl, 'confirmed').getAccountInfo(escrowAddress(w3));
+    escrowFunded = !!info && info.owner.toBase58() === data.onchain.programId;
+  } catch {
+    escrowFunded = null;
+  }
+  renderEscrow();
+}
+
+// tag 1 = deposit (investor, launch, escrow, system program); tag 2 = withdraw (investor, launch, escrow).
+async function sendEscrowTx(tag) {
+  if (!CONFIG.rpcUrl) return setStatus('escrow-status', 'No Solana RPC is configured yet.');
+  try {
+    const w3 = await web3();
+    const conn = new w3.Connection(CONFIG.rpcUrl, 'confirmed');
+    const me = new w3.PublicKey(wallet.address);
+    const keys = [
+      { pubkey: me, isSigner: true, isWritable: true },
+      { pubkey: new w3.PublicKey(data.onchain.launch), isSigner: false, isWritable: true },
+      { pubkey: escrowAddress(w3), isSigner: false, isWritable: true },
+    ];
+    if (tag === 1) keys.push({ pubkey: w3.SystemProgram.programId, isSigner: false, isWritable: false });
+    const ix = new w3.TransactionInstruction({ programId: new w3.PublicKey(data.onchain.programId), keys, data: Uint8Array.from([tag]) });
+    const { blockhash, lastValidBlockHeight } = await conn.getLatestBlockhash();
+    const tx = new w3.Transaction({ feePayer: me, blockhash, lastValidBlockHeight }).add(ix);
+    setStatus('escrow-status', 'Approve the transaction in your wallet.');
+    const { signature } = await wallet.provider.signAndSendTransaction(tx);
+    setStatus('escrow-status', 'Waiting for confirmation…');
+    const res = await conn.confirmTransaction({ signature, blockhash, lastValidBlockHeight }, 'confirmed');
+    if (res.value.err) throw new Error('The transaction failed on chain.');
+    setStatus('escrow-status', tag === 1 ? 'Deposited.' : 'Withdrawn. The SOL is back in your wallet.');
+  } catch (err) {
+    setStatus('escrow-status', err?.code === 4001 ? 'Cancelled in the wallet.' : err.message);
+  }
+  await refreshEscrow();
+}
+
 function setStatus(id, text) { const el = $(id); if (el) el.textContent = text; }
 
 function setupGoogle() {
@@ -735,6 +841,8 @@ async function loadData() {
 $('commit-input').addEventListener('input', render);
 $('commit-btn').addEventListener('click', commit);
 $('cancel-btn').addEventListener('click', cancelCommit);
+$('deposit-btn').addEventListener('click', () => sendEscrowTx(1));
+$('withdraw-btn').addEventListener('click', () => sendEscrowTx(2));
 $('wallet-btn').addEventListener('click', connectWallet);
 $('chain-verify').addEventListener('click', verifyChain);
 $('proposals').addEventListener('click', (e) => {
@@ -746,6 +854,6 @@ setupGoogle();
 renderChain();
 render();
 setInterval(renderCountdown, 30_000);
-loadData().then(render);
+loadData().then(() => { render(); refreshEscrow(); });
 loadChain();
 </script>

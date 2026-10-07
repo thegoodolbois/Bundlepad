@@ -1,5 +1,7 @@
 {
   "googleClientId": "",
   "allowOrigin": "https://thegoodolbois.github.io",
-  "buybackWallet": null
+  "buybackWallet": null,
+  "groupBuyProgramId": "",
+  "rpcUrl": ""
 }

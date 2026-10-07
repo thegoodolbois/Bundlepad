@@ -1,14 +1,14 @@
 {
-  "current_plan": 3,
-  "stage": "awaiting_review",
+  "current_plan": 4,
+  "stage": "awaiting_owner",
   "plan_file": "plan/plan.md",
   "follow_up_dir": "plan/follow_up",
   "approval": {
     "required": true,
     "approved": true,
     "approved_by": "thegoodolbois",
-    "approved_at": "2026-10-07T14:16:09.950Z",
-    "notes": "Approved via session instruction. Off-chain part implemented first; on-chain execution with outside investor SOL stays gated on audit + legal check (Plan 3 §7)."
+    "approved_at": "2026-10-07T14:49:24.661Z",
+    "notes": "Approved via session instruction. Hosting deferred by the owner. Outside investor SOL stays gated on audit + legal check."
   },
   "tasks": [
     {
@@ -50,8 +50,14 @@
     {
       "id": "8",
       "title": "Plan 4: on-chain group-buy program, durable-nonce pre-signing, launcher, buyback job",
+      "status": "done",
+      "note": "group-buy program, launcher, dashboard deposits; design change: escrow deposits instead of durable nonces"
+    },
+    {
+      "id": "9",
+      "title": "Plan 5: go-live (hosting, keys, gate a local+pump, deploy, gate b owner-only mainnet, gate c audit, gate d legal)",
       "status": "blocked",
-      "note": "awaiting approval of follow_up_3.md; mainnet with outside SOL also needs audit + legal check"
+      "note": "waiting on the owner; see plan/follow_up/follow_up_4.md"
     }
   ],
   "follow_ups": [
@@ -69,7 +75,13 @@
       "plan": 4,
       "file": "plan/follow_up/follow_up_3.md",
       "created_at": "2026-10-07T14:16:10.872Z",
-      "approval": "pending"
+      "approval": "approved"
+    },
+    {
+      "plan": 5,
+      "file": "plan/follow_up/follow_up_4.md",
+      "created_at": "2026-10-07T14:49:24.755Z",
+      "approval": "n/a (owner actions)"
     }
   ],
   "history": [
@@ -100,6 +112,18 @@
       "plan": 3,
       "stage": "awaiting_review",
       "note": "Plan 3 off-chain part implemented (11/11 tests pass); Plan 4 written to follow_up_3.md, awaiting approval"
+    },
+    {
+      "ts": "2026-10-07T14:49:24.661Z",
+      "plan": 4,
+      "stage": "implementing",
+      "note": "Plan 4 (follow_up_3.md) approved by owner: \"i approve i will have to host when i have the chance\""
+    },
+    {
+      "ts": "2026-10-07T14:49:24.755Z",
+      "plan": 4,
+      "stage": "awaiting_owner",
+      "note": "Plan 4 implemented: group-buy program (7 LiteSVM tests), launcher, dashboard deposits; local-validator smoke tests pass. Go-live steps in follow_up_4.md"
     }
   ]
 }

@@ -36,6 +36,10 @@ const USAGE = `usage: chain <command> [options]
   launch publish ID              freeze the manifest and log its hash on the chain
   launch close ID                freeze the commitment list and log it on the chain
   launch show [ID]               print a launch's status, commitments and votes
+  launch onchain ID --mint M [--slippage BPS] [--refund-after SECS]
+                                 fix the on-chain terms of a closed launch (see onchain/client)
+  launch tx ID --kind K --sig S  record a landed launch transaction (the launcher does this)
+  buyback --kind swap|burn --sig S [--sol N] [--tokens N]   record a buyback swap or burn
   pages                          write data/dashboard.json and refresh the chain in index.html`;
 
 function openStore() {
@@ -269,6 +273,19 @@ const commands = {
       const st = launches.close(id);
       const total = st.commitments.reduce((s, c) => s + c.sol, 0);
       console.log(`closed ${id}: ${st.commitments.length} commitments, ${total} SOL, block ${st.commitmentsBlock}`);
+    } else if (action === 'onchain') {
+      const cfg = launches.config();
+      const plan = launches.planOnchain(id, {
+        programId: opts.program ?? cfg.groupBuyProgramId,
+        mint: opts.mint,
+        maxSlippageBps: opts.slippage ? Number(opts.slippage) : undefined,
+        refundAfterSecs: opts['refund-after'] ? Number(opts['refund-after']) : undefined,
+      });
+      console.log(`launch ${id}: on-chain account ${plan.launch}, ${plan.commitments.length} commitments, vault ${plan.vault}`);
+    } else if (action === 'tx') {
+      if (!opts.kind || !opts.sig) throw new Error('launch tx needs --kind and --sig');
+      launches.recordTx(id, opts.kind, opts.sig);
+      console.log(`recorded ${opts.kind} ${opts.sig}`);
     } else if (action === 'show') {
       const d = launches.dashboard(id);
       if (!d.launch) { console.log('no published launch'); return; }
@@ -276,8 +293,13 @@ const commands = {
       for (const i of d.investors) console.log(`  ${i.wallet} ${i.sol} SOL`);
       for (const p of d.proposals) console.log(`  vote ${p.id}: ${p.options.map((o, k) => `${o}=${p.tally[k].toFixed(3)}`).join(' ')}`);
     } else {
-      throw new Error('usage: chain launch create|publish|close|show');
+      throw new Error('usage: chain launch create|publish|close|show|onchain|tx');
     }
+  },
+
+  buyback(opts) {
+    const bb = openLaunches().recordBuyback({ kind: opts.kind, signature: opts.sig, sol: Number(opts.sol ?? 0), tokens: Number(opts.tokens ?? 0) });
+    console.log(`buyback totals: ${bb.feesSol} SOL in, ${bb.boughtTokens} bought, ${bb.burnedTokens} burned`);
   },
 
   pages() {
@@ -305,7 +327,9 @@ function main(argv) {
       subject: { type: 'string' }, body: { type: 'string' }, out: { type: 'string' },
       tar: { type: 'string' }, commit: { type: 'string' }, ref: { type: 'string' },
       force: { type: 'boolean' }, port: { type: 'string' }, help: { type: 'boolean' },
-      host: { type: 'string' }, file: { type: 'string' },
+      host: { type: 'string' }, file: { type: 'string' }, mint: { type: 'string' }, program: { type: 'string' },
+      slippage: { type: 'string' }, 'refund-after': { type: 'string' }, kind: { type: 'string' }, sig: { type: 'string' },
+      sol: { type: 'string' }, tokens: { type: 'string' },
     },
   });
   const [command = 'status', ...rest] = positionals;

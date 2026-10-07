@@ -1,6 +1,13 @@
 # Follow-up 3 → Plan 4 — On-chain group buy and launcher
 
-Status: **AWAITING HUMAN APPROVAL**
+Status: **APPROVED** (2026-10-07) and **implemented**. See `onchain/README.md`.
+Items 1–3 are built and tested, item 4 is a record-keeping command, and
+item 5 waits on hosting. Go-live steps are in `follow_up_4.md`.
+
+Design change from Plan 3 §3: durable-nonce pre-signing became per-investor
+escrow deposits (a Jito bundle holds at most 5 transactions, and a transaction
+can use only one nonce). Investors still sign only for their own SOL, and they
+can withdraw until the buy.
 
 Plan 3 (`follow_up_2.md`) was approved on 2026-10-07 ("update all and continue
 all plans"). Its off-chain part is done:

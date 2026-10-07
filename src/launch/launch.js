@@ -7,6 +7,7 @@
 //   buyback.json             running buyback & burn totals (logged by the buyback job)
 //   <id>/manifest.json       the launch record; frozen once published
 //   <id>/state.json          status, manifestHash, manifestBlock, commitments, bindings, votes
+//   <id>/onchain.json        group-buy program accounts and init terms (after close)
 //
 // Nothing here holds or moves SOL. Investors sign messages with their own
 // wallets; every state change is queued on the integrity chain.
@@ -18,6 +19,7 @@ const { canonical, sha256 } = require('../hash');
 const { makeEvent } = require('../events');
 const chain = require('../chain');
 const { verifyWalletSignature, walletKey } = require('./crypto');
+const onchain = require('./onchain');
 
 const ID_RE = /^[a-z0-9][a-z0-9-]{0,31}$/;
 const MAX_FEE_BPS = 1000;
@@ -186,6 +188,76 @@ class Launches {
     return state;
   }
 
+  // Fixes the on-chain terms of a closed launch: program, launch PDA, mint,
+  // buyback address and the frozen commitment list in lamports. The launcher
+  // sends init_launch from this file; it is logged on the chain first.
+  planOnchain(id, { programId, mint, buyback = this.config().buybackWallet, maxSlippageBps = 500, refundAfterSecs = 3600 }) {
+    const manifest = this.manifest(id);
+    const state = this.state(id);
+    if (!programId || !isAddress(programId)) throw new Error('group-buy program id is required (launches/config.json groupBuyProgramId)');
+    if (!isAddress(mint)) throw new Error('mint must be an address');
+    if (!buyback || !isAddress(buyback)) throw new Error('buyback wallet is required (launches/config.json buybackWallet)');
+    if (this.read(`${id}/onchain.json`, null)?.initTx) throw new Error(`launch ${id} is already initialized on chain`);
+    const args = onchain.initArgsFromLaunch(manifest, state, { mint, buyback, maxSlippageBps, refundAfterSecs });
+    const launch = onchain.launchAddress(programId, manifest.creatorWallet, id);
+    const plan = {
+      programId,
+      launch,
+      creator: manifest.creatorWallet,
+      vault: onchain.vaultAddress(programId, launch),
+      mint,
+      tokenProgram: args.tokenProgram,
+      buyback,
+      manifestHash: state.manifestHash,
+      feeBps: args.feeBps,
+      maxSlippageBps,
+      launchAt: args.launchAt,
+      refundAfter: args.refundAfter,
+      commitments: args.commitments.map((c) => ({ wallet: c.investor, lamports: c.lamports.toString(), escrow: onchain.escrowAddress(programId, launch, c.investor) })),
+      txs: [],
+    };
+    this.write(`${id}/onchain.json`, plan);
+    this.log('update', 'launch.onchain', { id, ...plan, txs: undefined });
+    this.sealChain();
+    return plan;
+  }
+
+  onchain(id) { return this.read(`${id}/onchain.json`, null); }
+
+  // Records a landed transaction (init, deposit batch, buy, settle, refund).
+  recordTx(id, kind, signature, extra = {}) {
+    const plan = this.onchain(id);
+    if (!plan) throw new Error(`launch ${id} has no on-chain plan`);
+    plan.txs.push({ kind, signature, ts: new Date(this.now()).toISOString(), ...extra });
+    if (kind === 'init') plan.initTx = signature;
+    this.write(`${id}/onchain.json`, plan);
+    this.log('update', 'launch.tx', { id, kind, signature, ...extra });
+    this.sealChain();
+    if (kind === 'buy') {
+      const state = this.state(id);
+      state.status = 'launched';
+      state.history.push({ ts: new Date(this.now()).toISOString(), status: 'launched' });
+      this.saveState(id, state);
+    }
+    return plan;
+  }
+
+  // Buyback & burn is done by the owner's buyback wallet; each step is recorded.
+  recordBuyback({ kind, signature, sol = 0, tokens = 0 }) {
+    if (!['swap', 'burn'].includes(kind)) throw new Error('kind must be swap or burn');
+    if (!signature) throw new Error('transaction signature is required');
+    const bb = this.read('buyback.json', { feesSol: 0, boughtTokens: 0, burnedTokens: 0 });
+    bb.history = bb.history ?? [];
+    if (bb.history.some((h) => h.signature === signature)) throw new Error('this transaction is already recorded');
+    if (kind === 'swap') { bb.feesSol += sol; bb.boughtTokens += tokens; }
+    else bb.burnedTokens += tokens;
+    bb.history.push({ kind, signature, sol, tokens, ts: new Date(this.now()).toISOString() });
+    this.write('buyback.json', bb);
+    this.log('update', `buyback.${kind}`, { signature, sol, tokens });
+    this.sealChain();
+    return bb;
+  }
+
   // Public status, derived from the stored status and the commit window.
   status(id) {
     const state = this.state(id);
@@ -300,7 +372,7 @@ class Launches {
   // Shape read by index.html (CONFIG.dataUrl). Google subjects never leave the server.
   dashboard(id = this.currentId()) {
     const launches = this.ids().filter((i) => this.state(i).status !== 'draft');
-    const bb = this.read('buyback.json', { feesSol: 0, boughtTokens: 0, burnedTokens: 0 });
+    const { history: _history, ...bb } = this.read('buyback.json', { feesSol: 0, boughtTokens: 0, burnedTokens: 0 });
     const buyback = { wallet: this.config().buybackWallet ?? null, ...bb, launches: launches.filter((i) => this.state(i).status === 'launched').length };
     if (!id) return { launch: null, investors: [], proposals: [], buyback };
     const manifest = this.manifest(id);
@@ -310,8 +382,17 @@ class Launches {
       launch: { ...manifest, status: statusMap[this.status(id)], manifestHash: state.manifestHash, manifestBlock: state.manifestBlock },
       investors: state.commitments.map(({ wallet, sol, ts }) => ({ wallet, sol, ts })),
       proposals: this.tally(id),
+      onchain: this.publicOnchain(id),
       buyback,
     };
+  }
+
+  // What the dashboard needs to build deposit/withdraw transactions.
+  publicOnchain(id) {
+    const plan = this.onchain(id);
+    if (!plan?.initTx) return null;
+    const { programId, launch, vault, mint, tokenProgram, launchAt, refundAfter, commitments, txs } = plan;
+    return { programId, launch, vault, mint, tokenProgram, launchAt, refundAfter, commitments, txs };
   }
 
   // The newest published launch.

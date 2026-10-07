@@ -4,3 +4,6 @@
 .chain/LOCK
 *.tmp
 node_modules/
+# Build output and installed packages for the on-chain code.
+onchain/*/target/
+onchain/client/node_modules/

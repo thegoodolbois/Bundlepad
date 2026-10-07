@@ -1,0 +1,29 @@
+{
+  "header": {
+    "version": 1,
+    "height": 11,
+    "prevHash": "0000b4029d8ba41febc1c80d8268fcfb9d0863b38006cee91a4204a3aaa65aef",
+    "timestamp": 1791384564677,
+    "difficulty": 16,
+    "nonce": 14284,
+    "eventsRoot": "8d50bf7d3e9cd642e9f62de5915750f532bfd70a1d2e392c5f3a716b61a07f95",
+    "stateRoot": "5a3f8d847d0f86d1d4e803e7b9d58b275ee9e7514d406c5d83b208ab5ce5171d"
+  },
+  "hash": "00009e8bc851cf8c945b20c243d44f5ece1811bd18c41a51bf47e463d6f9f6c9",
+  "events": [
+    {
+      "id": "c97965cc4669a8e34dcfdd2e5aecf73a1ca0416836a04aa13ae4ca7a29a2b6e9",
+      "type": "update",
+      "subject": "memory.transition",
+      "source": "memory",
+      "body": {
+        "ts": "2026-10-07T14:49:24.661Z",
+        "plan": 4,
+        "stage": "implementing",
+        "note": "Plan 4 (follow_up_3.md) approved by owner: \"i approve i will have to host when i have the chance\""
+      },
+      "ts": 1791384564675,
+      "block": 11
+    }
+  ]
+}

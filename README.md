@@ -4,8 +4,9 @@ Launch together. A group of investors commits SOL to a token launch. At launch,
 one atomic group buy goes into the bonding curve, and the tokens are split 1:1
 by SOL committed, straight into each investor's own wallet.
 
-- **No pool wallet.** Investors' SOL stays in their own wallets until their own
-  signature moves it into the group buy.
+- **No pool wallet.** Each investor deposits into their own escrow, which only
+  the group-buy program can move, and which they can withdraw from until the buy.
+  If the buy doesn't happen, everyone is refunded.
 - **Everything on the record.** The launch manifest, every commitment, vote and
   cancellation is logged on this repo's integrity chain (`.chain/`), and every
   launch transaction carries a `Bundlepad <id> <manifestHash>` memo.
@@ -13,9 +14,10 @@ by SOL committed, straight into each investor's own wallet.
   burn of $BUNDLEPAD. The buyback wallet is controlled by the Bundlepad owner.
 - **No platform selling.** Bundlepad never sells investors' tokens.
 
-Status: the off-chain backend and dashboard are built. The on-chain group-buy
-program and launcher are planned (`plan/follow_up/follow_up_3.md`) and need an
-audit and a legal check before any outside investor's SOL goes through them.
+Status: the backend, dashboard, on-chain group-buy program and launcher are
+built and tested (`onchain/README.md`). Going live needs hosting, keys, an
+audit and a legal check (`plan/follow_up/follow_up_4.md`). No outside
+investor's SOL goes through the program before the audit and the legal check.
 
 ## Layout
 
@@ -25,6 +27,7 @@ audit and a legal check before any outside investor's SOL goes through them.
 | `src/` | Integrity chain CLI (`node src/index.js --help`) |
 | `src/launch/` | Launch backend: manifests, Google sign-in, wallet signatures, commitments, votes |
 | `launches/` | Launch config, manifests and state |
+| `onchain/` | Group-buy Solana program, its tests, and the launcher |
 | `.chain/` | The integrity chain (blocks, objects, event log) |
 | `plan/`, `memory.json` | Plans and their approval state |
 
@@ -39,8 +42,12 @@ node src/index.js launch close bp-001            # freezes the commitment list
 node src/index.js pages                          # data/dashboard.json + chain copy in index.html
 ```
 
-Before going live, set `googleClientId` (and `buybackWallet`) in
-`launches/config.json`, and `apiUrl` / `googleClientId` in `CONFIG` in
-`index.html`. The API must be served over HTTPS, since the dashboard is.
+Then the on-chain part (deposits, the group buy, settling) runs through
+`onchain/client/launcher.js`. See `onchain/README.md`.
+
+Before going live, set `googleClientId`, `buybackWallet`, `groupBuyProgramId`
+and `rpcUrl` in `launches/config.json`, and `apiUrl`, `rpcUrl` and
+`googleClientId` in `CONFIG` in `index.html`. The API must be served over
+HTTPS, since the dashboard is.
 
 Pooled launch participation can be a regulated activity. Check before mainnet.
