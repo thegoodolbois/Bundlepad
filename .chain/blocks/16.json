@@ -1,0 +1,105 @@
+{
+  "header": {
+    "version": 1,
+    "height": 16,
+    "prevHash": "0000715b152c84e7b86ce81a943ceaffa19df798ae1683fa579aff55ee9edcc8",
+    "timestamp": 1791394360157,
+    "difficulty": 16,
+    "nonce": 29162,
+    "eventsRoot": "1c65bb92ab9d9f64e60a843af244f2c7768ef5d3b3dc282f1ac8cbb51abf1a78",
+    "stateRoot": "e7856becce20c0154ae615e73d51d51df88ec02f39a99a933f08f7d3815120fb"
+  },
+  "hash": "00002c948e102d1386692cb30f7da8008fd659f8c91c81b0fabdb4d1ace971a8",
+  "events": [
+    {
+      "id": "54f3b563dafed6faa97f6f143a054ca2530386a9e421ddd2b80aeaefc6228b25",
+      "type": "update",
+      "subject": "git.commit",
+      "source": "local-cli",
+      "body": {
+        "sha": "989cb268f4a5d216f9719da12ce72967f43b7f8e",
+        "parents": [
+          "8594c62917bb4cfa9739da3128373b69394725fe"
+        ],
+        "author": {
+          "name": "Claude",
+          "email": "noreply@anthropic.com",
+          "date": "2026-10-07T17:24:17+00:00"
+        },
+        "committer": {
+          "name": "Claude",
+          "email": "noreply@anthropic.com",
+          "date": "2026-10-07T17:24:17+00:00"
+        },
+        "message": "Record the go-live tooling commit on the integrity chain\n\nCo-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>\nClaude-Session: https://claude.ai/code/session_019dLaQpC8ustRzQLisewKPK"
+      },
+      "ts": 1791394359428,
+      "block": 16
+    },
+    {
+      "id": "852ce6db26f7a18e8b0604dbe2d8e8d6b9da5b9211a7235ea445c7aba43ad00e",
+      "type": "file",
+      "subject": "snapshot.created",
+      "source": "local-cli",
+      "body": {
+        "commit": "989cb268f4a5d216f9719da12ce72967f43b7f8e",
+        "manifest": "7881761ab3e691e3336e66a0fcc445694051cea5b735443a77ab8483ea7166fa",
+        "files": 61
+      },
+      "ts": 1791394359752,
+      "block": 16
+    },
+    {
+      "id": "443dc571950c1408d8e3f3e60de41290d503ee031ea351431934efa955e996df",
+      "type": "update",
+      "subject": "git.commit",
+      "source": "local-cli",
+      "body": {
+        "sha": "51f93bd27ca5c72aa1a24dc92b1f9138bba84c63",
+        "parents": [
+          "989cb268f4a5d216f9719da12ce72967f43b7f8e"
+        ],
+        "author": {
+          "name": "Claude",
+          "email": "noreply@anthropic.com",
+          "date": "2026-10-07T17:32:39+00:00"
+        },
+        "committer": {
+          "name": "Claude",
+          "email": "noreply@anthropic.com",
+          "date": "2026-10-07T17:32:39+00:00"
+        },
+        "message": "Add marketing research: platforms, posting automation, crypto channels\n\nmarketing/ covers 29 platforms (social, video, community, crypto-native):\nofficial posting APIs, cost and limits, native and API scheduling,\nsupported schedulers, Siri Shortcuts methods, paid crypto ad policies and\nautomation risks, as a CSV/JSON dataset plus a summary table and a write-up\nper platform. Also: Shortcuts recipes (Telegram, Discord, Bluesky,\nMastodon, Threads, WhatsApp, Farcaster, Binance Square), scheduler / API /\nno-code comparison, crypto listing and ad channels, and promotion rules\n(FTC, UK FCA, EU MiCA). Researched 2026-10-07; sources listed, with\nunverified items marked.\n\nCo-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>\nClaude-Session: https://claude.ai/code/session_019dLaQpC8ustRzQLisewKPK"
+      },
+      "ts": 1791394359756,
+      "block": 16
+    },
+    {
+      "id": "82fcdb64f81c4fa40f7da7eba80e98a98d1eb273d42ea8e0c07b3188512ef303",
+      "type": "file",
+      "subject": "snapshot.created",
+      "source": "local-cli",
+      "body": {
+        "commit": "51f93bd27ca5c72aa1a24dc92b1f9138bba84c63",
+        "manifest": "d2f1ede251d89373c327606c77af2de90d53069afc3cb7bef7214b1b53e92df7",
+        "files": 70
+      },
+      "ts": 1791394360154,
+      "block": 16
+    },
+    {
+      "id": "7c7e97c5614bbbc05533a62a0b1f936b1607bc0bca890691ab8bb5a940ea5182",
+      "type": "update",
+      "subject": "ref.update",
+      "source": "local-cli",
+      "body": {
+        "ref": "local/heads/claude/sleepy-brown-x6slgf",
+        "from": "8594c62917bb4cfa9739da3128373b69394725fe",
+        "to": "51f93bd27ca5c72aa1a24dc92b1f9138bba84c63",
+        "forced": false
+      },
+      "ts": 1791394360156,
+      "block": 16
+    }
+  ]
+}
