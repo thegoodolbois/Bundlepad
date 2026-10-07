@@ -1,0 +1,105 @@
+{
+  "header": {
+    "version": 1,
+    "height": 15,
+    "prevHash": "00009284949747f5b097acbbffecfe0dcd6f9c14ede7f366d5aa02968cbe02c4",
+    "timestamp": 1791393857036,
+    "difficulty": 16,
+    "nonce": 36187,
+    "eventsRoot": "f16b749626ab621c3b26480a59f64d2d1b7041115028b24766a6bc0c4be61add",
+    "stateRoot": "a78a6e80440807deafa039f05c5562d9f09de1ada80d65cf239e491c0b063774"
+  },
+  "hash": "0000715b152c84e7b86ce81a943ceaffa19df798ae1683fa579aff55ee9edcc8",
+  "events": [
+    {
+      "id": "965f99b7df6fc864de4bb13f5dd2fa126717fe793d6329fd0b6eb1c7a2f36e87",
+      "type": "update",
+      "subject": "git.commit",
+      "source": "local-cli",
+      "body": {
+        "sha": "c3e189c9c9f5990a0e9d4d286ebe20729c7b68d6",
+        "parents": [
+          "5dfa44ff6e4602f9156b1993a35f17bcfbf46820"
+        ],
+        "author": {
+          "name": "Claude",
+          "email": "noreply@anthropic.com",
+          "date": "2026-10-07T14:50:06+00:00"
+        },
+        "committer": {
+          "name": "Claude",
+          "email": "noreply@anthropic.com",
+          "date": "2026-10-07T14:50:06+00:00"
+        },
+        "message": "Record the on-chain group buy commit on the integrity chain\n\nCo-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>\nClaude-Session: https://claude.ai/code/session_019dLaQpC8ustRzQLisewKPK"
+      },
+      "ts": 1791393856216,
+      "block": 15
+    },
+    {
+      "id": "0611ab6c54eb4f44e9f748b8e11a25094957a7625ebadd5ece32b21dcdd9309e",
+      "type": "file",
+      "subject": "snapshot.created",
+      "source": "local-cli",
+      "body": {
+        "commit": "c3e189c9c9f5990a0e9d4d286ebe20729c7b68d6",
+        "manifest": "d65b098f0787aa44ed5ece7e40233c6119ccab34a4a1796e9ea2455bb2028b6b",
+        "files": 55
+      },
+      "ts": 1791393856541,
+      "block": 15
+    },
+    {
+      "id": "5e63c016fc4d3b19c22c8758143bb9f0a569674551bc453ed4777ef0e47c75a0",
+      "type": "update",
+      "subject": "git.commit",
+      "source": "local-cli",
+      "body": {
+        "sha": "8594c62917bb4cfa9739da3128373b69394725fe",
+        "parents": [
+          "c3e189c9c9f5990a0e9d4d286ebe20729c7b68d6"
+        ],
+        "author": {
+          "name": "Claude",
+          "email": "noreply@anthropic.com",
+          "date": "2026-10-07T17:24:16+00:00"
+        },
+        "committer": {
+          "name": "Claude",
+          "email": "noreply@anthropic.com",
+          "date": "2026-10-07T17:24:16+00:00"
+        },
+        "message": "Add go-live tooling: configure, buyback automation, deploy files, guide\n\n- chain configure: one command sets launches/config.json and the\n  dashboard CONFIG (validated addresses and URLs; HTTPS API required)\n- requireGoogle toggle: wallet-only identity for launches among friends\n- launcher: settles everyone right after the buy (--no-settle to skip),\n  --at for a scheduled launch, refuses before launchAt; refunds open 24h\n  after launchAt by default\n- onchain/client/buyback.js: swaps fee SOL for $BUNDLEPAD via Jupiter,\n  burns it, records both on the chain; cron-safe, --dry-run\n- dashboard: reads the chain live from the API when configured\n- deploy/: systemd unit, Caddyfile (auto HTTPS), publish-to-GitHub cron\n- docs/GO-LIVE.md: setup, running a launch with friends, costs,\n  troubleshooting\n\nCo-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>\nClaude-Session: https://claude.ai/code/session_019dLaQpC8ustRzQLisewKPK"
+      },
+      "ts": 1791393856546,
+      "block": 15
+    },
+    {
+      "id": "ec6c5a7043f5a6bed46752401006e79e017201f24f8f4515a5cafb1014005a1f",
+      "type": "file",
+      "subject": "snapshot.created",
+      "source": "local-cli",
+      "body": {
+        "commit": "8594c62917bb4cfa9739da3128373b69394725fe",
+        "manifest": "df1062d066ad2d043619b4333145d972f74131323f6d75da48958696699a4e2d",
+        "files": 61
+      },
+      "ts": 1791393857034,
+      "block": 15
+    },
+    {
+      "id": "21e9338df78e8bdcf0932c1eb317d6c0fe602f403912522199b48cf870283578",
+      "type": "update",
+      "subject": "ref.update",
+      "source": "local-cli",
+      "body": {
+        "ref": "local/heads/claude/sleepy-brown-x6slgf",
+        "from": "5dfa44ff6e4602f9156b1993a35f17bcfbf46820",
+        "to": "8594c62917bb4cfa9739da3128373b69394725fe",
+        "forced": false
+      },
+      "ts": 1791393857035,
+      "block": 15
+    }
+  ]
+}
