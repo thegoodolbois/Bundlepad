@@ -1,0 +1,15 @@
+{
+  "id": "bp-001",
+  "label": "Bundlepad launch bp-001",
+  "token": { "name": "", "symbol": "", "metadataUri": "" },
+  "creatorWallet": "<creator wallet address>",
+  "caps": { "minSol": 0.1, "maxSolPerInvestor": 2, "targetSol": 10, "maxInvestors": 10 },
+  "platformFeeBps": 1000,
+  "buybackToken": "<$BUNDLEPAD mint address>",
+  "commitWindow": { "opens": "2026-11-01T00:00:00Z", "closes": "2026-11-03T00:00:00Z" },
+  "launchAt": "2026-11-03T01:00:00Z",
+  "ordering": "atomic group buy, split pro-rata by SOL (follow_up_2.md §4)",
+  "proposals": [
+    { "id": "slippage", "title": "Max slippage for the group buy", "options": ["5%", "10%"] }
+  ]
+}

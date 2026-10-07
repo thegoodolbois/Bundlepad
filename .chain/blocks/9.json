@@ -1,0 +1,29 @@
+{
+  "header": {
+    "version": 1,
+    "height": 9,
+    "prevHash": "00003c82f7524cada50bf82f39591a5bd233263d93de2bd559e70ff812b7f6a5",
+    "timestamp": 1791382570873,
+    "difficulty": 16,
+    "nonce": 58552,
+    "eventsRoot": "5d8a411858bf435e6f65fe9b98337f649e268a3d23433456bdb745e4bf4b66d7",
+    "stateRoot": "2b5fd04ca3f79e4f2a5ec7441f05586eecdc1155e620dc9e11171159a4e206d3"
+  },
+  "hash": "0000e7cb79e04706a00f69a859a434b315e1a844eb36eb86a51fc0828b746f77",
+  "events": [
+    {
+      "id": "8191917f9b6ee4ebd38c40870a475c4886c6433ae4be8e74fbda99e3dab70f4e",
+      "type": "update",
+      "subject": "memory.transition",
+      "source": "memory",
+      "body": {
+        "ts": "2026-10-07T14:16:10.872Z",
+        "plan": 3,
+        "stage": "awaiting_review",
+        "note": "Plan 3 off-chain part implemented (11/11 tests pass); Plan 4 written to follow_up_3.md, awaiting approval"
+      },
+      "ts": 1791382570873,
+      "block": 9
+    }
+  ]
+}

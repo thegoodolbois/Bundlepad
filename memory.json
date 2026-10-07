@@ -1,5 +1,5 @@
 {
-  "current_plan": 2,
+  "current_plan": 3,
   "stage": "awaiting_review",
   "plan_file": "plan/plan.md",
   "follow_up_dir": "plan/follow_up",
@@ -7,8 +7,8 @@
     "required": true,
     "approved": true,
     "approved_by": "thegoodolbois",
-    "approved_at": "2026-10-05T22:29:48.415Z",
-    "notes": "Backup to another repo if possible, else keep in a file here; public = anyone can commit (all branches, tags, PR heads); proof-of-work on"
+    "approved_at": "2026-10-07T14:16:09.950Z",
+    "notes": "Approved via session instruction. Off-chain part implemented first; on-chain execution with outside investor SOL stays gated on audit + legal check (Plan 3 §7)."
   },
   "tasks": [
     {
@@ -36,6 +36,22 @@
       "title": "Create backup repo for chain",
       "status": "blocked",
       "note": "gh repo create failed: token lacks createRepository; chain kept in .chain/ here"
+    },
+    {
+      "id": "6",
+      "title": "Plan 3: launch backend (Google sign-in, wallet binding, commitments, votes) logged to the chain",
+      "status": "done"
+    },
+    {
+      "id": "7",
+      "title": "Plan 3: wire dashboard commit/cancel/vote to the backend; chain refresh via \"chain pages\"",
+      "status": "done"
+    },
+    {
+      "id": "8",
+      "title": "Plan 4: on-chain group-buy program, durable-nonce pre-signing, launcher, buyback job",
+      "status": "blocked",
+      "note": "awaiting approval of follow_up_3.md; mainnet with outside SOL also needs audit + legal check"
     }
   ],
   "follow_ups": [
@@ -43,6 +59,17 @@
       "plan": 2,
       "file": "plan/follow_up/follow_up_1.md",
       "created_at": "2026-10-05T22:29:48.415Z"
+    },
+    {
+      "plan": 3,
+      "file": "plan/follow_up/follow_up_2.md",
+      "created_at": "2026-10-05T23:30:43.000Z"
+    },
+    {
+      "plan": 4,
+      "file": "plan/follow_up/follow_up_3.md",
+      "created_at": "2026-10-07T14:16:10.872Z",
+      "approval": "pending"
     }
   ],
   "history": [
@@ -61,6 +88,18 @@
       "plan": 2,
       "stage": "awaiting_review",
       "note": "Step 4 implemented; chain initialized in .chain/ (difficulty 16); 4/4 tests pass"
+    },
+    {
+      "ts": "2026-10-07T14:16:09.951Z",
+      "plan": 3,
+      "stage": "implementing",
+      "note": "Plan 3 (follow_up_2.md) approved by owner: \"update all and continue all plans\""
+    },
+    {
+      "ts": "2026-10-07T14:16:10.872Z",
+      "plan": 3,
+      "stage": "awaiting_review",
+      "note": "Plan 3 off-chain part implemented (11/11 tests pass); Plan 4 written to follow_up_3.md, awaiting approval"
     }
   ]
 }

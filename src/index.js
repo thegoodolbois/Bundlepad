@@ -15,6 +15,7 @@ const { makeEvent } = require('./events');
 const chain = require('./chain');
 const snapshot = require('./snapshot');
 const { localRefs, remoteRefs, diffRefs, track } = require('./track');
+const { Launches } = require('./launch/launch');
 
 const DEFAULT_DIFFICULTY = 16;
 
@@ -30,12 +31,26 @@ const USAGE = `usage: chain <command> [options]
   export --out DIR | --tar FILE [--commit SHA | --ref REF] [--force]
   backup [DIR]                   copy .chain/ to DIR (commit + push if DIR is a git clone)
   install-hooks                  run "track" after every commit/merge
-  serve [--port N]               localhost API (default 8787)`;
+  serve [--port N] [--host H]    chain + launch API (default 127.0.0.1:8787)
+  launch create --file F         save a draft launch manifest (launches/<id>/manifest.json)
+  launch publish ID              freeze the manifest and log its hash on the chain
+  launch close ID                freeze the commitment list and log it on the chain
+  launch show [ID]               print a launch's status, commitments and votes
+  pages                          write data/dashboard.json and refresh the chain in index.html`;
 
 function openStore() {
   const store = new Store(git.toplevel(process.cwd()));
   if (!store.exists()) throw new Error('no chain here; run "chain init" first');
   return store;
+}
+
+function openLaunches(store = openStore()) {
+  return new Launches(store.repoRoot, { chainStore: store });
+}
+
+// The dashboard's offline fallback: block headers plus event subjects.
+function chainSummary(store) {
+  return [...store.blocks()].map((b) => ({ header: b.header, hash: b.hash, subjects: b.events.map((e) => e.subject) }));
 }
 
 function sealAndReport(store) {
@@ -234,8 +249,50 @@ const commands = {
 
   serve(opts) {
     const port = Number(opts.port ?? 8787);
-    require('./server').serve(openStore(), port);
-    console.log(`listening on http://127.0.0.1:${port}`);
+    const host = opts.host ?? '127.0.0.1';
+    const store = openStore();
+    const launches = openLaunches(store);
+    require('./server').serve(store, port, { host, launches, allowOrigin: launches.config().allowOrigin });
+    console.log(`listening on http://${host}:${port}`);
+  },
+
+  launch(opts, [action, id]) {
+    const launches = openLaunches();
+    if (action === 'create') {
+      if (!opts.file) throw new Error('launch create needs --file manifest.json');
+      const m = launches.create(JSON.parse(fs.readFileSync(opts.file, 'utf8')));
+      console.log(`saved draft ${m.id}; run "chain launch publish ${m.id}" to freeze it`);
+    } else if (action === 'publish') {
+      const st = launches.publish(id);
+      console.log(`published ${id}: manifest ${st.manifestHash} in block ${st.manifestBlock}`);
+    } else if (action === 'close') {
+      const st = launches.close(id);
+      const total = st.commitments.reduce((s, c) => s + c.sol, 0);
+      console.log(`closed ${id}: ${st.commitments.length} commitments, ${total} SOL, block ${st.commitmentsBlock}`);
+    } else if (action === 'show') {
+      const d = launches.dashboard(id);
+      if (!d.launch) { console.log('no published launch'); return; }
+      console.log(`${d.launch.id} ${d.launch.status} manifest ${d.launch.manifestHash ?? '(draft)'}`);
+      for (const i of d.investors) console.log(`  ${i.wallet} ${i.sol} SOL`);
+      for (const p of d.proposals) console.log(`  vote ${p.id}: ${p.options.map((o, k) => `${o}=${p.tally[k].toFixed(3)}`).join(' ')}`);
+    } else {
+      throw new Error('usage: chain launch create|publish|close|show');
+    }
+  },
+
+  pages() {
+    const store = openStore();
+    const launches = openLaunches(store);
+    const out = path.join(store.repoRoot, 'data', 'dashboard.json');
+    fs.mkdirSync(path.dirname(out), { recursive: true });
+    fs.writeFileSync(out, JSON.stringify(launches.dashboard(), null, 2) + '\n');
+    const html = path.join(store.repoRoot, 'index.html');
+    if (fs.existsSync(html)) {
+      const src = fs.readFileSync(html, 'utf8');
+      const next = src.replace(/^let CHAIN = .*;$/m, () => `let CHAIN = ${JSON.stringify(chainSummary(store))};`);
+      fs.writeFileSync(html, next);
+    }
+    console.log(`wrote ${path.relative(store.repoRoot, out)}; index.html chain at height ${store.height()}`);
   },
 };
 
@@ -248,6 +305,7 @@ function main(argv) {
       subject: { type: 'string' }, body: { type: 'string' }, out: { type: 'string' },
       tar: { type: 'string' }, commit: { type: 'string' }, ref: { type: 'string' },
       force: { type: 'boolean' }, port: { type: 'string' }, help: { type: 'boolean' },
+      host: { type: 'string' }, file: { type: 'string' },
     },
   });
   const [command = 'status', ...rest] = positionals;

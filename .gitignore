@@ -1,0 +1,6 @@
+# Salt for hashing Google account ids; never commit it.
+.secrets/
+# Transient chain/launch files.
+.chain/LOCK
+*.tmp
+node_modules/

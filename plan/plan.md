@@ -22,6 +22,9 @@ patterns** (block template fields, event envelope, message types, post schema).
 - **Storage:** plain files under `.chain/` (git-ignored by default, optionally
   committed or mirrored elsewhere — the chain is only useful if it lives somewhere
   the attacker of the GitHub repo can't also reach).
+  *Update (Plan 2):* the backup repo couldn't be created, so `.chain/` is
+  committed to this repo (see follow_up_1.md §1) and `chain backup <dir>`
+  mirrors it elsewhere.
 
 ## 1. Data structures
 

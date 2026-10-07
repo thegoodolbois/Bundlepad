@@ -1,3 +1,6 @@
+<!doctype html>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Bundlepad</title>
 <meta name="description" content="Transparent group launches: one buy, split 1:1 by SOL committed, every step on the record.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -230,6 +233,7 @@ footer { font-size: var(--step--1); color: var(--muted); display: grid; gap: 4px
           <div class="field-row">
             <input id="commit-input" type="number" inputmode="decimal" step="0.05" min="0" value="0">
             <button class="btn primary" id="commit-btn" type="button">Commit</button>
+            <button class="btn" id="cancel-btn" type="button" hidden>Cancel</button>
           </div>
           <span class="note" id="commit-limits"></span>
         </div>
@@ -342,7 +346,8 @@ const EMPTY = {
 let CHAIN = [{"header":{"version":1,"height":0,"prevHash":"0000000000000000000000000000000000000000000000000000000000000000","timestamp":1791239580183,"difficulty":16,"nonce":96419,"eventsRoot":"fe4b9c1182ac099c7e1dc226c113414dc35cfa64ecd235e2baea16c2baf937da","stateRoot":"0000000000000000000000000000000000000000000000000000000000000000"},"hash":"0000da1dff9a4e258419652ffa5e2c4fb609063da82297fb49b460df07816d8f","subjects":["chain.genesis"]},{"header":{"version":1,"height":1,"prevHash":"0000da1dff9a4e258419652ffa5e2c4fb609063da82297fb49b460df07816d8f","timestamp":1791239580868,"difficulty":16,"nonce":5315,"eventsRoot":"9218a43411efa8eae08a67666189c121044089e3fc8bd2298545b62c314da315","stateRoot":"136ed14a27fa32fa088a736abbe07044c4a86f352babbe6e95147285d6247e3f"},"hash":"0000ca9ada909d87a4f4743eedbe83c984dac436b2e81a29aab5e6a7fd1f37f5","subjects":["git.commit","snapshot.created","ref.update"]},{"header":{"version":1,"height":2,"prevHash":"0000ca9ada909d87a4f4743eedbe83c984dac436b2e81a29aab5e6a7fd1f37f5","timestamp":1791239581166,"difficulty":16,"nonce":118273,"eventsRoot":"6a3cc18c38f38612e5b5280e32a025231848bf4f917cd3233b0a5302ff62e949","stateRoot":"136ed14a27fa32fa088a736abbe07044c4a86f352babbe6e95147285d6247e3f"},"hash":"00009cd580abffa05ff449f1b6f58f04797bef9b110d7406e32ea365694789ec","subjects":["ref.update"]},{"header":{"version":1,"height":3,"prevHash":"00009cd580abffa05ff449f1b6f58f04797bef9b110d7406e32ea365694789ec","timestamp":1791239582056,"difficulty":16,"nonce":94281,"eventsRoot":"35b97f7b31134adc7b77a26f669d59146d98fa99ca4912bd6275ff51a3059915","stateRoot":"136ed14a27fa32fa088a736abbe07044c4a86f352babbe6e95147285d6247e3f"},"hash":"00001fea6b63cc723958d0b56209933e9de3ae81558dbe9c2fec7072578e3443","subjects":["verify.ok"]},{"header":{"version":1,"height":4,"prevHash":"00001fea6b63cc723958d0b56209933e9de3ae81558dbe9c2fec7072578e3443","timestamp":1791239582693,"difficulty":16,"nonce":160,"eventsRoot":"eab66bc5d92e0bd3b02b23660f31060ebf50f3c3d872acd462b8f7e2daa79402","stateRoot":"136ed14a27fa32fa088a736abbe07044c4a86f352babbe6e95147285d6247e3f"},"hash":"0000cd764439a27b3ec1d9c68a3700d7ef52d2299941029d17f8b17686d0993e","subjects":["restore.done"]},{"header":{"version":1,"height":5,"prevHash":"0000cd764439a27b3ec1d9c68a3700d7ef52d2299941029d17f8b17686d0993e","timestamp":1791239588649,"difficulty":16,"nonce":56217,"eventsRoot":"b7e81a627101e83915ef6cbfb445d23dd18e2bb9a5f5969f2dd9050a76b5232a","stateRoot":"136ed14a27fa32fa088a736abbe07044c4a86f352babbe6e95147285d6247e3f"},"hash":"00006ad72831690e95210dc5ecde85c6f1e46d54e28dca89ebb698b3788ceb80","subjects":["memory.transition"]}];
 
 // Config for the live deployment. Fee is the agreed 10% (follow_up_2.md).
-const CONFIG = { dataUrl: 'data/dashboard.json', googleClientId: '', platformFeeBps: 1000 };
+// apiUrl is the Bundlepad backend ("chain serve"); empty means read-only from dataUrl.
+const CONFIG = { dataUrl: 'data/dashboard.json', apiUrl: '', googleClientId: '', platformFeeBps: 1000 };
 
 // pump.fun-style constant-product bonding curve (virtual reserves).
 const CURVE = { virtualSol: 30, virtualTokens: 1_073_000_000, graduationSol: 85, supply: 1_000_000_000 };
@@ -352,7 +357,8 @@ const priceAt = (sol) => ((CURVE.virtualSol + sol) ** 2 / (CURVE.virtualSol * CU
 
 let data = structuredClone(EMPTY);
 let wallet = null;     // { address, provider }
-let googleUser = null; // { name, credential }
+let googleUser = null; // { name, sub, credential }
+let bound = false;     // this wallet is bound to this Google account for the open launch
 
 const $ = (id) => document.getElementById(id);
 const fmt = (n, d = 2) => n.toLocaleString('en-US', { minimumFractionDigits: d, maximumFractionDigits: d });
@@ -361,7 +367,7 @@ const short = (a) => a.slice(0, 4) + '…' + a.slice(-4);
 
 const feeBps = () => data.launch?.platformFeeBps ?? CONFIG.platformFeeBps;
 const feeRate = () => feeBps() / 10_000;
-const STATUS_TEXT = { open: 'Commitments open', closed: 'Commitments closed', launched: 'Launched' };
+const STATUS_TEXT = { scheduled: 'Opens soon', open: 'Commitments open', closed: 'Commitments closed', launched: 'Launched' };
 
 // Commitments (plus an optional extra one), each with its vote weight.
 function positions(extra) {
@@ -389,13 +395,13 @@ function render() {
   const { launch } = data;
   const isYou = (w) => wallet && w === wallet.address;
   const split = computeSplit(positions());
-  const committed = split.totalSol;
+  const totalCommitted = split.totalSol;
 
   $('launch-status').textContent = launch ? (STATUS_TEXT[launch.status] ?? launch.status) : 'No launch open';
   $('launch-status').className = 'pill' + (launch?.status === 'open' ? ' good' : '');
   $('launch-id').textContent = launch ? `${launch.id} · ${launch.token.symbol}` : '';
-  $('sum-committed').innerHTML = `${fmt(committed)} <small>/ ${fmt(launch?.caps.targetSol ?? 0)} SOL</small>`;
-  $('sum-bar').style.width = launch?.caps.targetSol ? Math.min(100, (committed / launch.caps.targetSol) * 100) + '%' : '0';
+  $('sum-committed').innerHTML = `${fmt(totalCommitted)} <small>/ ${fmt(launch?.caps.targetSol ?? 0)} SOL</small>`;
+  $('sum-bar').style.width = launch?.caps.targetSol ? Math.min(100, (totalCommitted / launch.caps.targetSol) * 100) + '%' : '0';
   $('sum-investors').innerHTML = `${data.investors.length} <small>/ ${launch?.caps.maxInvestors ?? 0}</small>`;
   $('sum-fee').textContent = `${feeBps() / 100}%`;
   renderCountdown();
@@ -407,7 +413,9 @@ function render() {
   $('commit-limits').textContent = launch
     ? `Min ${launch.caps.minSol} SOL, max ${launch.caps.maxSolPerInvestor} SOL per Google account.`
     : 'No launch is open for commitments yet.';
+  const committed = wallet && data.investors.some((i) => i.wallet === wallet.address);
   $('commit-btn').disabled = !(launch?.status === 'open');
+  $('cancel-btn').hidden = !(committed && launch?.status === 'open');
   $('pos-fee').textContent = `${fmt(sol * feeRate(), 3)} SOL`;
   $('pos-buy').textContent = `${fmt(sol * (1 - feeRate()), 3)} SOL`;
   $('pos-share').textContent = `${fmt(you.share * 100, 1)}%`;
@@ -594,6 +602,7 @@ async function connectWallet() {
   try {
     const res = await provider.connect();
     wallet = { address: (res?.publicKey ?? provider.publicKey).toString(), provider };
+    bound = false;
     $('wallet-btn').textContent = short(wallet.address);
     render();
   } catch {
@@ -601,9 +610,30 @@ async function connectWallet() {
   }
 }
 
+// Returns the signature as padded base64, which the backend accepts.
 async function signText(text) {
   const res = await wallet.provider.signMessage(new TextEncoder().encode(text), 'utf8');
-  return res.signature ?? res;
+  const bytes = new Uint8Array(res.signature ?? res);
+  return btoa(String.fromCharCode(...bytes));
+}
+
+async function api(pathname, body) {
+  if (!CONFIG.apiUrl) throw new Error('The Bundlepad backend isn\'t connected yet, so nothing was recorded.');
+  const res = await fetch(CONFIG.apiUrl.replace(/\/$/, '') + pathname, body === undefined ? {} : {
+    method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(body),
+  });
+  const json = await res.json();
+  if (!res.ok) throw new Error(json.error ?? `Request failed (${res.status})`);
+  return json;
+}
+
+// Links this wallet to this Google account for the launch (once per session).
+async function bindWallet(launch) {
+  if (bound) return;
+  const { nonce } = await api('/api/launch/nonce');
+  const signature = await signText(`Bundlepad bind ${googleUser.sub} ${wallet.address} ${nonce}`);
+  await api(`/api/launch/${launch.id}/bind`, { google: googleUser.credential, wallet: wallet.address, nonce, signature });
+  bound = true;
 }
 
 async function commit() {
@@ -617,15 +647,29 @@ async function commit() {
   if (!(sol >= caps.minSol && sol <= caps.maxSolPerInvestor)) return setStatus('commit-status', `Enter between ${caps.minSol} and ${caps.maxSolPerInvestor} SOL.`);
   const committed = data.investors.reduce((s, i) => s + i.sol, 0);
   if (committed + sol > caps.targetSol) return setStatus('commit-status', `Only ${fmt(caps.targetSol - committed)} SOL is left before the target.`);
-  let signature;
   try {
-    signature = await signText(`Bundlepad commit ${launch.id} ${sol} SOL ${wallet.address} ${launch.manifestHash}`);
-  } catch {
-    return setStatus('commit-status', 'Signature was cancelled, so nothing was committed.');
+    await bindWallet(launch);
+    const signature = await signText(`Bundlepad commit ${launch.id} ${sol} SOL ${wallet.address} ${launch.manifestHash}`);
+    await api(`/api/launch/${launch.id}/commit`, { google: googleUser.credential, wallet: wallet.address, sol, signature });
+  } catch (err) {
+    return setStatus('commit-status', err?.code === 4001 || /reject|cancel/i.test(err?.message) ? 'Signature was cancelled, so nothing was committed.' : err.message);
   }
-  // TODO(backend): POST { launch: launch.id, wallet, sol, signature, google: googleUser.credential }.
-  setStatus('commit-status', 'Signed. Commitments are recorded once the Bundlepad backend is running.');
-  void signature;
+  setStatus('commit-status', `Committed ${sol} SOL. Your SOL stays in your wallet until launch.`);
+  await loadData();
+  render();
+}
+
+async function cancelCommit() {
+  const { launch } = data;
+  try {
+    const signature = await signText(`Bundlepad cancel ${launch.id} ${wallet.address} ${launch.manifestHash}`);
+    await api(`/api/launch/${launch.id}/cancel`, { wallet: wallet.address, signature });
+  } catch (err) {
+    return setStatus('commit-status', err.message);
+  }
+  setStatus('commit-status', 'Commitment cancelled.');
+  await loadData();
+  render();
 }
 
 async function vote(id, choice) {
@@ -633,11 +677,14 @@ async function vote(id, choice) {
   const mine = positions().find((p) => wallet && p.wallet === wallet.address);
   if (!mine) return setStatus(`vote-status-${id}`, 'Commit to this launch to vote.');
   try {
-    await signText(`Bundlepad vote ${data.launch.id} ${id} ${proposal.options[choice]} ${wallet.address}`);
-  } catch {
-    return setStatus(`vote-status-${id}`, 'Signature was cancelled, so no vote was cast.');
+    const signature = await signText(`Bundlepad vote ${data.launch.id} ${id} ${proposal.options[choice]} ${wallet.address}`);
+    await api(`/api/launch/${data.launch.id}/vote`, { wallet: wallet.address, proposal: id, choice, signature });
+  } catch (err) {
+    return setStatus(`vote-status-${id}`, err.message);
   }
-  setStatus(`vote-status-${id}`, `Signed vote for ${proposal.options[choice]} (weight ${fmt(mine.weight, 3)}). Votes are counted once the backend is running.`);
+  await loadData();
+  render();
+  setStatus(`vote-status-${id}`, `Voted ${proposal.options[choice]} with weight ${fmt(mine.weight, 3)}.`);
 }
 
 function setStatus(id, text) { const el = $(id); if (el) el.textContent = text; }
@@ -655,7 +702,8 @@ function setupGoogle() {
       callback: (resp) => {
         // The backend verifies resp.credential; the page only reads the name.
         const payload = JSON.parse(atob(resp.credential.split('.')[1].replace(/-/g, '+').replace(/_/g, '/')));
-        googleUser = { name: payload.name, credential: resp.credential };
+        googleUser = { name: payload.name, sub: payload.sub, credential: resp.credential };
+        bound = false;
         $('google-slot').innerHTML = `<span class="pill good">${escapeHtml(payload.name)}</span>`;
       },
     });
@@ -678,13 +726,15 @@ async function loadChain() {
 
 async function loadData() {
   try {
-    const res = await fetch(CONFIG.dataUrl, { cache: 'no-store' });
+    const url = CONFIG.apiUrl ? CONFIG.apiUrl.replace(/\/$/, '') + '/api/launch/dashboard' : CONFIG.dataUrl;
+    const res = await fetch(url, { cache: 'no-store' });
     if (res.ok) data = { ...structuredClone(EMPTY), ...(await res.json()) };
   } catch { /* nothing published yet */ }
 }
 
 $('commit-input').addEventListener('input', render);
 $('commit-btn').addEventListener('click', commit);
+$('cancel-btn').addEventListener('click', cancelCommit);
 $('wallet-btn').addEventListener('click', connectWallet);
 $('chain-verify').addEventListener('click', verifyChain);
 $('proposals').addEventListener('click', (e) => {

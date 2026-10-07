@@ -6,10 +6,20 @@
 //   POST /api/chain/events            {ok, event}  (queued; alerts seal immediately)
 //   GET  /api/chain/stats             {total, last_24h, last_event}
 //   GET  /api/chain/blocks/:height
+//
+// Launch API (plan/follow_up/follow_up_2.md). Every POST is checked against a
+// wallet signature, and bind/commit also against a Google ID token:
+//   GET  /api/launch/nonce             {nonce, expiresAt}
+//   GET  /api/launch/dashboard[?id]    the shape index.html reads
+//   POST /api/launch/:id/bind          {google, wallet, nonce, signature}
+//   POST /api/launch/:id/commit        {google, wallet, sol, signature}
+//   POST /api/launch/:id/cancel        {wallet, signature}
+//   POST /api/launch/:id/vote          {wallet, proposal, choice, signature}
 
 const http = require('node:http');
 const { makeEvent } = require('./events');
 const { tip, enqueue, seal } = require('./chain');
+const { verifyGoogleIdToken } = require('./launch/crypto');
 
 function allEvents(store) {
   const events = [];
@@ -17,8 +27,28 @@ function allEvents(store) {
   return events;
 }
 
-function handle(store, req, body) {
+async function handleLaunch(launches, req, url, body, verifyGoogle) {
+  if (req.method === 'GET' && url.pathname === '/api/launch/nonce') return [200, launches.issueNonce()];
+  if (req.method === 'GET' && url.pathname === '/api/launch/dashboard') {
+    return [200, launches.dashboard(url.searchParams.get('id') ?? undefined)];
+  }
+  const match = url.pathname.match(/^\/api\/launch\/([a-z0-9-]+)\/(bind|commit|cancel|vote)$/);
+  if (req.method !== 'POST' || !match) return null;
+  const [, id, action] = match;
+  const input = JSON.parse(body || '{}');
+  if (action === 'bind' || action === 'commit') {
+    const { sub } = await verifyGoogle(input.google, launches.config().googleClientId);
+    return [200, { ok: true, result: launches[action](id, { ...input, sub }) }];
+  }
+  return [200, { ok: true, result: launches[action](id, input) }];
+}
+
+async function handle(store, req, body, { launches = null, verifyGoogle = verifyGoogleIdToken } = {}) {
   const url = new URL(req.url, 'http://localhost');
+  if (launches && url.pathname.startsWith('/api/launch/')) {
+    const res = await handleLaunch(launches, req, url, body, verifyGoogle);
+    if (res) return res;
+  }
   if (req.method === 'GET' && url.pathname === '/api/chain/template') {
     const t = tip(store);
     return [200, { height: t.header.height + 1, difficulty: store.config().difficulty, prevHash: t.hash, timestamp: Date.now() }];
@@ -53,18 +83,28 @@ function handle(store, req, body) {
   return [404, { error: 'not found' }];
 }
 
-function serve(store, port) {
+const MAX_BODY = 64 * 1024;
+
+// Binds to localhost unless a host is given. `allowOrigin` (e.g. the GitHub
+// Pages origin) is the only browser origin allowed to call the API.
+function serve(store, port, { host = '127.0.0.1', launches = null, allowOrigin = '' } = {}) {
   const server = http.createServer((req, res) => {
+    const headers = { 'content-type': 'application/json' };
+    if (allowOrigin) Object.assign(headers, { 'access-control-allow-origin': allowOrigin, 'access-control-allow-headers': 'content-type', vary: 'origin' });
+    if (req.method === 'OPTIONS') { res.writeHead(204, headers); res.end(); return; }
     let body = '';
-    req.on('data', (chunk) => { body += chunk; });
-    req.on('end', () => {
+    req.on('data', (chunk) => {
+      body += chunk;
+      if (body.length > MAX_BODY) req.destroy();
+    });
+    req.on('end', async () => {
       let status, payload;
-      try { [status, payload] = handle(store, req, body); } catch (err) { [status, payload] = [400, { error: err.message }]; }
-      res.writeHead(status, { 'content-type': 'application/json' });
+      try { [status, payload] = await handle(store, req, body, { launches }); } catch (err) { [status, payload] = [400, { error: err.message }]; }
+      res.writeHead(status, headers);
       res.end(JSON.stringify(payload));
     });
   });
-  server.listen(port, '127.0.0.1');
+  server.listen(port, host);
   return server;
 }
 

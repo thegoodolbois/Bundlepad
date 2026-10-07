@@ -1,0 +1,29 @@
+{
+  "header": {
+    "version": 1,
+    "height": 8,
+    "prevHash": "00001fb6c437a3eb19b69a46955cac4f6d0aababd7bc300f555c90b08030f9f2",
+    "timestamp": 1791382569975,
+    "difficulty": 16,
+    "nonce": 185560,
+    "eventsRoot": "e6d33e381b97788d45ba28c24f6c63c883ffe632ef506819f5e5da3bb6ef4bba",
+    "stateRoot": "2b5fd04ca3f79e4f2a5ec7441f05586eecdc1155e620dc9e11171159a4e206d3"
+  },
+  "hash": "00003c82f7524cada50bf82f39591a5bd233263d93de2bd559e70ff812b7f6a5",
+  "events": [
+    {
+      "id": "f8b829fad814df3bdfc54a9f65c2b0f0c43af86fac40812cd94f856d954ba5fa",
+      "type": "update",
+      "subject": "memory.transition",
+      "source": "memory",
+      "body": {
+        "ts": "2026-10-07T14:16:09.951Z",
+        "plan": 3,
+        "stage": "implementing",
+        "note": "Plan 3 (follow_up_2.md) approved by owner: \"update all and continue all plans\""
+      },
+      "ts": 1791382569972,
+      "block": 8
+    }
+  ]
+}

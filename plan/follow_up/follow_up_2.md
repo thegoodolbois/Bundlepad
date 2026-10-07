@@ -1,6 +1,7 @@
 # Follow-up 2 → Plan 3 — Transparent Bundled Launch (investor-held funds)
 
-Status: **AWAITING HUMAN APPROVAL**
+Status: **APPROVED** (2026-10-07). Off-chain part (§1, §2, §6 backend) implemented;
+on-chain part continues in `follow_up_3.md`.
 
 ## Principles (agreed with the owner)
 
