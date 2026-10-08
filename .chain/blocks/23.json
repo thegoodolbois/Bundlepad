@@ -1,0 +1,105 @@
+{
+  "header": {
+    "version": 1,
+    "height": 23,
+    "prevHash": "000009fd1ce7b84f151448b30343f1f18b881d927d235a9be00c61d63cbbeef2",
+    "timestamp": 1791427245879,
+    "difficulty": 16,
+    "nonce": 42116,
+    "eventsRoot": "7bd9f88d2aae18c7e6ae08984ba08347eac6d07c09f49186d9b3422f895b0667",
+    "stateRoot": "faa442788f6753b87eaba2199f76fa7c14cfd0297ffe9a49cf541221466b2080"
+  },
+  "hash": "00007b17d4fdfa3a8846691ffce10ea672fd5abaea5ce88d086d347b304295bd",
+  "events": [
+    {
+      "id": "0a05576da708ca774626d5dab683d8dc4f967276ed4e447e52e3056c5c90b23e",
+      "type": "update",
+      "subject": "git.commit",
+      "source": "local-cli",
+      "body": {
+        "sha": "1a0ec440aeb365233c1cb46fc21d6e1decc54290",
+        "parents": [
+          "4046c59c1e6c9f7a62f4ce84390716950e58ba48"
+        ],
+        "author": {
+          "name": "Claude",
+          "email": "noreply@anthropic.com",
+          "date": "2026-10-08T02:30:14+00:00"
+        },
+        "committer": {
+          "name": "Claude",
+          "email": "noreply@anthropic.com",
+          "date": "2026-10-08T02:30:14+00:00"
+        },
+        "message": "Record the script engine commit on the integrity chain\n\nCo-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>\nClaude-Session: https://claude.ai/code/session_019dLaQpC8ustRzQLisewKPK"
+      },
+      "ts": 1791427244851,
+      "block": 23
+    },
+    {
+      "id": "d9720bd719c14006c5c59e707be3fee38c7847a89a12411a34d8b1f014372845",
+      "type": "file",
+      "subject": "snapshot.created",
+      "source": "local-cli",
+      "body": {
+        "commit": "1a0ec440aeb365233c1cb46fc21d6e1decc54290",
+        "manifest": "292143e25e396569121fdbe6834e656dc4a5ce294b7fc4502f7417c4a02cd0aa",
+        "files": 87
+      },
+      "ts": 1791427245281,
+      "block": 23
+    },
+    {
+      "id": "107faec6fcb41ca776e171354b818750a8eacb4df2f365987266681323c86f29",
+      "type": "update",
+      "subject": "git.commit",
+      "source": "local-cli",
+      "body": {
+        "sha": "72fb706b31ce87bf9fe6f3fb111111370d430346",
+        "parents": [
+          "1a0ec440aeb365233c1cb46fc21d6e1decc54290"
+        ],
+        "author": {
+          "name": "Claude",
+          "email": "noreply@anthropic.com",
+          "date": "2026-10-08T02:40:44+00:00"
+        },
+        "committer": {
+          "name": "Claude",
+          "email": "noreply@anthropic.com",
+          "date": "2026-10-08T02:40:44+00:00"
+        },
+        "message": "Add agent skills for every part of the repo and an Agent skills tab\n\nSeven skills in .claude/skills (repo map, launch, social posting, market\nresearch, script engine, video sourcing, content autopilot), bundled into\nmarketing/data/skills.json by marketing/build-skills.js, with a test that\nkeeps the bundle in sync and checks referenced files exist.\n\nCo-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>\nClaude-Session: https://claude.ai/code/session_019dLaQpC8ustRzQLisewKPK"
+      },
+      "ts": 1791427245285,
+      "block": 23
+    },
+    {
+      "id": "593be4f14c721bd16deb81da6196151058cb887c6eba3fa98edfb2f05501d286",
+      "type": "file",
+      "subject": "snapshot.created",
+      "source": "local-cli",
+      "body": {
+        "commit": "72fb706b31ce87bf9fe6f3fb111111370d430346",
+        "manifest": "b3586412b04e0ec3b687f79bd4b57bfdb6c39fb2832c8c24f8c7b2428a0d5aad",
+        "files": 97
+      },
+      "ts": 1791427245877,
+      "block": 23
+    },
+    {
+      "id": "5d5faa8c74debd391a1f2fd3e915e19a8cd96fb565319e257c729e1520c1805a",
+      "type": "update",
+      "subject": "ref.update",
+      "source": "local-cli",
+      "body": {
+        "ref": "local/heads/claude/sleepy-brown-x6slgf",
+        "from": "4046c59c1e6c9f7a62f4ce84390716950e58ba48",
+        "to": "72fb706b31ce87bf9fe6f3fb111111370d430346",
+        "forced": false
+      },
+      "ts": 1791427245878,
+      "block": 23
+    }
+  ]
+}
