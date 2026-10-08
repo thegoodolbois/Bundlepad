@@ -25,6 +25,7 @@ up their automation. Researched 2026-10-07.
 | File | What it is |
 |---|---|
 | [SETUP.md](SETUP.md) | **Step-by-step setup for every platform and hub:** what the human does (exact consoles, clicks, approvals), which secrets to hand over, what the agent does (exact API calls), a test call. Machine-readable: [data/setup.json](data/setup.json) |
+| [MARKET-RESEARCH.md](MARKET-RESEARCH.md) | **Market research:** weekly agent pipeline to find trending products and winning ad patterns, product score, 100 sources (trend and ad libraries, product data, ad research tools, suppliers, fees), 25 affiliate programs, 32 script frameworks and margin/undercut formulas, trending snapshot. Data: [data/market.json](data/market.json) |
 | [PLATFORMS.md](PLATFORMS.md) | Overview table, then every platform with its numbered automation routes |
 | [LOGIN.md](LOGIN.md) | Can a user sign in (Google or the platform's own login) and let an app post for them? Scopes, review, token lifetimes |
 | [SHORTCUTS.md](SHORTCUTS.md) | Siri / Apple Shortcuts recipes (Telegram, Discord, Bluesky, Mastodon, Threads, WhatsApp, Farcaster, Binance Square), timed automations, Android |
