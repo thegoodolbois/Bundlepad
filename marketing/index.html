@@ -69,6 +69,7 @@ code, .mono { font-family: var(--font-mono); font-size: var(--step--1); overflow
 
 .filters { display: grid; grid-template-columns: 2fr repeat(4, 1fr); gap: 10px; align-items: end; }
 .filters label { display: grid; gap: 4px; min-width: 0; }
+.filters textarea { width: 100%; border: 1px solid var(--line); background: var(--surface); border-radius: 8px; padding: 9px 11px; min-width: 0; font: inherit; color: inherit; resize: vertical; }
 .filters input, .filters select { width: 100%; border: 1px solid var(--line); background: var(--surface); border-radius: 8px; padding: 9px 11px; min-width: 0; }
 .count { color: var(--muted); font-size: var(--step--1); }
 
@@ -153,6 +154,7 @@ footer { color: var(--muted); font-size: var(--step--1); display: flex; flex-wra
     <button class="tab" role="tab" id="tab-hubs" aria-selected="false" data-view="hubs">Hubs &amp; tools</button>
     <button class="tab" role="tab" id="tab-market" aria-selected="false" data-view="market">Market research</button>
     <button class="tab" role="tab" id="tab-video" aria-selected="false" data-view="video">Video sourcing</button>
+    <button class="tab" role="tab" id="tab-script" aria-selected="false" data-view="script">Script engine</button>
     <button class="tab" role="tab" id="tab-agents" aria-selected="false" data-view="agents">For AI agents</button>
   </div>
 
@@ -164,6 +166,7 @@ footer { color: var(--muted); font-size: var(--step--1); display: flex; flex-wra
   </footer>
 </div>
 
+<script src="engine/core.js"></script>
 <script>
 'use strict';
 const $ = (s, el = document) => el.querySelector(s);
@@ -631,6 +634,113 @@ function vChecklists() {
     </section>`;
 }
 
+// ---- Script engine tab: same core as the CLI (engine/core.js) ----------------------
+// Sources stay in this page's memory. Your published scripts (history) are kept in this
+// browser only, and can be exported to the CLI's script-library.json format.
+const SE = window.ScriptEngine;
+const sestate = { sources: [] };
+function seHistory() { try { return JSON.parse(localStorage.getItem('se-history') || '[]'); } catch { return []; } }
+function seSaveHistory(h) { try { localStorage.setItem('se-history', JSON.stringify(h)); return true; } catch { return false; } }
+function seLibrary() {
+  return [...sestate.sources.map((x, i) => ({ id: 'source-' + (i + 1), kind: 'source', title: x.title, fingerprint: x.fingerprint })),
+    ...seHistory().map((h) => ({ id: h.id, kind: 'history', title: h.title, fingerprint: h.fingerprint }))];
+}
+
+function renderScript() {
+  $('#view').innerHTML = `
+    <p class="count">Paste scripts that work for others. The engine digests their structure, writes a prompt for a new script for your product, then rates your draft and checks it isn't a copy of any source or of anything you already posted. The command-line version (engine/cli.js) runs the whole loop with Claude.</p>
+    <section class="panel detail">
+      <h2>1. Source scripts (to learn from, never to copy)</h2>
+      <div class="filters" style="grid-template-columns:1fr">
+        <label><span class="label">Paste one or more scripts. Separate them with a line containing only ---</span><textarea id="se-src" rows="7" placeholder="Stop scrolling if your back hurts after work.&#10;…&#10;---&#10;Next script…"></textarea></label>
+      </div>
+      <p><button class="btn primary" id="se-digest" type="button">Digest sources</button></p>
+      <div id="se-src-out"></div>
+    </section>
+    <section class="panel detail">
+      <h2>2. Your product → recreate prompt</h2>
+      <div class="filters" style="grid-template-columns:repeat(2,minmax(0,1fr))">
+        <label><span class="label">Product name</span><input id="se-name" placeholder="Lumi Desk Lamp"></label>
+        <label><span class="label">Audience</span><input id="se-aud" placeholder="students who study late"></label>
+        <label><span class="label">What it is</span><input id="se-desc" placeholder="rechargeable LED desk lamp"></label>
+        <label><span class="label">Offer / call to action</span><input id="se-offer" placeholder="15% off with code LUMI15, link in bio"></label>
+        <label><span class="label">Facts you can prove (one per line)</span><textarea id="se-facts" rows="3"></textarea></label>
+        <label><span class="label">Length (seconds) and style</span><input id="se-secs" type="number" value="30"><input id="se-style" placeholder="casual, first person" style="margin-top:6px"></label>
+      </div>
+      <p><button class="btn primary" id="se-prompt" type="button">Build prompt</button> <button class="btn" id="se-copy" type="button">Copy prompt</button></p>
+      <pre id="se-prompt-out" style="white-space:pre-wrap"></pre>
+    </section>
+    <section class="panel detail">
+      <h2>3. Rate &amp; check your new script</h2>
+      <div class="filters" style="grid-template-columns:1fr">
+        <label><span class="label">Paste the new script (from Claude or written by you)</span><textarea id="se-new" rows="7"></textarea></label>
+      </div>
+      <p><button class="btn primary" id="se-check" type="button">Rate &amp; check</button> <button class="btn" id="se-accept" type="button">I posted this: add to history</button></p>
+      <div id="se-check-out"></div>
+    </section>
+    <section class="panel detail">
+      <h2>History (your published scripts)</h2>
+      <div id="se-hist"></div>
+      <p><button class="btn" id="se-export" type="button">Export library JSON (for the CLI)</button></p>
+    </section>`;
+  const facts = () => $('#se-facts').value.split('\n').map((x) => x.trim()).filter(Boolean);
+  const drawHistory = () => {
+    const h = seHistory();
+    $('#se-hist').innerHTML = h.length ? `<div class="tablewrap"><table><thead><tr><th>Date</th><th>Title</th><th>Structure</th></tr></thead><tbody>${h.map((x) => `<tr><td>${esc(x.date.slice(0, 10))}</td><td>${esc(x.title)}</td><td>${esc(x.structure.join(' → '))}</td></tr>`).join('')}</tbody></table></div>` : '<p class="note">Nothing yet. Scripts you mark as posted are kept in this browser so later scripts can\'t repeat them.</p>';
+  };
+  drawHistory();
+  $('#se-digest').addEventListener('click', () => {
+    sestate.sources = $('#se-src').value.split(/^\s*---\s*$/m).map((t) => t.trim()).filter(Boolean).map((text, i) => {
+      const d = SE.digest(text);
+      return { title: `Source ${i + 1}: ${d.hook.slice(0, 50)}`, digest: d, rating: SE.rate(text), fingerprint: SE.fingerprint(text) };
+    });
+    $('#se-src-out').innerHTML = sestate.sources.length ? `<div class="tablewrap"><table><thead><tr><th>#</th><th>Hook</th><th>Structure</th><th>Length</th><th>Score</th></tr></thead><tbody>${sestate.sources.map((x, i) => `<tr><td><label><input type="radio" name="se-pick" value="${i}" ${i === 0 ? 'checked' : ''}> ${i + 1}</label></td><td>${esc(x.digest.hook)}<br><span class="note">${esc(x.digest.hookType)}</span></td><td>${esc(x.digest.structure.join(' → '))}</td><td>${x.digest.words} words, ~${x.digest.seconds}s</td><td>${x.rating.total}</td></tr>`).join('')}</tbody></table></div><p class="note">The selected structure is used for the prompt. Only structure is used; the words are not.</p>` : '<p class="note">Paste at least one script.</p>';
+  });
+  const buildPrompt = () => {
+    const pick = document.querySelector('input[name="se-pick"]:checked');
+    const src = pick ? sestate.sources[Number(pick.value)] : null;
+    return SE.recreatePrompt({
+      sourceDigest: src && src.digest, targetSeconds: Number($('#se-secs').value) || 30, style: $('#se-style').value,
+      product: { name: $('#se-name').value || 'my product', description: $('#se-desc').value, audience: $('#se-aud').value, facts: facts(), offer: $('#se-offer').value },
+    });
+  };
+  $('#se-prompt').addEventListener('click', () => { $('#se-prompt-out').textContent = buildPrompt(); });
+  $('#se-copy').addEventListener('click', async () => {
+    const p = $('#se-prompt-out').textContent || buildPrompt(); $('#se-prompt-out').textContent = p;
+    try { await navigator.clipboard.writeText(p); $('#se-copy').textContent = 'Copied'; } catch { $('#se-copy').textContent = 'Select the text to copy'; }
+  });
+  $('#se-check').addEventListener('click', () => {
+    const text = $('#se-new').value;
+    if (!text.trim()) return;
+    const r = SE.rate(text, { targetSeconds: Number($('#se-secs').value) || 30 });
+    const c = SE.originality(text, seLibrary());
+    const lib = seLibrary();
+    const phrases = [...new Set(c.matches.filter((m) => m.sharedShingles).flatMap((m) => SE.overlaps(text, (lib.find((e) => e.id === m.id) || {}).fingerprint)))];
+    const tone = { original: 'Original: no copied passages from any source or past post.', too_close: 'Too close: reword the phrases below before posting.', duplicate: 'Duplicate: this copies a source or a past post. Rewrite it.' }[c.verdict];
+    $('#se-check-out').innerHTML = `
+      <div class="callout"><span class="label">Originality</span><br><b>${esc(tone)}</b>
+        ${c.matches.filter((m) => m.sharedShingles).map((m) => `<br>${esc(m.title)}: ${Math.round(m.containment * 100)}% shared, longest copied run ${m.longestRunWords} words`).join('')}
+        ${phrases.length ? `<br>Reword: ${phrases.map((x) => `“${esc(x)}”`).join(', ')}` : ''}</div>
+      <div class="callout" style="margin-top:8px"><span class="label">Score ${r.total}/100</span><br>${Object.entries(r.scores).map(([k, v]) => `${esc(k)} ${v}`).join(' · ')}${list(r.fixes)}</div>
+      <p class="note">Structure: ${esc(r.digest.structure.join(' → '))} · ${r.digest.words} words, ~${r.digest.seconds}s · hook: ${esc(r.digest.hookType)}</p>`;
+  });
+  $('#se-accept').addEventListener('click', () => {
+    const text = $('#se-new').value.trim();
+    if (!text) return;
+    const c = SE.originality(text, seLibrary());
+    if (c.verdict !== 'original' && !confirm(`This script is ${c.verdict.replace('_', ' ')}. Add it to history anyway?`)) return;
+    const d = SE.digest(text);
+    const h = seHistory();
+    h.push({ id: 'h' + Date.now().toString(36), kind: 'history', title: ($('#se-name').value ? $('#se-name').value + ': ' : '') + d.hook.slice(0, 60), date: new Date().toISOString(), structure: d.structure, hookType: d.hookType, words: d.words, seconds: d.seconds, fingerprint: SE.fingerprint(text), text });
+    if (!seSaveHistory(h)) alert('This browser blocks storage, so history can\'t be kept here. Use the CLI instead.');
+    drawHistory();
+  });
+  $('#se-export').addEventListener('click', () => {
+    const blob = new Blob([JSON.stringify({ version: 1, entries: seHistory() }, null, 1)], { type: 'application/json' });
+    const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'script-library.json'; a.click();
+  });
+}
+
 function show(view) {
   state.view = view;
   document.querySelectorAll('.tab').forEach((t) => t.setAttribute('aria-selected', String(t.dataset.view === view)));
@@ -638,6 +748,7 @@ function show(view) {
   else if (view === 'hubs') renderHubs();
   else if (view === 'market') renderMarket();
   else if (view === 'video') renderVideo();
+  else if (view === 'script') renderScript();
   else renderAgents();
 }
 
@@ -648,6 +759,7 @@ function route() {
   else if (location.hash === '#agents') show('agents');
   else if (location.hash === '#market') show('market');
   else if (location.hash === '#video') show('video');
+  else if (location.hash === '#script') show('script');
   else show('platforms');
 }
 

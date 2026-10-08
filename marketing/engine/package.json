@@ -1,0 +1,11 @@
+{
+  "name": "bundlepad-script-engine",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Digest, recreate, rate and originality-check short-form video ad scripts",
+  "main": "core.js",
+  "bin": { "script-engine": "cli.js" },
+  "scripts": { "test": "node --test test/*.test.js" },
+  "dependencies": { "@anthropic-ai/sdk": "^0.132.0" },
+  "engines": { "node": ">=20" }
+}
