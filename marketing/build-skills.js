@@ -8,7 +8,7 @@ const path = require('path');
 const ROOT = path.join(__dirname, '..');
 const DIR = path.join(ROOT, '.claude', 'skills');
 const OUT = path.join(__dirname, 'data', 'skills.json');
-const ORDER = ['bundlepad', 'content-autopilot', 'social-posting', 'market-research', 'script-engine', 'video-sourcing', 'bundlepad-launch'];
+const ORDER = ['bundlepad', 'user-intake', 'content-autopilot', 'social-posting', 'market-research', 'script-engine', 'video-sourcing', 'bundlepad-launch'];
 
 function parse(text) {
   const m = text.match(/^---\n([\s\S]*?)\n---\n/);

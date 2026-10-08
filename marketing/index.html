@@ -135,6 +135,7 @@ footer { color: var(--muted); font-size: var(--step--1); display: flex; flex-wra
       <p>Every social and content platform, whether it has an API, whether that's free, and every way to automate posting. Each one comes with step-by-step setup for you and for your AI agent.</p>
     </div>
     <nav class="links" aria-label="Links">
+      <a class="btn primary" href="setup.html">My setup (generate my prompt)</a>
       <a class="btn" href="../">Bundlepad</a>
       <a class="btn" href="https://github.com/thegoodolbois/Bundlepad/tree/main/marketing">Source on GitHub</a>
       <button class="btn" id="theme-btn" type="button" aria-label="Switch light or dark theme">Theme</button>
@@ -346,6 +347,7 @@ function renderAgents() {
   $('#view').innerHTML = `
     <section class="panel agentbox">
       <h2>Give this to your AI agent</h2>
+      <p><b>Personalized version:</b> fill in <a href="setup.html">My setup</a> (your products, platforms, sign-ins and keys) and it writes the full prompt for you. Or give your agent the <a href="${base}INTAKE.md">intake prompt</a> and it will ask you the questions.</p>
       <p>Paste this into your agent so it can help you set up automated posting:</p>
       <pre id="prompt">Help me automate my content. First read the skills (they tell you how to use every part of this guide): https://raw.githubusercontent.com/thegoodolbois/Bundlepad/main/marketing/data/skills.json
 - Instructions: ${base}AGENT-GUIDE.md

@@ -18,6 +18,7 @@ If you don't have the repo checked out, read any file at
 | Find trending products and ads, compare the market, sell vs affiliate, margins | `market-research` | `marketing/MARKET-RESEARCH.md`, `data/market.json` |
 | Turn a script into a video from footage they're allowed to use | `video-sourcing` | `marketing/VIDEO-SOURCING.md`, `data/video.json` |
 | Rewrite a winning script for their product, rate it, block copies and repeats | `script-engine` | `marketing/engine/`, `SCRIPT-ENGINE.md` |
+| Onboard a user: collect their profile, products, platform keys and schedule | `user-intake` | `marketing/INTAKE.md`, `marketing/setup.html` |
 | Automate daily or weekly content end to end | `content-autopilot` | all of the marketing ones, in order |
 
 ## Repo layout

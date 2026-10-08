@@ -8,6 +8,8 @@ up their automation. Researched 2026-10-07.
 
 ## For agents: start here
 
+**Per-user setup:** [setup.html](setup.html) ([web](https://thegoodolbois.github.io/Bundlepad/marketing/setup.html)) collects one user's profile, products, platform sign-ins and keys, schedule, script, video and research settings. It writes a personalized agent prompt plus profile.json, product.json files and a .env. [INTAKE.md](INTAKE.md) is the same intake as a prompt for an agent to run.
+
 **Agent skills:** [`.claude/skills/`](../.claude/skills/) has one skill per part of this repo (start with `bundlepad`; `content-autopilot` runs the whole content pipeline). They are bundled in [data/skills.json](data/skills.json) and shown on the Agent skills tab. After editing a skill, run `node marketing/build-skills.js`.
 1. **[AGENT-GUIDE.md](AGENT-GUIDE.md):** what to ask the user, how to pick a
    route per platform, setup patterns, and rules. Then **[SETUP.md](SETUP.md)**

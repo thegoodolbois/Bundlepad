@@ -9,6 +9,8 @@ This skill chains the four marketing skills. Load each one when you reach its
 step.
 
 ## One-time setup (with the human)
+Start with the `user-intake` skill. If the user filled in the setup page (`marketing/setup.html`), use their generated prompt or `profile.json`, and ask only about what's missing.
+
 1. **Accounts and posting routes.** Use the `social-posting` skill. For each
    platform, the human does the `human_steps` from `marketing/data/setup.json`,
    and you do the `agent_steps` and a test post. Prefer one hub (Postiz or
