@@ -155,6 +155,7 @@ footer { color: var(--muted); font-size: var(--step--1); display: flex; flex-wra
     <button class="tab" role="tab" id="tab-market" aria-selected="false" data-view="market">Market research</button>
     <button class="tab" role="tab" id="tab-video" aria-selected="false" data-view="video">Video sourcing</button>
     <button class="tab" role="tab" id="tab-script" aria-selected="false" data-view="script">Script engine</button>
+    <button class="tab" role="tab" id="tab-skills" aria-selected="false" data-view="skills">Agent skills</button>
     <button class="tab" role="tab" id="tab-agents" aria-selected="false" data-view="agents">For AI agents</button>
   </div>
 
@@ -346,12 +347,13 @@ function renderAgents() {
     <section class="panel agentbox">
       <h2>Give this to your AI agent</h2>
       <p>Paste this into your agent so it can help you set up automated posting:</p>
-      <pre id="prompt">Help me automate posting my content. Use this guide:
+      <pre id="prompt">Help me automate my content. First read the skills (they tell you how to use every part of this guide): https://raw.githubusercontent.com/thegoodolbois/Bundlepad/main/marketing/data/skills.json
 - Instructions: ${base}AGENT-GUIDE.md
 - Every platform and every automation route: ${base}data/platforms.json
 - Step-by-step setup (what I do, what you do): ${base}data/setup.json
 - Market research (trending products, affiliates, scripts): ${base}data/market.json
 - Video sourcing (legal footage, audio, script-to-video procedure): ${base}data/video.json
+- Script engine (recreate, rate, no duplicates): ${base}SCRIPT-ENGINE.md
 Start by asking which platforms I want, what content I post, and how often.</pre>
       <div class="links"><button class="btn primary" id="copy" type="button">Copy</button><span class="muted" id="copied" role="status"></span></div>
       <h2>Files</h2>
@@ -741,6 +743,47 @@ function renderScript() {
   });
 }
 
+// ---- Agent skills tab: .claude/skills bundled into data/skills.json ----------------
+let skillsData = null;
+async function renderSkills() {
+  $('#view').innerHTML = '<p class="count">Loading skills…</p>';
+  try { skillsData = skillsData || await fetch('data/skills.json').then((r) => r.json()); }
+  catch (err) { $('#view').innerHTML = `<p class="panel detail">Couldn't load skills (${esc(err.message)}).</p>`; return; }
+  const all = skillsData.skills.map((x) => x.text).join('\n\n');
+  $('#view').innerHTML = `
+    <p class="count">${skillsData.skills.length} skills that teach an AI agent to use every part of this repo. Give your agent this page's link, or install the skills.</p>
+    <section class="panel detail">
+      <h2>How to give these to an agent</h2>
+      ${list([
+        'Claude Code: clone the repo. The skills in .claude/skills/ load automatically when you work in it. To use them in any project, copy each folder to ~/.claude/skills/<name>/.',
+        'Claude.ai or the Claude apps: download the SKILL.md of a skill, put it in a folder named after the skill, zip the folder, and upload it in the Claude settings where skills are managed (the menu name varies by app version).',
+        'Any other agent: paste the raw link of a skill (below), or press "Copy all skills" and paste them into its instructions.',
+        'Start with "bundlepad". It tells the agent which skill to use for each job.',
+      ])}
+      <p><button class="btn primary" id="sk-copyall" type="button">Copy all skills</button> <a class="btn" href="${esc(skillsData.repo)}/tree/main/.claude/skills" target="_blank" rel="noopener">Open on GitHub</a></p>
+    </section>
+    ${skillsData.skills.map((x, i) => `
+    <section class="panel detail">
+      <h2>${esc(x.name)}</h2>
+      <p>${esc(x.description)}</p>
+      <p class="note">Raw link: ${linkify(esc(skillsData.raw + x.name + '/SKILL.md'))}</p>
+      <p><button class="btn" data-sk-view="${i}" type="button">Show</button> <button class="btn" data-sk-copy="${i}" type="button">Copy</button> <button class="btn" data-sk-dl="${i}" type="button">Download SKILL.md</button></p>
+      <pre id="sk-text-${i}" hidden style="white-space:pre-wrap">${esc(x.text)}</pre>
+    </section>`).join('')}`;
+  const copy = async (btn, text) => { try { await navigator.clipboard.writeText(text); btn.textContent = 'Copied'; } catch { btn.textContent = 'Use Show and select the text'; } };
+  $('#sk-copyall').addEventListener('click', (e) => copy(e.target, all));
+  $('#view').addEventListener('click', (e) => {
+    const t = e.target;
+    if (t.dataset.skView) { const pre = $('#sk-text-' + t.dataset.skView); pre.hidden = !pre.hidden; t.textContent = pre.hidden ? 'Show' : 'Hide'; }
+    if (t.dataset.skCopy) copy(t, skillsData.skills[Number(t.dataset.skCopy)].text);
+    if (t.dataset.skDl) {
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(new Blob([skillsData.skills[Number(t.dataset.skDl)].text], { type: 'text/markdown' }));
+      a.download = 'SKILL.md'; a.click();
+    }
+  });
+}
+
 function show(view) {
   state.view = view;
   document.querySelectorAll('.tab').forEach((t) => t.setAttribute('aria-selected', String(t.dataset.view === view)));
@@ -749,6 +792,7 @@ function show(view) {
   else if (view === 'market') renderMarket();
   else if (view === 'video') renderVideo();
   else if (view === 'script') renderScript();
+  else if (view === 'skills') renderSkills();
   else renderAgents();
 }
 
@@ -760,6 +804,7 @@ function route() {
   else if (location.hash === '#market') show('market');
   else if (location.hash === '#video') show('video');
   else if (location.hash === '#script') show('script');
+  else if (location.hash === '#skills') show('skills');
   else show('platforms');
 }
 

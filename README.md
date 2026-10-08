@@ -33,6 +33,7 @@ investor's SOL goes through the program before the audit and the legal check.
 | `deploy/` | systemd unit, Caddy (HTTPS) config, and the publish-to-GitHub script |
 | `docs/GO-LIVE.md` | Step-by-step go-live guide |
 | `marketing/` | Every social platform and every way to automate posting (APIs, user sign-in, schedulers, Siri Shortcuts); agent-ready JSON |
+| `.claude/skills/` | Agent skills: how an AI agent uses every part of this repo (start with `bundlepad`); also on the guide page's Agent skills tab |
 | `.chain/` | The integrity chain (blocks, objects, event log) |
 | `plan/`, `memory.json` | Plans and their approval state |
 

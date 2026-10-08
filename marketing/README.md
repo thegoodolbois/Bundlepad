@@ -1,12 +1,14 @@
 # Social posting automation: every platform, every option
 
-**Web version:** https://thegoodolbois.github.io/Bundlepad/marketing/ (tabs: Platforms, Hubs & tools, Market research, Video sourcing, For AI agents).
+**Web version:** https://thegoodolbois.github.io/Bundlepad/marketing/ (tabs: Platforms, Hubs & tools, Market research, Video sourcing, Script engine, Agent skills, For AI agents).
 
 A reference for **automating content posting** across 71 social and
 content platforms. It's written so an AI agent can use it to help a user set
 up their automation. Researched 2026-10-07.
 
 ## For agents: start here
+
+**Agent skills:** [`.claude/skills/`](../.claude/skills/) has one skill per part of this repo (start with `bundlepad`; `content-autopilot` runs the whole content pipeline). They are bundled in [data/skills.json](data/skills.json) and shown on the Agent skills tab. After editing a skill, run `node marketing/build-skills.js`.
 1. **[AGENT-GUIDE.md](AGENT-GUIDE.md):** what to ask the user, how to pick a
    route per platform, setup patterns, and rules. Then **[SETUP.md](SETUP.md)**
    for each platform's exact human and agent steps.
