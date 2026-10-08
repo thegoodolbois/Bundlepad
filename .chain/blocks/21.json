@@ -1,0 +1,105 @@
+{
+  "header": {
+    "version": 1,
+    "height": 21,
+    "prevHash": "0000def2d48ddc5aec68423271039417d14541e4bbe4001723469d01fe1a4552",
+    "timestamp": 1791426054293,
+    "difficulty": 16,
+    "nonce": 29678,
+    "eventsRoot": "e9f3a96906f85e4e916fcd3ab18d2afc147f2096a9fc6273696e4f4476c5ec8b",
+    "stateRoot": "58dcfcff65995fba71c3190b7f4f2e09514239aec6ffe078259910a407f5cf30"
+  },
+  "hash": "000031861c3be3ccfe61e8ae40a98aa2eb7eacfb018f6bbbb2a300f13e82b330",
+  "events": [
+    {
+      "id": "8210812ee2743b93754c1b3158e989660fee4be21b8eea767321cd8ba8f8e6ab",
+      "type": "update",
+      "subject": "git.commit",
+      "source": "local-cli",
+      "body": {
+        "sha": "e7c47c25825e7f38d01c09b82d3ed9016fa760f7",
+        "parents": [
+          "750ccac191447d21db25cd0c87c088313a660c40"
+        ],
+        "author": {
+          "name": "Claude",
+          "email": "noreply@anthropic.com",
+          "date": "2026-10-08T02:16:40+00:00"
+        },
+        "committer": {
+          "name": "Claude",
+          "email": "noreply@anthropic.com",
+          "date": "2026-10-08T02:16:40+00:00"
+        },
+        "message": "Record the market research commit on the integrity chain\n\nCo-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>\nClaude-Session: https://claude.ai/code/session_019dLaQpC8ustRzQLisewKPK"
+      },
+      "ts": 1791426052709,
+      "block": 21
+    },
+    {
+      "id": "64a19a48c296595a32cd42d62eb0331716c043749f835cdbdfe94058ee140b5f",
+      "type": "file",
+      "subject": "snapshot.created",
+      "source": "local-cli",
+      "body": {
+        "commit": "e7c47c25825e7f38d01c09b82d3ed9016fa760f7",
+        "manifest": "7fc8f8acd72f2e9b35d21043bc7b0b4af687c2e89bee7283d70eeaeef9cdd84b",
+        "files": 75
+      },
+      "ts": 1791426053078,
+      "block": 21
+    },
+    {
+      "id": "a66d43ee78f4e02df0ba4022473229eed9c6503d243cefa325b16746cc4c559c",
+      "type": "update",
+      "subject": "git.commit",
+      "source": "local-cli",
+      "body": {
+        "sha": "0cc28f1f9d3338195c6e0cd0b993f3e0246f870b",
+        "parents": [
+          "e7c47c25825e7f38d01c09b82d3ed9016fa760f7"
+        ],
+        "author": {
+          "name": "Claude",
+          "email": "noreply@anthropic.com",
+          "date": "2026-10-08T02:20:52+00:00"
+        },
+        "committer": {
+          "name": "Claude",
+          "email": "noreply@anthropic.com",
+          "date": "2026-10-08T02:20:52+00:00"
+        },
+        "message": "Add the Video sourcing tab: legal footage sources and script-to-video procedure\n\nSix agents researched free stock video, public domain and Creative\nCommons footage, AI video and avatars, product footage and UGC creators,\nmusic/SFX/voiceover, and matching/assembly tools plus platform rules.\n\n- data/video.json + VIDEO-SOURCING.md: 7-stage procedure (human and agent\n  versions), scene breakdown JSON format, shot rules, license log format,\n  pre-publish compliance gate, 193 sources with license, attribution,\n  API and cost, 20 methods and checklists\n- Guide page: Video sourcing tab (procedure, filterable sources,\n  checklists); agent prompt and README link the new data\n\nCo-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>\nClaude-Session: https://claude.ai/code/session_019dLaQpC8ustRzQLisewKPK"
+      },
+      "ts": 1791426053082,
+      "block": 21
+    },
+    {
+      "id": "7b4f19c6a0369a4fd32b44a1cb6f6be31c3cb6fbd40f2c17ed2b702ba20646ca",
+      "type": "file",
+      "subject": "snapshot.created",
+      "source": "local-cli",
+      "body": {
+        "commit": "0cc28f1f9d3338195c6e0cd0b993f3e0246f870b",
+        "manifest": "c33bc3e2d0d50495c19aa3da590ea81df3db7a4d9a75cf4fbcec8df0d5e6807e",
+        "files": 77
+      },
+      "ts": 1791426054290,
+      "block": 21
+    },
+    {
+      "id": "eeffea5ff81989d8f2f5526d2552a8d46bf2b37750c942abfa504461bfa6e29e",
+      "type": "update",
+      "subject": "ref.update",
+      "source": "local-cli",
+      "body": {
+        "ref": "local/heads/claude/sleepy-brown-x6slgf",
+        "from": "750ccac191447d21db25cd0c87c088313a660c40",
+        "to": "0cc28f1f9d3338195c6e0cd0b993f3e0246f870b",
+        "forced": false
+      },
+      "ts": 1791426054291,
+      "block": 21
+    }
+  ]
+}
