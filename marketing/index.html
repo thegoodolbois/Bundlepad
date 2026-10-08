@@ -152,6 +152,7 @@ footer { color: var(--muted); font-size: var(--step--1); display: flex; flex-wra
     <button class="tab" role="tab" id="tab-platforms" aria-selected="true" data-view="platforms">Platforms</button>
     <button class="tab" role="tab" id="tab-hubs" aria-selected="false" data-view="hubs">Hubs &amp; tools</button>
     <button class="tab" role="tab" id="tab-market" aria-selected="false" data-view="market">Market research</button>
+    <button class="tab" role="tab" id="tab-video" aria-selected="false" data-view="video">Video sourcing</button>
     <button class="tab" role="tab" id="tab-agents" aria-selected="false" data-view="agents">For AI agents</button>
   </div>
 
@@ -346,6 +347,8 @@ function renderAgents() {
 - Instructions: ${base}AGENT-GUIDE.md
 - Every platform and every automation route: ${base}data/platforms.json
 - Step-by-step setup (what I do, what you do): ${base}data/setup.json
+- Market research (trending products, affiliates, scripts): ${base}data/market.json
+- Video sourcing (legal footage, audio, script-to-video procedure): ${base}data/video.json
 Start by asking which platforms I want, what content I post, and how often.</pre>
       <div class="links"><button class="btn primary" id="copy" type="button">Copy</button><span class="muted" id="copied" role="status"></span></div>
       <h2>Files</h2>
@@ -354,6 +357,8 @@ Start by asking which platforms I want, what content I post, and how often.</pre
         <li><a href="data/platforms.json">data/platforms.json</a>: one record per platform, with <code>automation_options</code> best first</li>
         <li><a href="data/setup.json">data/setup.json</a>: human steps, secrets, agent steps, test call and troubleshooting for every platform and hub</li>
         <li><a href="data/platforms.csv">data/platforms.csv</a>: the same data for spreadsheets</li>
+        <li><a href="data/market.json">data/market.json</a>: market research (trend and ad sources, products, affiliate programs, script frameworks, pipeline) · <a href="${base}MARKET-RESEARCH.md">MARKET-RESEARCH.md</a></li>
+        <li><a href="data/video.json">data/video.json</a>: video sourcing (footage, music, voiceover, tools with licenses; script-to-video procedure) · <a href="${base}VIDEO-SOURCING.md">VIDEO-SOURCING.md</a></li>
         <li><a href="https://github.com/thegoodolbois/Bundlepad/blob/main/marketing/SHORTCUTS.md">SHORTCUTS.md</a>: Siri Shortcut recipes · <a href="https://github.com/thegoodolbois/Bundlepad/blob/main/marketing/LOGIN.md">LOGIN.md</a>: signing in and posting for users</li>
       </ul>
     </section>`;
@@ -534,12 +539,105 @@ function mCalc() {
   draw();
 }
 
+// ---- Video sourcing tab: procedure, sources with licenses, checklists ----
+let video = null;
+const vstate = { section: 'procedure', q: '', cat: '' };
+const VCAT = {
+  stock_video: 'Free stock video', public_domain: 'Public domain', creative_commons: 'Creative Commons', ai_video: 'AI video generation',
+  ai_avatar: 'AI avatars', product_footage: 'Product footage', ugc_marketplace: 'UGC creator marketplaces', music: 'Music',
+  sound_effects: 'Sound effects', voiceover_tts: 'Voiceover / TTS', editing_api: 'Editing APIs', editing_app: 'Editing apps',
+  matching_search: 'Footage matching & search', captions: 'Captions', platform_policy: 'Platform rules', other: 'Other',
+};
+
+async function renderVideo() {
+  $('#view').innerHTML = '<p class="count">Loading video sourcing…</p>';
+  try { video = video || await fetch('data/video.json').then((r) => r.json()); }
+  catch (err) { $('#view').innerHTML = `<p class="panel detail">Couldn't load video sourcing (${esc(err.message)}).</p>`; return; }
+  const secs = [['procedure', 'The procedure'], ['sources', 'Footage, audio & tools'], ['checklists', 'Checklists & methods']];
+  $('#view').innerHTML = `
+    <p class="count">${esc(video.intro)}</p>
+    <div class="tabs" role="tablist" aria-label="Video sourcing sections">${secs.map(([k, n]) => `<button class="tab" role="tab" data-vsec="${k}" aria-selected="${vstate.section === k}">${n}</button>`).join('')}</div>
+    <div id="vview"></div>`;
+  $('#view .tabs').addEventListener('click', (e) => { const t = e.target.closest('[data-vsec]'); if (!t) return; vstate.section = t.dataset.vsec; renderVideo(); });
+  ({ procedure: vProcedure, sources: vSources, checklists: vChecklists })[vstate.section]();
+}
+
+function vProcedure() {
+  $('#vview').innerHTML = `
+    <section class="panel detail">
+      <h2>Script + product → video, in seven stages</h2>
+      <div class="tablewrap"><table><thead><tr><th>#</th><th>Stage</th><th>You do</th><th>Your agent does</th></tr></thead><tbody>
+        ${video.stages.map((s, i) => `<tr><td>${i + 1}</td><td><b>${esc(s.name)}</b></td><td>${txt(s.human)}</td><td>${txt(s.agent)}</td></tr>`).join('')}
+      </tbody></table></div>
+      <div class="section"><h3>Rules</h3>${list(video.rules, false)}</div>
+      <div class="section"><h3>Human version, step by step</h3>${list(video.procedure_human.map((x) => String(x).replace(/^\d+\.\s*/, '')))}</div>
+      <div class="section"><h3>Agent version, step by step</h3>${list(video.procedure_agent.map((x) => String(x).replace(/^\d+\.\s*/, '')))}</div>
+      <div class="section"><h3>Scene breakdown format (what the agent produces)</h3><div class="agentbox" style="padding:0"><pre>${esc(video.scene_schema)}</pre></div></div>
+      <div class="section"><h3>Shot rules</h3>${list(video.shot_rules, false)}</div>
+    </section>`;
+}
+
+function vSources() {
+  const all = video.sources;
+  const cats = Object.keys(VCAT).filter((c) => all.some((s) => s.category === c));
+  $('#vview').innerHTML = `
+    <section class="filters" aria-label="Filters" style="grid-template-columns: 2fr 1fr 1fr">
+      <label><span class="label">Search</span><input id="v-q" type="search" placeholder="Pexels, CC0, voiceover, FFmpeg…" value="${esc(vstate.q)}"></label>
+      <label><span class="label">Category</span><select id="v-cat"><option value="">All</option>${cats.map((c) => `<option value="${c}" ${c === vstate.cat ? 'selected' : ''}>${esc(VCAT[c])}</option>`).join('')}</select></label>
+      <label><span class="label">Show only</span><select id="v-only"><option value="">Everything</option><option value="noattr">No attribution needed</option><option value="api">Has an API</option><option value="free">Free</option></select></label>
+    </section>
+    <p class="count" id="v-count" role="status"></p>
+    <div id="v-list" style="display:grid;gap:12px"></div>`;
+  const draw = () => {
+    const q = vstate.q.toLowerCase(), only = $('#v-only').value;
+    const rows = all.filter((s) => (!vstate.cat || s.category === vstate.cat)
+      && (!q || JSON.stringify(s).toLowerCase().includes(q))
+      && (only !== 'noattr' || /^no/i.test(s.attribution_required || ''))
+      && (only !== 'api' || /^yes/i.test(s.has_api || ''))
+      && (only !== 'free' || /^free/i.test(s.cost || '')));
+    $('#v-count').textContent = `${rows.length} of ${all.length}`;
+    $('#v-list').innerHTML = rows.map((s) => `
+      <details class="panel detail">
+        <summary><div class="detail-head"><div><span class="label">${esc(VCAT[s.category] || s.category)}</span><h2 style="font-size:var(--step-1)">${esc(s.name)}</h2></div>
+          <div class="links"><span class="pill ${/^no/i.test(s.attribution_required || '') ? 'good' : 'warn'}">Credit: ${esc((s.attribution_required || '—').split(/[—–(;,.]/)[0].trim())}</span> <span class="pill ${/^yes/i.test(s.has_api) ? 'good' : ''}">API: ${esc((s.has_api || '—').split(/[—–(;,.]/)[0].trim())}</span> <span class="pill ${/^free/i.test(s.cost) ? 'good' : 'info'}">${esc((s.cost || '—').slice(0, 36))}</span></div></div>
+          <p class="muted" style="margin:6px 0 0">${txt(s.what_you_get)}</p></summary>
+        <div class="facts">
+          <div><span class="label">License</span><span class="v">${txt(s.license)}</span></div>
+          <div><span class="label">Attribution</span><span class="v">${txt(s.attribution_required)}</span></div>
+          <div><span class="label">API</span><span class="v">${txt(s.has_api)}</span></div>
+          <div><span class="label">Cost</span><span class="v">${txt(s.cost)}</span></div>
+          <div><span class="label">Account needed</span><span class="v">${txt(s.account_needed)}</span></div>
+          <div><span class="label">Agent can automate</span><span class="v">${txt(s.agent_can_automate)}</span></div>
+          <div><span class="label">Terms / limits</span><span class="v">${txt(s.terms_notes)}</span></div>
+          <div><span class="label">Best for</span><span class="v">${txt(s.best_for)}</span></div>
+        </div>
+        ${s.how_to_use?.length ? `<div class="section"><h3>How to use it</h3>${list(s.how_to_use)}</div>` : ''}
+        ${s.details && Object.keys(s.details).length ? `<div class="section"><h3>Details</h3><div class="facts">${Object.entries(s.details).map(([k, v]) => `<div><span class="label">${esc(k.replace(/_/g, ' '))}</span><span class="v">${txt(v)}</span></div>`).join('')}</div></div>` : ''}
+        ${s.url ? `<p><a class="btn" href="${esc(s.url)}" target="_blank" rel="noopener">Open ${esc(s.name)}</a></p>` : ''}
+      </details>`).join('') || '<p class="muted">Nothing matches.</p>';
+  };
+  $('#v-q').addEventListener('input', (e) => { vstate.q = e.target.value; draw(); });
+  $('#v-cat').addEventListener('input', (e) => { vstate.cat = e.target.value; draw(); });
+  $('#v-only').addEventListener('input', draw);
+  draw();
+}
+
+function vChecklists() {
+  $('#vview').innerHTML = `
+    <section class="panel detail">
+      <h2>Compliance gate (before publishing)</h2>${list(video.compliance_gate, false)}
+      <div class="section"><h3>License log (keep a row for every asset)</h3>${list(video.license_log, false)}</div>
+      ${video.methods.map((m) => `<div class="section"><h3>${esc(m.name)}</h3>${list(m.steps)}${m.example ? `<div class="callout" style="margin-top:8px"><span class="label">Example</span><br>${txt(m.example)}</div>` : ''}</div>`).join('')}
+    </section>`;
+}
+
 function show(view) {
   state.view = view;
   document.querySelectorAll('.tab').forEach((t) => t.setAttribute('aria-selected', String(t.dataset.view === view)));
   if (view === 'platforms') renderPlatforms();
   else if (view === 'hubs') renderHubs();
   else if (view === 'market') renderMarket();
+  else if (view === 'video') renderVideo();
   else renderAgents();
 }
 
@@ -549,6 +647,7 @@ function route() {
   else if (location.hash === '#hubs') show('hubs');
   else if (location.hash === '#agents') show('agents');
   else if (location.hash === '#market') show('market');
+  else if (location.hash === '#video') show('video');
   else show('platforms');
 }
 

@@ -95,3 +95,8 @@ user's situation:
 Clubhouse, Medium, Naver Blog, Patreon, Lemon8, Xiaohongshu (RedNote), Messenger, Signal, Gab, Gettr, Truth Social, Substack, BeReal, Spotify for Creators, Behance, Quora, Minds, Likee, Rumble, Triller.
 
 For each of these, SETUP.md gives the official automation-adjacent route where one exists (built-in scheduler, import from URL or RSS, podcast-host RSS) plus a manual workflow: the agent prepares the content to the platform's specs and the human posts it.
+
+## 7. Beyond posting: finding what to sell and making the videos
+- **Market research** ([MARKET-RESEARCH.md](MARKET-RESEARCH.md), [data/market.json](data/market.json)): a weekly pipeline to find trending products and winning ad patterns, score them, compare the market, decide sell vs affiliate, and write original scripts.
+- **Video sourcing** ([VIDEO-SOURCING.md](VIDEO-SOURCING.md), [data/video.json](data/video.json)): turn a script and a product into a video from footage you are allowed to use: scene breakdown, sourcing order (own footage first), clip matching, voiceover and music, assembly, license log and compliance gate.
+- Never compile other creators' videos without a written license, and never copy another ad's script word for word.
