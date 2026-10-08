@@ -1,0 +1,105 @@
+{
+  "header": {
+    "version": 1,
+    "height": 24,
+    "prevHash": "00007b17d4fdfa3a8846691ffce10ea672fd5abaea5ce88d086d347b304295bd",
+    "timestamp": 1791429355304,
+    "difficulty": 16,
+    "nonce": 10381,
+    "eventsRoot": "5de19bcc80409cbe47bf639cc6eb83d8f43b2a868dc8a68a3af6742684b0095a",
+    "stateRoot": "8663e7d1871a57a125cb653815255e4f9f557e07de0db3e3193e8fe2f201612c"
+  },
+  "hash": "0000fa81baed8b2bf3a4a2ff7d4ae0fb84f2c20d82bfdbfcf4d8ae3ab7b9e20e",
+  "events": [
+    {
+      "id": "f62fae528dd8f33bd0622fb25ec1fc500e229b96d3ebe4fc9f96fee64569e3c5",
+      "type": "update",
+      "subject": "git.commit",
+      "source": "local-cli",
+      "body": {
+        "sha": "3a114c8b82f89095125f8408c799ed0437d3ec48",
+        "parents": [
+          "72fb706b31ce87bf9fe6f3fb111111370d430346"
+        ],
+        "author": {
+          "name": "Claude",
+          "email": "noreply@anthropic.com",
+          "date": "2026-10-08T02:40:46+00:00"
+        },
+        "committer": {
+          "name": "Claude",
+          "email": "noreply@anthropic.com",
+          "date": "2026-10-08T02:40:46+00:00"
+        },
+        "message": "Record the agent skills commit on the integrity chain\n\nCo-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>\nClaude-Session: https://claude.ai/code/session_019dLaQpC8ustRzQLisewKPK"
+      },
+      "ts": 1791429354222,
+      "block": 24
+    },
+    {
+      "id": "e64f7dc94f8580e135fa33f22507af71006a1c8f507313cb2a3b6c0ca223ad02",
+      "type": "file",
+      "subject": "snapshot.created",
+      "source": "local-cli",
+      "body": {
+        "commit": "3a114c8b82f89095125f8408c799ed0437d3ec48",
+        "manifest": "51084dac5fa8638489c70feef117fee1148a85968e6dd678b36355261220a453",
+        "files": 97
+      },
+      "ts": 1791429354677,
+      "block": 24
+    },
+    {
+      "id": "128c7ce2978440b1a524584b6a75b7bc2faef5d38d6d7985b2a2fcbb86c86a88",
+      "type": "update",
+      "subject": "git.commit",
+      "source": "local-cli",
+      "body": {
+        "sha": "2fb5fa4413d50a539077a4c7cd50bbad6262a6c8",
+        "parents": [
+          "3a114c8b82f89095125f8408c799ed0437d3ec48"
+        ],
+        "author": {
+          "name": "Claude",
+          "email": "noreply@anthropic.com",
+          "date": "2026-10-08T03:15:54+00:00"
+        },
+        "committer": {
+          "name": "Claude",
+          "email": "noreply@anthropic.com",
+          "date": "2026-10-08T03:15:54+00:00"
+        },
+        "message": "Add per-user setup page and agent intake prompt\n\nmarketing/setup.html collects one user's profile, products and facts,\nplatforms (sign-in links, setup steps, key fields, key tests), hub,\nschedule, approvals, scripts, video and research settings, and generates\na personalized agent prompt plus profile.json, product.json files and a\n.env. Keys stay out of the prompt and profile; they can be saved in the\nbrowser encrypted with a passphrase. INTAKE.md is the same intake as an\nagent prompt, and a new user-intake skill ties them together.\n\nCo-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>\nClaude-Session: https://claude.ai/code/session_019dLaQpC8ustRzQLisewKPK"
+      },
+      "ts": 1791429354682,
+      "block": 24
+    },
+    {
+      "id": "b125f886b84915910d0f41533a245b2c2b7405748a68bba9a7acdb22dd0deff1",
+      "type": "file",
+      "subject": "snapshot.created",
+      "source": "local-cli",
+      "body": {
+        "commit": "2fb5fa4413d50a539077a4c7cd50bbad6262a6c8",
+        "manifest": "094cd9932c3e51534448357085fd3aead4fdb23475a3aa74f81382ea0568003a",
+        "files": 101
+      },
+      "ts": 1791429355302,
+      "block": 24
+    },
+    {
+      "id": "7436f27280d8ead1e16d0117a2b94c991adfd58ee1a57a90bd892eedb15e5c71",
+      "type": "update",
+      "subject": "ref.update",
+      "source": "local-cli",
+      "body": {
+        "ref": "local/heads/claude/sleepy-brown-x6slgf",
+        "from": "72fb706b31ce87bf9fe6f3fb111111370d430346",
+        "to": "2fb5fa4413d50a539077a4c7cd50bbad6262a6c8",
+        "forced": false
+      },
+      "ts": 1791429355303,
+      "block": 24
+    }
+  ]
+}
