@@ -1,0 +1,143 @@
+{
+  "header": {
+    "version": 1,
+    "height": 20,
+    "prevHash": "0000b1aaaf827e6d0e03798ba9a8e017f6550c919e4d27149b6e3c9d1bcda566",
+    "timestamp": 1791425800169,
+    "difficulty": 16,
+    "nonce": 39747,
+    "eventsRoot": "5d52a4395bffeea98784af7c1253b7dd49ed3540518d9b63e46f95931a947a7c",
+    "stateRoot": "45ca753252a992de30434eb83ce2369c7d5f89a9aa1e70503fd03f4d722c4e6b"
+  },
+  "hash": "0000def2d48ddc5aec68423271039417d14541e4bbe4001723469d01fe1a4552",
+  "events": [
+    {
+      "id": "d0962214918beebf76d8d1747da9ad2d44d4813de1271b3b14282efa22ecfd99",
+      "type": "update",
+      "subject": "git.commit",
+      "source": "local-cli",
+      "body": {
+        "sha": "97c9bf6611cde7785017e0bb523ba2006676923b",
+        "parents": [
+          "ac82cff1e57c4a00c37a1863ca1b5f96d9fab9f8"
+        ],
+        "author": {
+          "name": "Claude",
+          "email": "noreply@anthropic.com",
+          "date": "2026-10-07T21:11:48+00:00"
+        },
+        "committer": {
+          "name": "Claude",
+          "email": "noreply@anthropic.com",
+          "date": "2026-10-07T21:11:48+00:00"
+        },
+        "message": "Record the guide page commit on the integrity chain\n\nCo-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>\nClaude-Session: https://claude.ai/code/session_019dLaQpC8ustRzQLisewKPK"
+      },
+      "ts": 1791425798345,
+      "block": 20
+    },
+    {
+      "id": "c8f721d5ad9075f6674755b966d90d0d9579d58ddad49d2400bfcecb68b832d6",
+      "type": "file",
+      "subject": "snapshot.created",
+      "source": "local-cli",
+      "body": {
+        "commit": "97c9bf6611cde7785017e0bb523ba2006676923b",
+        "manifest": "98fd6540adae790c724855de33de4cf3345fd95754adc56b9449b6e00cf26c42",
+        "files": 73
+      },
+      "ts": 1791425798877,
+      "block": 20
+    },
+    {
+      "id": "0c1b04d73fcd4eedbf32e379b98a99498f7b33ff00c5313edfc83b77be5f5286",
+      "type": "update",
+      "subject": "git.commit",
+      "source": "local-cli",
+      "body": {
+        "sha": "4592512744f77d598414b89efcd7e9143792fc24",
+        "parents": [
+          "97c9bf6611cde7785017e0bb523ba2006676923b"
+        ],
+        "author": {
+          "name": "Claude",
+          "email": "noreply@anthropic.com",
+          "date": "2026-10-08T02:03:57+00:00"
+        },
+        "committer": {
+          "name": "Claude",
+          "email": "noreply@anthropic.com",
+          "date": "2026-10-08T02:03:57+00:00"
+        },
+        "message": "Add Market research tab (calculator live; research data in progress)\n\nCo-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>\nClaude-Session: https://claude.ai/code/session_019dLaQpC8ustRzQLisewKPK"
+      },
+      "ts": 1791425798881,
+      "block": 20
+    },
+    {
+      "id": "a4680bd19f577ed756d80fb61660400278d343a2e902ffdfe7c4ca2ebf899a25",
+      "type": "file",
+      "subject": "snapshot.created",
+      "source": "local-cli",
+      "body": {
+        "commit": "4592512744f77d598414b89efcd7e9143792fc24",
+        "manifest": "ea725b75a63c74fe230263399cd51e793a2883cf2dc18676569cec6aec97f1b4",
+        "files": 74
+      },
+      "ts": 1791425799238,
+      "block": 20
+    },
+    {
+      "id": "95fbe14993731d91944b168471071ca73a8dc38ff6096952a6753049c9fdd93b",
+      "type": "update",
+      "subject": "git.commit",
+      "source": "local-cli",
+      "body": {
+        "sha": "750ccac191447d21db25cd0c87c088313a660c40",
+        "parents": [
+          "4592512744f77d598414b89efcd7e9143792fc24"
+        ],
+        "author": {
+          "name": "Claude",
+          "email": "noreply@anthropic.com",
+          "date": "2026-10-08T02:16:38+00:00"
+        },
+        "committer": {
+          "name": "Claude",
+          "email": "noreply@anthropic.com",
+          "date": "2026-10-08T02:16:38+00:00"
+        },
+        "message": "Fill the Market research tab with the agent research\n\nSeven agents researched trend and ad libraries, best-selling product\ndata, affiliate programs, sales scripts, market comparison, an agent\npipeline and a trending snapshot (early Oct 2026).\n\n- data/market.json + MARKET-RESEARCH.md: 7-step weekly pipeline with\n  inputs, tools, outputs, human tasks, cost and cautions; 0-100 product\n  score; 100 sources and 25 affiliate programs; 32 script frameworks\n  and margin/undercut formulas; 22-item trending snapshot; rules (write\n  original scripts, no scraping, disclose affiliate links)\n- Calculator presets for TikTok Shop, Amazon, Etsy, eBay, Shopify and\n  Walmart fees\n\nCo-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>\nClaude-Session: https://claude.ai/code/session_019dLaQpC8ustRzQLisewKPK"
+      },
+      "ts": 1791425799242,
+      "block": 20
+    },
+    {
+      "id": "c818a874221010b2e884733665612a60ad6e3ec0c2d936c522c9e3d2b847a82f",
+      "type": "file",
+      "subject": "snapshot.created",
+      "source": "local-cli",
+      "body": {
+        "commit": "750ccac191447d21db25cd0c87c088313a660c40",
+        "manifest": "424bdb231fa757406277cd5a548e1e9a33ff7551e39b1644c328bef60241fcde",
+        "files": 75
+      },
+      "ts": 1791425800167,
+      "block": 20
+    },
+    {
+      "id": "438ae3ae2f6ad64e44da77588ab9d4f747e2f03db0dd3bb0152b5ea5bff6defa",
+      "type": "update",
+      "subject": "ref.update",
+      "source": "local-cli",
+      "body": {
+        "ref": "local/heads/claude/sleepy-brown-x6slgf",
+        "from": "ac82cff1e57c4a00c37a1863ca1b5f96d9fab9f8",
+        "to": "750ccac191447d21db25cd0c87c088313a660c40",
+        "forced": false
+      },
+      "ts": 1791425800168,
+      "block": 20
+    }
+  ]
+}
