@@ -151,6 +151,7 @@ footer { color: var(--muted); font-size: var(--step--1); display: flex; flex-wra
   <div class="tabs" role="tablist">
     <button class="tab" role="tab" id="tab-platforms" aria-selected="true" data-view="platforms">Platforms</button>
     <button class="tab" role="tab" id="tab-hubs" aria-selected="false" data-view="hubs">Hubs &amp; tools</button>
+    <button class="tab" role="tab" id="tab-market" aria-selected="false" data-view="market">Market research</button>
     <button class="tab" role="tab" id="tab-agents" aria-selected="false" data-view="agents">For AI agents</button>
   </div>
 
@@ -362,11 +363,183 @@ Start by asking which platforms I want, what content I post, and how often.</pre
   });
 }
 
+// ---- Market research tab: plan, sources, affiliate programs, scripts, calculator, snapshot ----
+let market = null;
+const mstate = { section: 'plan', q: '', cat: '' };
+const CAT_NAMES = {
+  trend_videos: 'Trending videos', ad_library: 'Ad libraries', product_data: 'Product & sales data', affiliate_program: 'Affiliate programs',
+  ad_research_tool: 'Ad research tools', script_tool: 'Script & transcript tools', supplier: 'Suppliers & dropship', marketplace_fees: 'Marketplace fees',
+  price_tracking: 'Price tracking', analytics: 'Analytics & demand', other: 'Other',
+};
+
+async function loadMarket() {
+  if (market) return market;
+  market = await fetch('data/market.json').then((r) => r.json());
+  return market;
+}
+
+async function renderMarket() {
+  $('#view').innerHTML = '<p class="count">Loading market research…</p>';
+  try { await loadMarket(); } catch (err) { $('#view').innerHTML = `<p class="panel detail">Couldn't load market research (${esc(err.message)}).</p>`; return; }
+  const secs = [['plan', 'The plan'], ['sources', 'Sources'], ['affiliate', 'Affiliate programs'], ['scripts', 'Sales scripts'], ['calc', 'Margin & undercut calculator'], ['snapshot', 'Trending now']];
+  $('#view').innerHTML = `
+    <p class="count">${esc(market.intro || '')}</p>
+    <div class="tabs" role="tablist" aria-label="Market research sections">${secs.map(([k, n]) => `<button class="tab" role="tab" data-msec="${k}" aria-selected="${mstate.section === k}">${n}</button>`).join('')}</div>
+    <div id="mview"></div>`;
+  $('#view .tabs').addEventListener('click', (e) => { const t = e.target.closest('[data-msec]'); if (!t) return; mstate.section = t.dataset.msec; renderMarket(); });
+  ({ plan: mPlan, sources: () => mSources(false), affiliate: () => mSources(true), scripts: mScripts, calc: mCalc, snapshot: mSnapshot })[mstate.section]();
+}
+
+function mPlan() {
+  const p = market.pipeline || {};
+  $('#mview').innerHTML = `
+    <section class="panel detail">
+      <h2>How the research runs</h2>
+      <p>${txt(p.summary)}</p>
+      ${(p.steps || []).map((s, i) => `
+        <div class="section">
+          <h3>${i + 1}. ${esc(s.name)}</h3>
+          ${s.what ? `<p>${txt(s.what)}</p>` : ''}
+          <div class="facts">
+            ${s.inputs ? `<div><span class="label">Inputs</span><span class="v">${txt(s.inputs)}</span></div>` : ''}
+            ${s.tools ? `<div><span class="label">Tools / APIs</span><span class="v">${txt(s.tools)}</span></div>` : ''}
+            ${s.outputs ? `<div><span class="label">Outputs</span><span class="v">${txt(s.outputs)}</span></div>` : ''}
+            ${s.human ? `<div><span class="label">Human does</span><span class="v">${txt(s.human)}</span></div>` : ''}
+            ${s.cost ? `<div><span class="label">Cost</span><span class="v">${txt(s.cost)}</span></div>` : ''}
+            ${s.cautions ? `<div><span class="label">Cautions</span><span class="v">${txt(s.cautions)}</span></div>` : ''}
+          </div>
+        </div>`).join('')}
+      ${p.scoring ? `<div class="section"><h3>Product score</h3><div class="callout">${txt(p.scoring)}</div></div>` : ''}
+      ${(market.rules || []).length ? `<div class="section"><h3>Rules</h3>${list(market.rules, false)}</div>` : ''}
+    </section>`;
+}
+
+function mSources(affiliateOnly) {
+  const all = (market.sources || []).filter((s) => affiliateOnly ? s.category === 'affiliate_program' : s.category !== 'affiliate_program');
+  const cats = [...new Set(all.map((s) => s.category))].sort();
+  $('#mview').innerHTML = `
+    <section class="filters" aria-label="Filters" style="grid-template-columns: 2fr 1fr">
+      <label><span class="label">Search</span><input id="m-q" type="search" placeholder="${affiliateOnly ? 'Program, category, commission…' : 'Tool, platform, data…'}" value="${esc(mstate.q)}"></label>
+      <label><span class="label">Category</span><select id="m-cat"><option value="">All</option>${cats.map((c) => `<option value="${esc(c)}" ${c === mstate.cat ? 'selected' : ''}>${esc(CAT_NAMES[c] || c)}</option>`).join('')}</select></label>
+    </section>
+    <p class="count" id="m-count" role="status"></p>
+    <div id="m-list" style="display:grid;gap:12px"></div>`;
+  const draw = () => {
+    const q = mstate.q.toLowerCase();
+    const rows = all.filter((s) => (!mstate.cat || s.category === mstate.cat) && (!q || JSON.stringify(s).toLowerCase().includes(q)));
+    $('#m-count').textContent = `${rows.length} of ${all.length}`;
+    $('#m-list').innerHTML = rows.map((s) => `
+      <details class="panel detail">
+        <summary><div class="detail-head"><div><span class="label">${esc(CAT_NAMES[s.category] || s.category)}</span><h2 style="font-size:var(--step-1)">${esc(s.name)}</h2></div>
+          <div class="links"><span class="pill ${/^yes/i.test(s.has_api) ? 'good' : /^partial/i.test(s.has_api) ? 'warn' : ''}">API: ${esc((s.has_api || '—').split(/[—–-]/)[0].trim())}</span> <span class="pill ${/^free/i.test(s.cost) && !/paid/i.test(s.cost) ? 'good' : 'info'}">${esc((s.cost || '—').slice(0, 40))}</span></div></div>
+          <p class="muted" style="margin:6px 0 0">${txt(s.what_it_shows)}</p></summary>
+        <div class="facts">
+          <div><span class="label">API</span><span class="v">${txt(s.has_api)}</span></div>
+          <div><span class="label">Cost</span><span class="v">${txt(s.cost)}</span></div>
+          <div><span class="label">Account needed</span><span class="v">${txt(s.account_needed)}</span></div>
+          <div><span class="label">Agent can automate</span><span class="v">${txt(s.agent_can_automate)}</span></div>
+          <div><span class="label">Best for</span><span class="v">${txt(s.best_for)}</span></div>
+          <div><span class="label">Terms / limits</span><span class="v">${txt(s.terms_notes)}</span></div>
+        </div>
+        ${s.how_to_use?.length ? `<div class="section"><h3>How to use it</h3>${list(s.how_to_use)}</div>` : ''}
+        ${s.details && Object.keys(s.details).length ? `<div class="section"><h3>Details</h3><div class="facts">${Object.entries(s.details).map(([k, v]) => `<div><span class="label">${esc(k.replace(/_/g, ' '))}</span><span class="v">${txt(v)}</span></div>`).join('')}</div></div>` : ''}
+        ${s.url ? `<p><a class="btn" href="${esc(s.url)}" target="_blank" rel="noopener">Open ${esc(s.name)}</a></p>` : ''}
+      </details>`).join('') || '<p class="muted">Nothing matches.</p>';
+  };
+  $('#m-q').addEventListener('input', (e) => { mstate.q = e.target.value; draw(); });
+  $('#m-cat').addEventListener('input', (e) => { mstate.cat = e.target.value; draw(); });
+  draw();
+}
+
+function mScripts() {
+  const f = market.frameworks || [];
+  $('#mview').innerHTML = `
+    <section class="panel detail">
+      <h2>Sales script frameworks</h2>
+      <p class="note">Learn the pattern, then write your own words. Copying another ad's script or footage is copyright infringement and gets ads rejected.</p>
+      ${f.map((x) => `<div class="section"><h3>${esc(x.name)}</h3>${list(x.steps)}${x.example ? `<div class="callout" style="margin-top:8px"><span class="label">Example (original)</span><br>${txt(x.example)}</div>` : ''}</div>`).join('')}
+    </section>`;
+}
+
+function mSnapshot() {
+  const items = market.snapshot || [];
+  $('#mview').innerHTML = `
+    <section class="panel detail">
+      <h2>Trending now <span class="muted" style="font-size:var(--step-0)">${esc(market.snapshot_date || '')}</span></h2>
+      <p class="note">A dated snapshot from public sources. Trends move fast: rerun the research before acting.</p>
+      <div class="tablewrap"><table><thead><tr><th>Trend</th><th>Signal</th><th>Evidence</th></tr></thead><tbody>
+        ${items.map((s) => `<tr><td><b>${esc(s.name)}</b><div class="muted">${txt(s.what_it_shows)}</div></td><td><span class="pill ${s.details?.signal_strength === 'strong' ? 'good' : s.details?.signal_strength === 'medium' ? 'info' : ''}">${esc(s.details?.signal_strength || '—')}</span></td><td>${txt(s.details?.evidence || '')} ${s.url ? `<a href="${esc(s.url)}" target="_blank" rel="noopener">source</a>` : ''} <span class="muted">${esc(s.details?.date || '')}</span></td></tr>`).join('')}
+      </tbody></table></div>
+    </section>`;
+}
+
+// Margin & undercut calculator. Fee = price × (platform% + payment%) + fixed fee per order.
+function mCalc() {
+  const presets = market.fee_presets || [];
+  $('#mview').innerHTML = `
+    <section class="panel detail">
+      <h2>Margin &amp; undercut calculator</h2>
+      <p class="note">Enter the competitor's price and your costs. It shows your profit at each price, the lowest price that still hits your target margin, and how far you can undercut.</p>
+      <div class="filters" style="grid-template-columns:repeat(3,minmax(0,1fr))">
+        <label><span class="label">Where you sell</span><select id="c-preset"><option value="">Custom</option>${presets.map((p, i) => `<option value="${i}">${esc(p.name)}</option>`).join('')}</select></label>
+        <label><span class="label">Competitor price ($)</span><input id="c-comp" type="number" step="0.01" value="29.99"></label>
+        <label><span class="label">Your price ($)</span><input id="c-price" type="number" step="0.01" value="24.99"></label>
+        <label><span class="label">Product cost ($/unit)</span><input id="c-cost" type="number" step="0.01" value="6.50"></label>
+        <label><span class="label">Shipping & packaging ($/unit)</span><input id="c-ship" type="number" step="0.01" value="4.00"></label>
+        <label><span class="label">Ad cost per sale ($)</span><input id="c-cpa" type="number" step="0.01" value="5.00"></label>
+        <label><span class="label">Platform fee (%)</span><input id="c-pct" type="number" step="0.1" value="8"></label>
+        <label><span class="label">Payment fee (%)</span><input id="c-pay" type="number" step="0.1" value="2.9"></label>
+        <label><span class="label">Fixed fee per order ($)</span><input id="c-fixed" type="number" step="0.01" value="0.30"></label>
+        <label><span class="label">Target margin (%)</span><input id="c-margin" type="number" step="1" value="20"></label>
+        <label><span class="label">Affiliate commission instead (%)</span><input id="c-aff" type="number" step="0.5" value="10"></label>
+      </div>
+      <div id="c-out"></div>
+      ${presets.length ? `<p class="note">Fee presets come from the research (${esc(market.fee_presets_note || 'check the marketplace before relying on them')}).</p>` : ''}
+    </section>`;
+  const ids = ['comp', 'price', 'cost', 'ship', 'cpa', 'pct', 'pay', 'fixed', 'margin', 'aff'];
+  const v = (k) => Number($('#c-' + k).value) || 0;
+  const money = (n) => (n < 0 ? '−$' : '$') + Math.abs(n).toFixed(2);
+  const draw = () => {
+    const pct = (v('pct') + v('pay')) / 100, m = v('margin') / 100;
+    const unit = v('cost') + v('ship');
+    const fees = (P) => P * pct + v('fixed');
+    const profit = (P) => P - fees(P) - unit - v('cpa');
+    const P = v('price');
+    const minPrice = (unit + v('cpa') + v('fixed')) / Math.max(1e-9, 1 - pct - m);
+    const breakEven = (unit + v('cpa') + v('fixed')) / Math.max(1e-9, 1 - pct);
+    const preAds = P - fees(P) - unit;
+    const beRoas = preAds > 0 ? P / preAds : Infinity;
+    const undercut = v('comp') - minPrice;
+    const affEarn = v('comp') * v('aff') / 100;
+    const ok = (x) => `<span class="pill ${x ? 'good' : 'bad'}">${x ? 'Works' : "Doesn't work"}</span>`;
+    $('#c-out').innerHTML = `
+      <div class="summary" style="margin-top:12px">
+        <div><span class="label">Profit per sale at your price</span><span class="big">${money(profit(P))}</span><span class="muted">${P ? (profit(P) / P * 100).toFixed(1) : 0}% margin</span></div>
+        <div><span class="label">Fees per sale</span><span class="big">${money(fees(P))}</span></div>
+        <div><span class="label">Break-even price</span><span class="big">${money(breakEven)}</span></div>
+        <div><span class="label">Lowest price at ${v('margin')}% margin</span><span class="big">${money(minPrice)}</span></div>
+        <div><span class="label">Break-even ROAS</span><span class="big">${isFinite(beRoas) ? beRoas.toFixed(2) + '×' : '—'}</span></div>
+      </div>
+      <div class="facts" style="margin-top:12px">
+        <div><span class="label">Undercut room vs competitor</span><span class="v">${undercut > 0 ? `You can price up to <b>${money(undercut)}</b> below ${money(v('comp'))} and still make ${v('margin')}%. ${ok(true)}` : `At these costs you can't beat ${money(v('comp'))} at ${v('margin')}% margin. Lower costs, or promote it as an affiliate. ${ok(false)}`}</span></div>
+        <div><span class="label">Affiliate instead</span><span class="v">Promoting the competitor's listing at ${v('aff')}% earns about <b>${money(affEarn)}</b> per sale with no stock, shipping or returns. Selling yourself earns ${money(profit(P))}.</span></div>
+      </div>`;
+  };
+  ids.forEach((k) => $('#c-' + k).addEventListener('input', draw));
+  $('#c-preset').addEventListener('input', (e) => {
+    const p = presets[Number(e.target.value)];
+    if (p) { $('#c-pct').value = p.platform_pct ?? 0; $('#c-pay').value = p.payment_pct ?? 0; $('#c-fixed').value = p.fixed_fee ?? 0; }
+    draw();
+  });
+  draw();
+}
+
 function show(view) {
   state.view = view;
   document.querySelectorAll('.tab').forEach((t) => t.setAttribute('aria-selected', String(t.dataset.view === view)));
   if (view === 'platforms') renderPlatforms();
   else if (view === 'hubs') renderHubs();
+  else if (view === 'market') renderMarket();
   else renderAgents();
 }
 
@@ -375,6 +548,7 @@ function route() {
   if (m) { document.querySelectorAll('.tab').forEach((t) => t.setAttribute('aria-selected', String(t.dataset.view === 'platforms'))); openDetail(decodeURIComponent(m[1]), false); }
   else if (location.hash === '#hubs') show('hubs');
   else if (location.hash === '#agents') show('agents');
+  else if (location.hash === '#market') show('market');
   else show('platforms');
 }
 
